@@ -225,7 +225,7 @@ extern "C" {
 
 //msvcrt lacks any and all c99 support.
 #if defined(_WIN32)
-	#ifdef __GNUC__
+	#if defined(__GNUC__) || (defined(_MSC_VER) && _MSC_VER >= 1800)	//vs2013+ ships inttypes.h
 		#include <inttypes.h>
 	#else
 		#define PRIxPTR "p"

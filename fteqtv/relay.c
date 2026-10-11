@@ -491,7 +491,10 @@ static struct turnclient_s *TURN_Allocate(cluster_t *cluster, netadr_t *clientad
 
 #if defined(_WIN32) && defined(SO_EXCLUSIVEADDRUSE)
 	//win32 is so fucked up
-	setsockopt(newsocket, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, (char *)&_true, sizeof(_true));
+	{
+		int _true = 1;
+		setsockopt(sock, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, (char *)&_true, sizeof(_true));
+	}
 #endif
 
 	for (tries = 5; ; tries--)

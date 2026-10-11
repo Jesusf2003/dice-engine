@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "dice-engine",
+  "version-string": "0.1.0",
+  "description": "FTEQW-based engine (client, server and tools).",
+  "builtin-baseline": "aeac3fa8d321bf9451d8dfacc62a476b5a956916",
+  "dependencies": [
+    "zlib",
+    "bzip2",
+    "libjpeg-turbo",
+    "libpng",
+    {
+      "name": "freetype",
+      "default-features": false,
+      "features": [ "zlib", "png", "bzip2" ]
+    },
+    "libogg",
+    "libvorbis",
+    "opus",
+    "speex",
+    "speexdsp",
+    "vulkan-headers",
+    {
+      "name": "openal-soft",
+      "platform": "windows"
+    }
+  ],
+  "features": {
+    "sdl2": {
+      "description": "Build the SDL2 platform layer instead of the native Win32/X11 one.",
+      "dependencies": [
+        {
+          "name": "sdl2",
+          "features": [ "vulkan" ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "makefile.configurations": [
+    {
+      "makePath": "C://mingw64/bin/mingw64-make.exe",
+      "name": "Unnamed configuration 1"
+    }
+  ]
+}
