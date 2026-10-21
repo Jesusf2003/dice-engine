@@ -1,0 +1,44 @@
+---- light / ericw-tools 2.0.0-alpha9 ----
+LoadBSPFile: 'F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp'
+BSP is version Quake BSP bsp29
+INFO: using built-in palette.
+img::ConvertTextures: WARNING: invalid size data for 
+Loading extended texinfo flags from F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.texinfo.json...
+3 entities read, 1 are lights.
+
+--- Options Summary ---
+    "range" was set to "0.500000" (from map)
+    "gamma" was set to "1.000000" (from map)
+    "light" was set to "0.000000" (from map)
+    "minlight_color" was set to "255 255 255" (from map)
+    "dirt" was set to "0" (from map)
+    "dirtscale" was set to "1.000000" (from map)
+    "bounce" was set to "0" (from map)
+    "bouncescale" was set to "1.000000" (from map)
+    "sunlight" was set to "0.000000" (from map)
+    "sunlight_color" was set to "255 255 255" (from map)
+    "sunlight2" was set to "0.000000" (from map)
+    "sunlight2_color" was set to "255 255 255" (from map)
+    "sunlight_mangle" was set to "-4.371139e-08 0 -1" (from map)
+    "sunlight_penumbra" was set to "0.000000" (from map)
+
+Embree_TraceInit: Embree version: 3.12.1
+Embree_TraceInit: 
+	0 sky faces
+	33 solid faces
+	0 filtered faces
+	0 shadow-casting skip faces
+SetupLights: 1 initial lights
+SetupLights: 1 after surface lights
+SetupLights: 1 after jittering
+Final count: 1 lights, 0 suns in use.
+0 surface light points in use.
+lightmap size (total): 4360
+Lighting Completed.
+
+0 switchable light styles (32 max)
+Writing F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp as Quake BSP bsp29
+0.058s seconds elapsed
+0 empty lightmaps
+
+

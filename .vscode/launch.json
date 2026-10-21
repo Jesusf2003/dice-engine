@@ -1,0 +1,46 @@
+{
+	"version": "0.2.0",
+	//bin/default.fmf makes ninjawars the standalone base game; -nohome keeps every write inside bin/ninjawars.
+	"configurations": [
+		{
+			"name": "fteqcc: solo compilar",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/bin/fteqcc64.exe",
+			"args": ["-srcfile", "progs.src"],
+			"cwd": "${workspaceFolder}/bin/ninjawars/src",
+			"console": "internalConsole"
+		},
+		{
+			"name": "fteqw: solo correr",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/bin/fteqw64.exe",
+			"args": [
+				"-basedir", "${workspaceFolder}/bin",
+				"-nohome",
+				"-window",
+				"+set", "developer", "1",
+				"+set", "sv_public", "0"
+			],
+			"cwd": "${workspaceFolder}/bin",
+			"console": "internalConsole"
+		},
+		{
+			"name": "fteqcc + fteqw: compilar y correr",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"preLaunchTask": "fteqcc: compilar ninjawars",
+			"program": "${workspaceFolder}/bin/fteqw64.exe",
+			"args": [
+				"-basedir", "${workspaceFolder}/bin",
+				"-nohome",
+				"-window",
+				"+set", "developer", "1",
+				"+set", "sv_public", "0"
+			],
+			"cwd": "${workspaceFolder}/bin",
+			"console": "internalConsole"
+		}
+	]
+}

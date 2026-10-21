@@ -1,0 +1,96 @@
+---- qbsp / ericw-tools 2.0.0-alpha9 ----
+
+--- Options Summary ---
+
+Input file: F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.map
+Output file: F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp
+
+INFO: using built-in palette.
+     3 entities
+     2 unique textures
+     4 texinfos
+    24 unique planes
+
+INFO: world extents calculated to 776 units
+     6 brushes
+    36 sides
+
+            0 texture frames added
+WARNING: unable to find texture skip
+Processing hull 0...
+    6 SOLID brushes
+    6 brushes total
+    36 visible sides
+INFO: calculating BSP for 6 brushes with 36 sides
+     6 brushes
+    36 visible faces
+    24 nodes
+    24 expensive split nodes
+    25 leaves
+    19 EMPTY leafs
+     6 SOLID leafs
+    25 leafs total
+    8 max tree height
+    6 avg tree height
+    114 tree portals
+    18 outside leaves
+    0 detail filled leafs
+     6 brushes
+     6 visible faces
+    30 non-visible faces
+    24 nodes
+    18 non-visible nodes
+    24 expensive split nodes
+    25 leaves
+    19 EMPTY leafs
+     6 SOLID leafs
+    25 leafs total
+    8 max tree height
+    6 avg tree height
+    114 tree portals
+    18 outside leaves
+    0 detail filled leafs
+    114 tree portals
+    6 sides visible
+     6 makefaces
+    24 subdivided
+    18 nodes pruned
+    1 player-occupiable leaves
+    1 clusters of leaves
+    6 SOLID leafs
+    1 EMPTY leafs
+    7 leafs total
+    7 max tree height
+    4 avg tree height
+    16 edges added by tjunctions
+    30 faces optimized through MWT
+    76 triangles computed from MWT
+     3 faces created via optimization of MWT triangles
+    71 edges
+    33 faces
+Processing hull 1...
+Processing hull 2...
+WARNING: No entities in empty space -- no filling performed (hull 2)
+Writing F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp as Quake BSP bsp29
+Wrote F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp
+
+count   lump name    byte size 
+      1 models               64
+     29 planes              580
+     40 vertexes            480
+      6 nodes               144
+      3 texinfos            120
+     33 faces               660
+    102 clipnodes           816
+      2 leafs                56
+     33 marksurfaces         66
+     72 edges               288
+    142 surfedges           568
+      2 textures           5492
+        lightdata             0
+        visdata               0
+        entdata             723
+
+0.149s seconds elapsed
+
+

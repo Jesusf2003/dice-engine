@@ -1,0 +1,163 @@
+// Ninja Wars - FGD para J.A.C.K. (Jackhammer)
+// Motor: FTEQW (BSP29). Compilador: ericw-tools (qbsp / vis / light).
+//
+// Solo se listan entidades que existen en src/*.qc o que ericw-tools procesa al compilar.
+// Si añades un spawn function nuevo en QuakeC, añádelo aquí también.
+
+//
+// Clases base
+//
+
+@BaseClass = Targetname
+[
+	targetname(target_source) : "Nombre"
+]
+
+@BaseClass = Target
+[
+	target(target_destination) : "Objetivo"
+]
+
+// Claves que qbsp/light de ericw-tools leen en cualquier entidad de brushes.
+@BaseClass = EricwBrush
+[
+	_shadow(choices) : "Proyecta sombras (light)" : 0 =
+	[
+		0 : "No"
+		1 : "Sí"
+	]
+	_minlight(integer) : "Luz mínima de este brush (light)" : 0
+	_mincolor(color255) : "Color de la luz mínima (light)" : "255 255 255"
+	_phong(choices) : "Suavizado phong (light)" : 0 =
+	[
+		0 : "No"
+		1 : "Sí"
+	]
+]
+
+//
+// Mundo
+//
+
+@SolidClass = worldspawn : "Mundo"
+[
+	message(string) : "Nombre del mapa"
+	wad(string) : "WADs de texturas (separados por ;)" : "textures.wad"
+
+	// FTEQW
+	sky(string) : "Skybox (FTE: gfx/env/<nombre>rt.tga, bk, lf, ft, up, dn)"
+	fog(string) : "Niebla (FTE: densidad r g b), ej. 0.05 0.3 0.3 0.3"
+
+	// ericw-tools light: iluminación global
+	light(integer) : "Luz mínima global" : 0
+	_minlight_color(color255) : "Color de la luz mínima" : "255 255 255"
+	_range(string) : "Escala de distancia de las luces" : "0.5"
+	_gamma(string) : "Gamma del lightmap" : "1.0"
+
+	// ericw-tools light: sol
+	_sunlight(integer) : "Intensidad del sol" : 0
+	_sun_mangle(string) : "Dirección del sol (yaw pitch roll)" : "0 -90 0"
+	_sunlight_color(color255) : "Color del sol" : "255 255 255"
+	_sunlight_penumbra(integer) : "Penumbra del sol (grados)" : 0
+
+	// ericw-tools light: cúpula de cielo (luz ambiente desde el cielo)
+	_sunlight2(integer) : "Intensidad de la cúpula de cielo" : 0
+	_sunlight2_color(color255) : "Color de la cúpula de cielo" : "255 255 255"
+
+	// ericw-tools light: oclusión ambiental y rebote
+	_dirt(choices) : "Oclusión ambiental (dirtmapping)" : 0 =
+	[
+		0 : "Desactivada"
+		1 : "Activada"
+	]
+	_dirtscale(string) : "Escala de la oclusión" : "1.0"
+	_bounce(choices) : "Luz rebotada" : 0 =
+	[
+		0 : "Desactivada"
+		1 : "Activada"
+	]
+	_bouncescale(string) : "Escala del rebote" : "1.0"
+]
+
+//
+// Jugador
+//
+
+// Tamaño = setsize() de PlayerSpawn en sv_player.qc: el origen está en los pies.
+// El jugador aparece en origin + '0 0 1' y cae hasta el suelo.
+@PointClass size(-16 -16 0, 16 16 56) color(0 255 0) = info_player_start : "Punto de aparición del jugador"
+[
+	angle(integer) : "Dirección (yaw)" : 0
+]
+
+//
+// Utilidades
+//
+
+// No hace nada en el juego. Sirve como destino de focos (light con target).
+@PointClass base(Targetname) size(-4 -4 -4, 4 4 4) color(0 128 255) = info_null : "Punto vacío (destino de focos)"
+[
+]
+
+//
+// Luces (solo compilación)
+//
+
+// light.exe hornea estas luces en el lightmap. En el juego, light() hace remove(self).
+// worldspawn no llama a lightstyle(), así que no hay estilos animados ni luces conmutables.
+@PointClass base(Target) size(-8 -8 -8, 8 8 8) color(255 255 64) = light : "Luz (horneada por light.exe)"
+[
+	light(integer) : "Intensidad" : 300
+	_color(color255) : "Color" : "255 255 255"
+	wait(string) : "Atenuación por distancia (mayor = alcance menor)" : "1.0"
+	delay(choices) : "Tipo de atenuación" : 0 =
+	[
+		0 : "Lineal"
+		1 : "Inversa (1/x)"
+		2 : "Inversa al cuadrado (1/x²)"
+		3 : "Sin atenuación"
+		4 : "Minlight local (sin atenuación ni sombras)"
+		5 : "Inversa al cuadrado (variante suavizada)"
+	]
+	_deviance(integer) : "Radio de luz suave (unidades)" : 0
+	_samples(integer) : "Muestras de luz suave" : 16
+	_dirt(choices) : "Oclusión ambiental en esta luz" : 0 =
+	[
+		0 : "Según worldspawn"
+		1 : "Forzar activada"
+		-1 : "Forzar desactivada"
+	]
+	_anglescale(string) : "Influencia del ángulo de incidencia (0-1)" : "0.5"
+
+	// Foco: apuntar con target -> info_null, o con mangle.
+	mangle(string) : "Dirección del foco (yaw pitch roll)"
+	angle(integer) : "Apertura del foco (grados)" : 40
+	_softangle(integer) : "Borde suave del foco (grados)" : 0
+]
+
+//
+// Brushes
+//
+
+// Brush visible sin colisión. Lo crea func_illusionary() en sv_triggers.qc.
+@SolidClass base(EricwBrush) color(128 128 255) = func_illusionary : "Brush sin colisión"
+[
+]
+
+// Solo compilación: qbsp fusiona estos brushes con el mundo.
+@SolidClass base(EricwBrush) color(200 200 200) = func_group : "Grupo de brushes (se fusiona con el mundo)"
+[
+]
+
+// Solo compilación: brushes que no dividen el árbol BSP (acelera vis, no tapan visibilidad).
+@SolidClass base(EricwBrush) color(160 160 160) = func_detail : "Brush de detalle"
+[
+]
+
+@SolidClass base(EricwBrush) color(160 160 220) = func_detail_illusionary : "Detalle sin colisión"
+[
+]
+
+@SolidClass base(EricwBrush) color(160 220 160) = func_detail_wall : "Detalle que no recorta caras de otros brushes"
+[
+]
