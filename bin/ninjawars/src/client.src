@@ -1,0 +1,11 @@
+#pragma target fte
+#pragma PROGS_DAT ../csprogs.dat
+
+// Must come before fteextensions.qc so it exposes the client builtins (readcoord, drawpic, ...).
+#define CSQC
+#include "fteextensions.qc"
+
+#include "client/cl_customdefs.qc"
+#include "client/cl_input.qc"
+#include "client/cl_hud.qc"
+#include "client/cl_menu.qc"

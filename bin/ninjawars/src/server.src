@@ -1,0 +1,14 @@
+#pragma target fte
+#pragma PROGS_DAT ../progs.dat
+
+#include "fteextensions.qc"
+
+// server side
+#include "server/sv_combat.qc"
+#include "server/sv_enemies.qc"
+#include "server/sv_triggers.qc"
+
+// game
+#include "game/entities/ent_light.qc"
+#include "game/player.qc"
+#include "game/main.qc"
