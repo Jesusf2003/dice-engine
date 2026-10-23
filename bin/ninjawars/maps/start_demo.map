@@ -16,7 +16,7 @@
 "light" "0"
 "wad" "textures.wad"
 "mapversion" "220"
-"wad" "F:/VSCodeProjects/CppProjects/dice-engine/bin/ninjawars/textures.wad;F:/VSCodeProjects/CppProjects/dice-engine/bin/ninjawars/devtextures.wad"
+"wad" "F:/VSCodeProjects/CppProjects/dice-engine/bin/ninjawars/textures.wad;F:/VSCodeProjects/CppProjects/dice-engine/bin/ninjawars/devtextures.wad;F:/VSCodeProjects/CppProjects/dice-engine/bin/ninjawars/tools.wad"
 "_generator" "J.A.C.K. 1.2.4603 (vpQuake)"
 {
 ( 256 -256 160 ) ( 256 -256 0 ) ( 256 256 160 ) MEASURE32_01 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
@@ -65,6 +65,14 @@
 ( -256 256 0 ) ( -256 256 -16 ) ( 256 256 0 ) CHECKERS [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
 ( 256 -256 0 ) ( -256 -256 0 ) ( 256 256 0 ) CHECKERS [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
 ( -256 256 -16 ) ( -256 -256 -16 ) ( 256 256 -16 ) CHECKERS [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( 168 128 64 ) ( 168 128 0 ) ( 168 64 64 ) MEASURE32_01 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 32 64 64 ) ( 32 64 0 ) ( 32 128 64 ) MEASURE32_01 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 168 64 64 ) ( 168 64 0 ) ( 32 64 64 ) MEASURE32_01 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 32 128 64 ) ( 32 128 0 ) ( 168 128 64 ) MEASURE32_01 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 32 128 0 ) ( 32 64 0 ) ( 168 128 0 ) SKIP [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 168 64 64 ) ( 32 64 64 ) ( 168 128 64 ) MEASURE32_01 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
 }
 }
 {

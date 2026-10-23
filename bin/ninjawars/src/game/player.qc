@@ -35,7 +35,7 @@ void() PlayerSpawn =
 	self.fixangle = TRUE;
 };
 
-void() CheckImpulses =
+void() CheckImpulses = 
 {
 	switch (self.impulse)
 	{
@@ -53,33 +53,3 @@ void() PlayerPostThink =
 {
 };
 
-void() SV_RunClientCommand =
-{
-	runstandardplayerphysics(self);
-};
-
-void() ClientConnect =
-{
-};
-
-void() PutClientInServer =
-{
-	PlayerSpawn();
-};
-
-void() ClientKill =
-{
-};
-
-void() ClientDisconnect =
-{
-	bprint(self.netname, " has left the game.\n");
-};
-
-void() SetNewParms =
-{
-};
-
-void() SetChangeParms =
-{
-};

@@ -24,3 +24,34 @@ void() worldspawn =
 
 // Called once per server frame, before any entity thinks.
 void() StartFrame = {};
+
+void() SV_RunClientCommand =
+{
+	runstandardplayerphysics(self);
+};
+
+void() ClientConnect =
+{
+};
+
+void() PutClientInServer =
+{
+	PlayerSpawn();
+};
+
+void() ClientKill =
+{
+};
+
+void() ClientDisconnect =
+{
+	bprint(self.netname, " has left the game.\n");
+};
+
+void() SetNewParms =
+{
+};
+
+void() SetChangeParms =
+{
+};

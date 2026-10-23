@@ -89,7 +89,7 @@
 {
 "classname" "light_spot"
 "_softangle" "0"
-"angle" "-1"
+"angle" "-2"
 "_anglescale" "0.5"
 "_dirt" "0"
 "_samples" "16"
@@ -97,6 +97,6 @@
 "delay" "0"
 "wait" "1.0"
 "_color" "0 170 255"
-"light" "150"
+"light" "400"
 "origin" "160 160 96"
 }

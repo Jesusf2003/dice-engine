@@ -1,4 +1,4 @@
-#QuakeC toolchain: fteqcc (cli), fteqccgui (win32 gui), qcvm (standalone vm).
+#QuakeC toolchain: fteqcc (cli), fteqccgui (win32 gui), fteqccgui-imgui (Dear ImGui gui), qcvm (standalone vm).
 
 if(FTE_TOOL_QCC)
 	add_executable(fteqcc
@@ -24,6 +24,18 @@ if(FTE_TOOL_QCCGUI)
 	else()
 		message(STATUS "FTE: fteqccgui (Qt5/QScintilla) is not ported to this build yet, skipping.")
 	endif()
+endif()
+
+#Dear ImGui port of the Qt frontend (qccguiqt.cpp). Win32 + OpenGL2 backends for now.
+if(FTE_TOOL_QCCGUI_IMGUI AND WIN32)
+	find_package(imgui CONFIG REQUIRED)
+	add_executable(fteqccgui-imgui WIN32
+		qccguiimgui.cpp
+		qccguistuff.c
+		${FTE_QCC_FILES}
+	)
+	target_link_libraries(fteqccgui-imgui PRIVATE fte_compile_options fte_deps_base imgui::imgui opengl32 comdlg32)
+	fte_setup_target(fteqccgui-imgui)
 endif()
 
 if(FTE_TOOL_QCVM)

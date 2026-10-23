@@ -5,16 +5,16 @@
 LoadBSPFile: 'F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp'
 BSP is version Quake BSP bsp29
 INFO: using built-in palette.
-     1 leafs
-     1 clusters
-     0 portals
+     5 leafs
+     5 clusters
+     8 portals
 Calculating Base Vis:
 Calculating Full Vis:
 Expanding clusters...
-average leafs visible: 1
+average leafs visible: 5
 c_noclip: 0
-c_chains: 0
-visdatasize:1  compressed from 1
+c_chains: 44
+visdatasize:5  compressed from 5
 Writing F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp as Quake BSP bsp29
 0.00s elapsed
 

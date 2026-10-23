@@ -17,6 +17,7 @@ option(FTE_DEP_VORBIS    "Link against libvorbisfile."                         O
 option(FTE_DEP_OPUS      "Link against opus (otherwise loaded at runtime)."    ON)
 option(FTE_DEP_SPEEX     "Link against speex/speexdsp (otherwise runtime)."    ON)
 option(FTE_DEP_VULKAN    "Build the Vulkan renderer (headers only)."           ON)
+option(FTE_DEP_IMGUI     "Link against Dear ImGui (v1.93.0-docking, ports/imgui)." ON)
 if(WIN32)
 	option(FTE_DEP_OPENAL "Link against openal-soft (otherwise OpenAL32.dll is loaded at runtime)." ON)
 else()
@@ -150,6 +151,14 @@ if(FTE_DEP_VULKAN)
 	find_package(VulkanHeaders CONFIG REQUIRED)
 	target_link_libraries(fte_deps_client INTERFACE Vulkan::Headers)
 	target_compile_definitions(fte_deps_client INTERFACE VKQUAKE)
+endif()
+
+#--- Dear ImGui (static C++ lib, overlay port in ports/imgui) ---------------
+#Client-side only. Engine code should guard its usage with AVAIL_IMGUI.
+if(FTE_DEP_IMGUI)
+	find_package(imgui CONFIG REQUIRED)
+	target_link_libraries(fte_deps_client INTERFACE imgui::imgui)
+	target_compile_definitions(fte_deps_client INTERFACE AVAIL_IMGUI)
 endif()
 
 #--- OpenGL (no import lib needed: the engine loads opengl32/libGL itself) --

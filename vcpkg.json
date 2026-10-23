@@ -4,6 +4,9 @@
   "version-string": "0.1.0",
   "description": "FTEQW-based engine (client, server and tools).",
   "builtin-baseline": "aeac3fa8d321bf9451d8dfacc62a476b5a956916",
+  "vcpkg-configuration": {
+    "overlay-ports": [ "./ports" ]
+  },
   "dependencies": [
     "zlib",
     "bzip2",
@@ -21,6 +24,13 @@
     "speexdsp",
     "vulkan-headers",
     {
+      "name": "imgui",
+      "features": [
+        "opengl2-binding",
+        { "name": "win32-binding", "platform": "windows" }
+      ]
+    },
+    {
       "name": "openal-soft",
       "platform": "windows"
     }
@@ -32,6 +42,10 @@
         {
           "name": "sdl2",
           "features": [ "vulkan" ]
+        },
+        {
+          "name": "imgui",
+          "features": [ "sdl2-binding" ]
         }
       ]
     }

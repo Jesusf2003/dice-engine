@@ -2,7 +2,6 @@
 LoadBSPFile: 'F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp'
 BSP is version Quake BSP bsp29
 INFO: using built-in palette.
-img::ConvertTextures: WARNING: invalid size data for 
 Loading extended texinfo flags from F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.texinfo.json...
 4 entities read, 2 are lights.
 
@@ -25,7 +24,7 @@ Loading extended texinfo flags from F:\VSCodeProjects\CppProjects\dice-engine\bi
 Embree_TraceInit: Embree version: 3.12.1
 Embree_TraceInit: 
 	0 sky faces
-	33 solid faces
+	49 solid faces
 	0 filtered faces
 	0 shadow-casting skip faces
 SetupLights: 2 initial lights
@@ -34,13 +33,13 @@ SetupLights: 2 after jittering
 Final count: 2 lights, 0 suns in use.
 Colored light entities/settings detected: .lit output enabled.
 0 surface light points in use.
-lightmap size (total): 17440
+lightmap size (total): 20256
 Lighting Completed.
 
 Writing F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.lit
 0 switchable light styles (32 max)
 Writing F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp as Quake BSP bsp29
-0.086s seconds elapsed
+0.075s seconds elapsed
 0 empty lightmaps
 
 

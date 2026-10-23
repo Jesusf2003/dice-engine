@@ -8,89 +8,91 @@ Output file: F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_
 INFO: using built-in palette.
      4 entities
      3 unique textures
-     7 texinfos
-    24 unique planes
+     8 texinfos
+    34 unique planes
 
 INFO: world extents calculated to 744 units
-     6 brushes
-    36 sides
+     7 brushes
+    42 sides
 
             0 texture frames added
-WARNING: unable to find texture skip
 Processing hull 0...
-    6 SOLID brushes
-    6 brushes total
-    36 visible sides
-INFO: calculating BSP for 6 brushes with 36 sides
-     6 brushes
-    36 visible faces
-    24 nodes
-    24 expensive split nodes
-    25 leaves
-    19 EMPTY leafs
-     6 SOLID leafs
-    25 leafs total
-    8 max tree height
-    6 avg tree height
-    114 tree portals
+    7 SOLID brushes
+    7 brushes total
+    42 visible sides
+INFO: calculating BSP for 7 brushes with 42 sides
+     7 brushes
+    41 visible faces
+     1 non-visible faces
+    29 nodes
+    29 expensive split nodes
+    30 leaves
+    23 EMPTY leafs
+     7 SOLID leafs
+    30 leafs total
+    12 max tree height
+     7 avg tree height
+    139 tree portals
     18 outside leaves
     0 detail filled leafs
-     6 brushes
-     6 visible faces
-    30 non-visible faces
-    24 nodes
+     7 brushes
+    11 visible faces
+    31 non-visible faces
+    29 nodes
     18 non-visible nodes
-    24 expensive split nodes
-    25 leaves
-    19 EMPTY leafs
-     6 SOLID leafs
-    25 leafs total
-    8 max tree height
-    6 avg tree height
-    114 tree portals
+    29 expensive split nodes
+    30 leaves
+    23 EMPTY leafs
+     7 SOLID leafs
+    30 leafs total
+    12 max tree height
+     7 avg tree height
+    139 tree portals
     18 outside leaves
     0 detail filled leafs
-    114 tree portals
-    6 sides visible
-     6 makefaces
+    139 tree portals
+    22 sides visible
+    22 makefaces
+     8 merged
     24 subdivided
     18 nodes pruned
-    1 player-occupiable leaves
-    1 clusters of leaves
-    6 SOLID leafs
-    1 EMPTY leafs
-    7 leafs total
-    7 max tree height
-    4 avg tree height
-    16 edges added by tjunctions
-    30 faces optimized through MWT
-    76 triangles computed from MWT
-     3 faces created via optimization of MWT triangles
-    71 edges
-    33 faces
+    5 player-occupiable leaves
+    5 clusters of leaves
+    8 vis portals
+     7 SOLID leafs
+     5 EMPTY leafs
+    12 leafs total
+    12 max tree height
+     7 avg tree height
+     32 edges added by tjunctions
+     38 faces optimized through MWT
+    108 triangles computed from MWT
+     11 faces created via optimization of MWT triangles
+    103 edges
+     49 faces
 Processing hull 1...
 Processing hull 2...
-WARNING: worldspawn at 0 0 0 has long value for key wad (length 140 >= 127)
+WARNING: worldspawn at 0 0 0 has long value for key wad (length 206 >= 127)
 Writing F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp as Quake BSP bsp29
 Wrote F:\VSCodeProjects\CppProjects\dice-engine\bin\ninjawars\maps\start_demo.bsp
 
 count   lump name    byte size 
       1 models               64
-     17 planes              340
-     40 vertexes            480
-      6 nodes               144
-      3 texinfos            120
-     33 faces               660
-     12 clipnodes            96
-      2 leafs                56
-     33 marksurfaces         66
-     72 edges               288
-    142 surfedges           568
-      3 textures          11748
+     31 planes              620
+     56 vertexes            672
+     11 nodes               264
+      4 texinfos            160
+     49 faces               980
+     28 clipnodes           224
+      6 leafs               168
+     65 marksurfaces        130
+    104 edges               416
+    206 surfedges           824
+      3 textures          17228
         lightdata             0
         visdata               0
-        entdata            1000
+        entdata            1066
 
-0.109s seconds elapsed
+0.083s seconds elapsed
 
 
