@@ -1,9 +1,9 @@
-//
-//	ent_light.qc - light (see ninjawars.fgd)
-//
-
-// light.exe bakes it into the lightmap when compiling the map, it's not needed at runtime.
-void() light =
+class light : BaseEntity
 {
-	remove(self);
+  void() light = {
+    remove(this);
+  };
 };
+
+class light_spot : light {};
+class light_sun : light {};

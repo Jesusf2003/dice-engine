@@ -9,6 +9,7 @@
 #include "server/sv_triggers.qc"
 
 // game
+#include "game/entities/entities.qh"
 #include "game/entities/ent_light.qc"
 #include "game/player.qc"
 #include "game/main.qc"

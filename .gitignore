@@ -43,15 +43,19 @@ engine/droid/proguard-project.txt
 engine/droid/project.properties
 
 references/
+bin/ninjwars/maps/autosave/
 bin/ninjwars/maps/*.log
 bin/ninjwars/maps/*.json
 bin/ninjwars/maps/*.prt
 bin/ninjwars/maps/*.jmx
-bin/Id1/
+bin/ninjwars/maps/*.lit
+bin/ninjwars/maps/*.max
+bin/test/
 bin/*.exe
 bin/*.zip
 bin/*.exp
 bin/*.lib
+bin/*.pfx
 
 # Flatpak build artifacts
 .flatpak-builder

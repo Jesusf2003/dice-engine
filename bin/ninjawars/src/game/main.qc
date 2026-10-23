@@ -5,6 +5,9 @@
 // Required by the compiler, the engine never calls it.
 void() main =
 {
+  precache_file("progs.dat");
+  precache_file("default.cfg");
+  precache_file("maps/start_demo.bsp");
 };
 
 void() precache_models =
@@ -15,12 +18,9 @@ void() precache_models =
 // First entity of every map. Precache everything the map can use here.
 void() worldspawn =
 {
-	cvar_set("sv_sound_land", "");
   precache_models();
-	print("Welcome to Ninja Wars!\n");
+	print("Welcome to Ninja Wars! :)\n");
 };
 
 // Called once per server frame, before any entity thinks.
-void() StartFrame =
-{
-};
+void() StartFrame = {};

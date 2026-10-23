@@ -1,163 +1,146 @@
-// Ninja Wars - FGD para J.A.C.K. (Jackhammer)
-// Motor: FTEQW (BSP29). Compilador: ericw-tools (qbsp / vis / light).
-//
-// Solo se listan entidades que existen en src/*.qc o que ericw-tools procesa al compilar.
-// Si a�ades un spawn function nuevo en QuakeC, a��delo aqu� tambi�n.
+// Ninja Wars - FGD for J.A.C.K. (Jackhammer)
+// Map compiler: Ericw's tools
 
 //
-// Clases base
+// Base classes
 //
-
 @BaseClass = Targetname
 [
-	targetname(target_source) : "Nombre"
+	targetname(target_source) : "Name"
 ]
 
 @BaseClass = Target
 [
-	target(target_destination) : "Objetivo"
+	target(target_destination) : "Target"
 ]
 
-// Claves que qbsp/light de ericw-tools leen en cualquier entidad de brushes.
 @BaseClass = EricwBrush
 [
-	_shadow(choices) : "Proyecta sombras (light)" : 0 =
+	_shadow(choices) : "Casts shadows (light)" : 0 =
 	[
 		0 : "No"
-		1 : "Si"
+		1 : "Yes"
 	]
-	_minlight(integer) : "Luz m�nima de este brush (light)" : 0
-	_mincolor(color255) : "Color de la luz m�nima (light)" : "255 255 255"
-	_phong(choices) : "Suavizado phong (light)" : 0 =
+	_minlight(integer) : "Minimum light for this brush (light)" : 0
+	_mincolor(color255) : "Minimum light color (light)" : "255 255 255"
+	_phong(choices) : "Phong smoothing (light)" : 0 =
 	[
 		0 : "No"
-		1 : "Si"
+		1 : "Yes"
 	]
 ]
 
 //
-// Mundo
+// World
 //
 
-@SolidClass = worldspawn : "Mundo"
+@SolidClass = worldspawn : "World"
 [
-	message(string) : "Nombre del mapa"
-	wad(string) : "WADs de texturas (separados por ;)" : "textures.wad"
+	message(string) : "Map name"
+	wad(string) : "Texture WADs (separated by ;)" : "textures.wad"
 
 	// FTEQW
-	sky(string) : "Skybox (FTE: gfx/env/<nombre>rt.tga, bk, lf, ft, up, dn)"
-	fog(string) : "Niebla (FTE: densidad r g b), ej. 0.05 0.3 0.3 0.3"
+	sky(string) : "Skybox (FTE: gfx/env/<name>rt.tga, bk, lf, ft, up, dn)"
+	fog(string) : "Fog (FTE: density r g b), e.g. 0.05 0.3 0.3 0.3"
 
-	// ericw-tools light: iluminaci�n global
-	light(integer) : "Luz m�nima global" : 0
-	_minlight_color(color255) : "Color de la luz m�nima" : "255 255 255"
-	_range(string) : "Escala de distancia de las luces" : "0.5"
-	_gamma(string) : "Gamma del lightmap" : "1.0"
+	// ericw-tools light: global lighting
+	light(integer) : "Global minimum light" : 0
+	_minlight_color(color255) : "Minimum light color" : "255 255 255"
+	_range(string) : "Light distance scale" : "0.5"
+	_gamma(string) : "Lightmap gamma" : "1.0"
 
-	// ericw-tools light: sol
-	_sunlight(integer) : "Intensidad del sol" : 0
-	_sun_mangle(string) : "Direcci�n del sol (yaw pitch roll)" : "0 -90 0"
-	_sunlight_color(color255) : "Color del sol" : "255 255 255"
-	_sunlight_penumbra(integer) : "Penumbra del sol (grados)" : 0
+	// ericw-tools light: sun
+	_sunlight(integer) : "Sun intensity" : 0
+	_sun_mangle(string) : "Sun direction (yaw pitch roll)" : "0 -90 0"
+	_sunlight_color(color255) : "Sun color" : "255 255 255"
+	_sunlight_penumbra(integer) : "Sun penumbra (degrees)" : 0
 
-	// ericw-tools light: c�pula de cielo (luz ambiente desde el cielo)
-	_sunlight2(integer) : "Intensidad de la c�pula de cielo" : 0
-	_sunlight2_color(color255) : "Color de la c�pula de cielo" : "255 255 255"
+	// ericw-tools light: sky dome (ambient light from the sky)
+	_sunlight2(integer) : "Sky dome intensity" : 0
+	_sunlight2_color(color255) : "Sky dome color" : "255 255 255"
 
-	// ericw-tools light: oclusi�n ambiental y rebote
-	_dirt(choices) : "Oclusi�n ambiental (dirtmapping)" : 0 =
+	// ericw-tools light: ambient occlusion and bounce
+	_dirt(choices) : "Ambient occlusion (dirtmapping)" : 0 =
 	[
-		0 : "Desactivada"
-		1 : "Activada"
+		0 : "Disabled"
+		1 : "Enabled"
 	]
-	_dirtscale(string) : "Escala de la oclusi�n" : "1.0"
-	_bounce(choices) : "Luz rebotada" : 0 =
+	_dirtscale(string) : "Occlusion scale" : "1.0"
+	_bounce(choices) : "Bounced light" : 0 =
 	[
-		0 : "Desactivada"
-		1 : "Activada"
+		0 : "Disabled"
+		1 : "Enabled"
 	]
-	_bouncescale(string) : "Escala del rebote" : "1.0"
+	_bouncescale(string) : "Bounce scale" : "1.0"
 ]
 
 //
-// Jugador
+// Player
 //
 
-// Tama�o = setsize() de PlayerSpawn en sv_player.qc: el origen est� en los pies.
-// El jugador aparece en origin + '0 0 1' y cae hasta el suelo.
-@PointClass size(-16 -16 0, 16 16 56) color(0 255 0) = info_player_start : "Punto de aparici�n del jugador"
+@PointClass color(255 0 0) size(-16 -16 0, 16 16 56) = info_player_start : "Player spawn point"
 [
-	angle(integer) : "Direcci�n (yaw)" : 0
+	angle(integer) : "Direction (yaw)" : 0
 ]
 
 //
-// Utilidades
+// Utilities
 //
 
-// No hace nada en el juego. Sirve como destino de focos (light con target).
-@PointClass base(Targetname) size(-4 -4 -4, 4 4 4) color(0 128 255) = info_null : "Punto vac�o (destino de focos)"
+@PointClass base(Targetname) size(-4 -4 -4, 4 4 4) color(0 128 255) = info_null : "Empty point (spotlight target)"
 [
 ]
 
 //
-// Luces (solo compilaci�n)
+// Lights (compile only)
 //
 
-// light.exe hornea estas luces en el lightmap. En el juego, light() hace remove(self).
-// worldspawn no llama a lightstyle(), as� que no hay estilos animados ni luces conmutables.
-@PointClass base(Target) size(-8 -8 -8, 8 8 8) color(255 255 64) = light : "Luz (horneada por light.exe)"
+@BaseClass = LightBase
 [
-	light(integer) : "Intensidad" : 300
+	light(integer) : "Intensity" : 300
 	_color(color255) : "Color" : "255 255 255"
-	wait(string) : "Atenuaci�n por distancia (mayor = alcance menor)" : "1.0"
-	delay(choices) : "Tipo de atenuaci�n" : 0 =
+	wait(string) : "Distance falloff (higher = shorter range)" : "1.0"
+	delay(choices) : "Falloff type" : 0 =
 	[
-		0 : "Lineal"
-		1 : "Inversa (1/x)"
-		2 : "Inversa al cuadrado (1/x�)"
-		3 : "Sin atenuaci�n"
-		4 : "Minlight local (sin atenuaci�n ni sombras)"
-		5 : "Inversa al cuadrado (variante suavizada)"
+		0 : "Linear"
+		1 : "Inverse (1/x)"
+		2 : "Inverse square (1/x^2)"
+		3 : "No falloff"
+		4 : "Local minlight (no falloff or shadows)"
+		5 : "Inverse square (smoothed variant)"
 	]
-	_deviance(integer) : "Radio de luz suave (unidades)" : 0
-	_samples(integer) : "Muestras de luz suave" : 16
-	_dirt(choices) : "Oclusi�n ambiental en esta luz" : 0 =
+	_deviance(integer) : "Soft light radius (units)" : 0
+	_samples(integer) : "Soft light samples" : 16
+	_dirt(choices) : "Ambient occlusion on this light" : 0 =
 	[
-		0 : "Seg�n worldspawn"
-		1 : "Forzar activada"
-		-1 : "Forzar desactivada"
+		0 : "Use worldspawn"
+		1 : "Force enabled"
+		-1 : "Force disabled"
 	]
-	_anglescale(string) : "Influencia del �ngulo de incidencia (0-1)" : "0.5"
+	_anglescale(string) : "Angle of incidence influence (0-1)" : "0.5"
+]
 
-	// Foco: apuntar con target -> info_null, o con mangle.
-	mangle(string) : "Direcci�n del foco (yaw pitch roll)"
-	angle(integer) : "Apertura del foco (grados)" : 40
-	_softangle(integer) : "Borde suave del foco (grados)" : 0
+@PointClass base(LightBase, Target) size(-8 -8 -8, 8 8 8) color(255 255 64) = light : "Point light (baked by light.exe)" []
+
+@PointClass base(LightBase, Target) size(-8 -8 -8, 8 8 8) color(255 200 64) = light_spot : "Spotlight (baked by light.exe)"
+[
+	mangle(string) : "Spotlight direction (yaw pitch roll)"
+	angle(integer) : "Spotlight cone angle (degrees)" : 40
+	_softangle(integer) : "Spotlight soft edge (degrees)" : 0
+]
+@PointClass base(LightBase) size(-8 -8 -8, 8 8 8) color(255 255 200) = light_sun : "Sun (baked by light.exe)"
+[
+	_sun(integer) : "Is sun (leave at 1)" : 1
+	mangle(string) : "Sun direction (yaw pitch roll)" : "0 -90 0"
+	_sunlight_penumbra(integer) : "Sun penumbra (degrees)" : 0
 ]
 
 //
 // Brushes
 //
 
-// Brush visible sin colisi�n. Lo crea func_illusionary() en sv_triggers.qc.
-@SolidClass base(EricwBrush) color(128 128 255) = func_illusionary : "Brush sin colisi�n"
-[
-]
-
-// Solo compilaci�n: qbsp fusiona estos brushes con el mundo.
-@SolidClass base(EricwBrush) color(200 200 200) = func_group : "Grupo de brushes (se fusiona con el mundo)"
-[
-]
-
-// Solo compilaci�n: brushes que no dividen el �rbol BSP (acelera vis, no tapan visibilidad).
-@SolidClass base(EricwBrush) color(160 160 160) = func_detail : "Brush de detalle"
-[
-]
-
-@SolidClass base(EricwBrush) color(160 160 220) = func_detail_illusionary : "Detalle sin colisi�n"
-[
-]
-
-@SolidClass base(EricwBrush) color(160 220 160) = func_detail_wall : "Detalle que no recorta caras de otros brushes"
-[
-]
+@SolidClass base(EricwBrush) color(128 128 255) = func_illusionary : "Non-colliding brush" []
+@SolidClass base(EricwBrush) color(200 200 200) = func_group : "Brush group (merged into world)" []
+@SolidClass base(EricwBrush) color(160 160 160) = func_detail : "Detail brush" []
+@SolidClass base(EricwBrush) color(160 160 220) = func_detail_illusionary : "Non-colliding detail" []
+@SolidClass base(EricwBrush) color(160 220 160) = func_detail_wall : "Detail that doesn't clip other brushes' faces" []
