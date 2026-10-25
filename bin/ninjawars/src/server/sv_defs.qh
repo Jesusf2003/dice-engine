@@ -3,5 +3,8 @@
 //	so the .qc files can call each other without caring about include order.
 //
 
+.float attack_finished;
+.float weaponshot;	// sent as STAT_WEAPONSHOT
+
 // sv_player.qc
 void() PlayerSpawn;

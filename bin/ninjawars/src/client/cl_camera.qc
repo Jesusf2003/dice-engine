@@ -72,7 +72,7 @@ void() Cam_SetupView =
 	}
 	else
 	{
-		addentities(MASK_VIEWMODEL);
+		Viewmodel_Draw();
 		setproperty(VF_VIEWENTITY, player_localentnum);	// hides our body (still casts shadows)
 		campos = eye;
 		camang = ang;

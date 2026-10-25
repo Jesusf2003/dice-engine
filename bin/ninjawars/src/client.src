@@ -9,6 +9,7 @@
 #include "client/cl_defs.qh"
 
 #include "client/cl_input.qc"
+#include "client/cl_viewmodel.qc"
 #include "client/cl_camera.qc"
 #include "client/cl_hud.qc"
 #include "client/menus/cl_menu.qc"
