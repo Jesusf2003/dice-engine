@@ -1,5 +1,0 @@
-// genera una entidad base para todos los jugadores y entidades del juego
-class BaseEntity : entity {
-public:
-  virtual void() Spawn = {};
-};

@@ -1,0 +1,7 @@
+//
+//	sv_defs.qh - server fields, cvars and prototypes. Included before every other server file,
+//	so the .qc files can call each other without caring about include order.
+//
+
+// sv_player.qc
+void() PlayerSpawn;

@@ -4,8 +4,14 @@
 // Must come before fteextensions.qc so it exposes the client builtins (readcoord, drawpic, ...).
 #define CSQC
 #include "fteextensions.qc"
+#include "shared/sh_defs.qc"
 
-#include "client/cl_customdefs.qc"
+#include "client/cl_defs.qh"
+
 #include "client/cl_input.qc"
+#include "client/cl_camera.qc"
 #include "client/cl_hud.qc"
-#include "client/cl_menu.qc"
+#include "client/menus/cl_menu.qc"
+
+// engine entry points
+#include "client/cl_main.qc"

@@ -2,9 +2,8 @@
 //	cl_input.qc - client side input processing
 //
 
-// Called for every input frame before it is sent to the server and used for prediction.
-// fteextensions.qc marks it __used, so it must have a body.
-void() CSQC_Input_Frame =
+// Called from CSQC_Input_Frame for every input frame, before it is sent to the server and used for prediction.
+void() Input_Frame =
 {
 	input_movevalues_x = bound(-350, input_movevalues_x, 350);
 	input_movevalues_y = bound(-350, input_movevalues_y, 350);

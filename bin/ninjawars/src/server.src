@@ -2,14 +2,21 @@
 #pragma PROGS_DAT ../progs.dat
 
 #include "fteextensions.qc"
+#include "shared/sh_defs.qc"
 
-// server side
+// declarations first, so the order below doesn't matter
+#include "server/sv_defs.qh"
+#include "server/entities/ent_base.qh"
+
+// map entities
+#include "server/entities/ent_info.qc"
+#include "server/entities/ent_func.qc"
+#include "server/entities/ent_light.qc"
+
+// gameplay
 #include "server/sv_combat.qc"
 #include "server/sv_enemies.qc"
-#include "server/sv_triggers.qc"
+#include "server/sv_player.qc"
 
-// game
-#include "game/entities/entities.qh"
-#include "game/entities/ent_light.qc"
-#include "game/player.qc"
-#include "game/main.qc"
+// engine entry points
+#include "server/sv_main.qc"

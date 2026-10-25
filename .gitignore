@@ -43,13 +43,22 @@ engine/droid/proguard-project.txt
 engine/droid/project.properties
 
 references/
-bin/ninjwars/maps/autosave/
-bin/ninjwars/maps/*.log
-bin/ninjwars/maps/*.json
-bin/ninjwars/maps/*.prt
-bin/ninjwars/maps/*.jmx
-bin/ninjwars/maps/*.lit
-bin/ninjwars/maps/*.max
+bin/ninjawars/maps/autosave/
+bin/ninjawars/maps/*.log
+bin/ninjawars/maps/*.json
+bin/ninjawars/maps/*.prt
+bin/ninjawars/maps/*.jmx
+bin/ninjawars/maps/*.lit
+bin/ninjawars/maps/*.max
+
+# ninjawars: compiled quakec and engine-written files
+bin/ninjawars/progs.dat
+bin/ninjawars/progs.lno
+bin/ninjawars/csprogs.dat
+bin/ninjawars/csprogs.lno
+bin/ninjawars/qconsole.log
+bin/ninjawars/fte.cfg
+bin/conhistory.txt
 bin/test/
 bin/*.exe
 bin/*.zip

@@ -1,14 +1,6 @@
 //
-//	player.qc - player spawning and the per-client entry points called by the engine
+//	sv_player.qc - player spawning and per-frame player logic
 //
-
-/* QUAKED info_player_start (0 0 1) (-16 -16 0) (16 16 56)
-*/
-class info_player_start : BaseEntity
-{
-	void() info_player_start = {};
-};
-
 
 info_player_start() find_spawn_point =
 {
@@ -25,9 +17,9 @@ void() PlayerSpawn =
 	self.classname = "player";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_WALK;
-	self.health = 100;
+	self.health = 600;
 	self.velocity = '0 0 0';
-	setmodel(self, "models/testplayer.iqm");
+	setmodel(self, "models/heritage_gun.iqm");
 	setsize(self, [-16, -16, 0], [16, 16, 56]);
 	setorigin(self, spot.origin + '0 0 1');
 	self.view_ofs = [0, 0, 48];
