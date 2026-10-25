@@ -144,3 +144,4 @@
 @SolidClass base(EricwBrush) color(160 160 160) = func_detail : "Detail brush" []
 @SolidClass base(EricwBrush) color(160 160 220) = func_detail_illusionary : "Non-colliding detail" []
 @SolidClass base(EricwBrush) color(160 220 160) = func_detail_wall : "Detail that doesn't clip other brushes' faces" []
+@SolidClass base() color(220 160 160) = func_test : "prints a message" []

@@ -19,7 +19,7 @@ void() PlayerSpawn =
 	self.movetype = MOVETYPE_WALK;
 	self.health = 600;
 	self.velocity = '0 0 0';
-	setmodel(self, "models/heritage_gun.iqm");
+	setmodel(self, "models/testplayer.iqm");
 	setsize(self, [-16, -16, 0], [16, 16, 56]);
 	setorigin(self, spot.origin + '0 0 1');
 	self.view_ofs = [0, 0, 48];

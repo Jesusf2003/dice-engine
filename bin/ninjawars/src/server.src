@@ -11,6 +11,7 @@
 // map entities
 #include "server/entities/ent_info.qc"
 #include "server/entities/ent_func.qc"
+#include "server/entities/ent_trigger.qc"
 #include "server/entities/ent_light.qc"
 
 // gameplay
