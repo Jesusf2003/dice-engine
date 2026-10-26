@@ -1,5 +1,5 @@
 /*Copyright Spoike, license is GPLv2+ */
-//Dear ImGui frontend for fteqcc (Win32 + legacy OpenGL), a replacement for the Qt one in qccguiqt.cpp.
+//Dear ImGui frontend for fteqcc (SDL2 + OpenGL3, so it runs on windows, linux and mac), a replacement for the Qt one in qccguiqt.cpp.
 //Shares qccguistuff.c (options, config, GoToDefinition, Grep) with the other frontends.
 
 /*Todo (in no particular order):
@@ -10,71 +10,32 @@
 	decompiler output saving
 */
 
-#include <imgui.h>
-#include <imgui_internal.h>	//DockBuilder
-#include <imgui_stdlib.h>
-#include <imgui_impl_opengl2.h>
-#include <imgui_impl_win32.h>
+#ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <commdlg.h>
 #include <direct.h>
-#include <GL/gl.h>
-#include <sys/stat.h>
+#define chdir _chdir
+#else
+#include <unistd.h>
+#endif
 
-#include <string>
-#include <vector>
-
-extern "C"
-{
-#include "qcc.h"
-#include "gui.h"
-
-extern int qcc_compileactive;
-};
-
-static char *cmdlineargs;
+static std::string cmdlineargs;
+static SDL_Window *g_window;
 
 static progfuncs_t guiprogfuncs;
 static progexterns_t guiprogexterns;
 
 #undef Sys_Error
 
-void RunCompiler(const char *args, pbool quick);
-void AddSourceFile(const char *parentpath, const char *filename);
-
 //---------------------------------------------------------------------------
 //gui state
-
-struct document_s
-{
-	std::string name;
-	std::string text;
-	bool dirty = false;
-};
-static std::vector<document_s> docs;
-static int docs_select = -1;	//tab to bring to front next frame
-
-struct sourcefile_s
-{
-	std::string parent;
-	std::string name;
-};
-static std::vector<sourcefile_s> sourcefiles;
-
-struct logline_s
-{
-	std::string text;
-	ImU32 colour;
-};
-static std::vector<logline_s> loglines;
-static std::string logpartial;
-static bool log_scrolltobottom;
-
 static bool want_compile;
 static bool want_quit;
+static std::string want_open;	//project to switch to, outside of the frame
+static bool openproject_popup;
 
 //---------------------------------------------------------------------------
 //file io, mostly the same as qccguiqt.cpp
@@ -249,7 +210,7 @@ void AddSourceFile(const char *parentpath, const char *filename)
 
 void GUI_DialogPrint(const char *title, const char *text)
 {
-	MessageBoxA(nullptr, text, title, MB_OK);
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, title, text, g_window);
 }
 
 void compilecb(void)
@@ -403,7 +364,7 @@ static void SetMainSrcFile(const char *src)
 	{
 		sl++;
 		std::string dir(src, sl-src);
-		_chdir(dir.c_str());
+		chdir(dir.c_str());
 		src = sl;
 	}
 
@@ -413,7 +374,7 @@ static void SetMainSrcFile(const char *src)
 	QCC_CloseAllVFiles();
 
 	GUI_SetDefaultOpts();
-	GUI_ParseCommandLine(cmdlineargs, true);
+	GUI_ParseCommandLine(cmdlineargs.c_str(), true);
 	GUI_RevealOptions();
 
 	//if the project is a .dat or .zip then decompile it now (so we can access the 'source')
@@ -457,18 +418,53 @@ static void SetMainSrcFile(const char *src)
 	EditFile(progssrcname, -1, false);
 }
 
-static void OpenProjectDialog(HWND hwnd)
+static void OpenProjectDialog(void)
 {
+#ifdef _WIN32
+	SDL_SysWMinfo wm;
+	SDL_VERSION(&wm.version);
 	char filename[MAX_PATH] = "";
 	OPENFILENAMEA ofn = {};
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = hwnd;
+	ofn.hwndOwner = SDL_GetWindowWMInfo(g_window, &wm) ? wm.info.win.window : nullptr;
 	ofn.lpstrFilter = "QuakeC projects (*.src, *.dat, *.pk3, *.zip)\0*.src;*.dat;*.pk3;*.zip\0All files\0*.*\0";
 	ofn.lpstrFile = filename;
 	ofn.nMaxFile = sizeof(filename);
 	ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
 	if (GetOpenFileNameA(&ofn))
-		SetMainSrcFile(filename);
+		want_open = filename;
+#else
+	//SDL2 has no native file dialog, ask for the path instead.
+	openproject_popup = true;
+#endif
+}
+
+static void DrawOpenProjectPopup(void)
+{
+	static std::string path;
+	if (openproject_popup)
+	{
+		ImGui::OpenPopup("Open project");
+		openproject_popup = false;
+	}
+	if (ImGui::BeginPopupModal("Open project", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::TextUnformatted("Path to a .src, .dat, .pk3 or .zip:");
+		ImGui::SetNextItemWidth(ImGui::GetFontSize() * 30);
+		if (ImGui::IsWindowAppearing())
+			ImGui::SetKeyboardFocusHere();
+		bool accept = ImGui::InputText("##path", &path, ImGuiInputTextFlags_EnterReturnsTrue);
+		accept |= ImGui::Button("Open");
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel"))
+			ImGui::CloseCurrentPopup();
+		if (accept && !path.empty())
+		{
+			want_open = path;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
 }
 
 //returns the file+line of a "foo.qc:123: error: ..." log line.
@@ -520,7 +516,7 @@ static void DrawFileTree(const std::string &parent, int depth = 0)
 	}
 }
 
-static void DrawUI(HWND hwnd)
+static void DrawUI(void)
 {
 	ImGuiIO &io = ImGui::GetIO();
 
@@ -532,7 +528,7 @@ static void DrawUI(HWND hwnd)
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Open project..."))
-				OpenProjectDialog(hwnd);
+				OpenProjectDialog();
 			if (ImGui::MenuItem("Save all", "Ctrl+Shift+S"))
 				SaveAllDocuments();
 			ImGui::Separator();
@@ -551,6 +547,7 @@ static void DrawUI(HWND hwnd)
 	}
 	if (ImGui::IsKeyChordPressed(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_S))
 		SaveAllDocuments();
+	DrawOpenProjectPopup();
 
 	//default layout: files on the left, output at the bottom, editor in the middle.
 	ImGuiID dockspace = ImGui::GetID("MainDock");
@@ -647,93 +644,77 @@ static void DrawUI(HWND hwnd)
 }
 
 //---------------------------------------------------------------------------
-//win32 + opengl plumbing
+//sdl2 + opengl plumbing
 
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+const char *glsl_version;
 
-static HDC g_hdc;
-static HGLRC g_hrc;
-static int g_width = 1280, g_height = 800;
+void SDL_CInit() {
 
-static LRESULT WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-{
-	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
-		return true;
-
-	switch (msg)
+    //start up the gui parts
+	SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS, "permonitorv2");
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 	{
-	case WM_SIZE:
-		if (wparam != SIZE_MINIMIZED)
-		{
-			g_width = LOWORD(lparam);
-			g_height = HIWORD(lparam);
-		}
-		return 0;
-	case WM_SYSCOMMAND:
-		if ((wparam & 0xfff0) == SC_KEYMENU)	//no alt menu
-			return 0;
-		break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "fteqccgui", SDL_GetError(), nullptr);
+		exit (1);
 	}
-	return DefWindowProcW(hwnd, msg, wparam, lparam);
+
+#ifdef __APPLE__
+	glsl_version = "#version 150";	//mac only does 3.2+ as a forward-compatible core profile
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#else
+	glsl_version = "#version 130";
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+#endif
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 }
 
-static bool CreateGLContext(HWND hwnd)
+int main(int argc, char **argv)
 {
-	PIXELFORMATDESCRIPTOR pfd = {};
-	pfd.nSize = sizeof(pfd);
-	pfd.nVersion = 1;
-	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-	pfd.iPixelType = PFD_TYPE_RGBA;
-	pfd.cColorBits = 32;
-
-	g_hdc = GetDC(hwnd);
-	int pf = ChoosePixelFormat(g_hdc, &pfd);
-	if (!pf || !SetPixelFormat(g_hdc, pf, &pfd))
-		return false;
-	g_hrc = wglCreateContext(g_hdc);
-	if (!g_hrc || !wglMakeCurrent(g_hdc, g_hrc))
-		return false;
-
-	//vsync, otherwise we redraw as fast as possible and eat a whole core.
-	typedef BOOL (WINAPI *wglSwapIntervalEXT_t)(int interval);
-	auto wglSwapIntervalEXT = (wglSwapIntervalEXT_t)wglGetProcAddress("wglSwapIntervalEXT");
-	if (wglSwapIntervalEXT)
-		wglSwapIntervalEXT(1);
-	return true;
-}
-
-int WINAPI WinMain(HINSTANCE hinst, HINSTANCE, LPSTR cmdline, int)
-{
-	//handle initial commandline args
-	cmdlineargs = cmdline;
+	for (int i = 1; i < argc; i++)
+	{
+		if (i > 1)
+			cmdlineargs += ' ';
+		if (strpbrk(argv[i], " \t"))
+			cmdlineargs += std::string("\"") + argv[i] + "\"";
+		else
+			cmdlineargs += argv[i];
+	}
 	GUI_SetDefaultOpts();
-	if (GUI_ParseCommandLine(cmdlineargs, false) == 1)
+	if (GUI_ParseCommandLine(cmdlineargs.c_str(), false) == 1)
 	{	//compile-only
-		RunCompiler(cmdlineargs, false);
+		RunCompiler(cmdlineargs.c_str(), false);
 		return EXIT_SUCCESS;
 	}
 
-	//start up the gui parts
-	ImGui_ImplWin32_EnableDpiAwareness();
-	float scale = ImGui_ImplWin32_GetDpiScaleForMonitor(MonitorFromPoint(POINT{0, 0}, MONITOR_DEFAULTTOPRIMARY));
+	SDL_CInit();
 
-	WNDCLASSEXW wc = {sizeof(wc), CS_OWNDC, WndProc, 0, 0, hinst, nullptr, LoadCursor(nullptr, IDC_ARROW), nullptr, nullptr, L"fteqccgui-imgui", nullptr};
-	RegisterClassExW(&wc);
-	HWND hwnd = CreateWindowW(wc.lpszClassName, L"FTEQCC GUI (ImGui edition)", WS_OVERLAPPEDWINDOW,
-		100, 100, (int)(g_width * scale), (int)(g_height * scale), nullptr, nullptr, hinst, nullptr);
+	//macs scale through SDL_WINDOW_ALLOW_HIGHDPI instead.
+	float scale = 1.0f;
+#ifndef __APPLE__
+	float dpi;
+	if (SDL_GetDisplayDPI(0, nullptr, &dpi, nullptr) == 0 && dpi > 96.0f)
+		scale = dpi / 96.0f;
+#endif
 
-	if (!CreateGLContext(hwnd))
+	g_window = SDL_CreateWindow("FTEQCC GUI (ImGui edition)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		(int)(1280 * scale), (int)(800 * scale), SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+	SDL_GLContext glcontext = g_window ? SDL_GL_CreateContext(g_window) : nullptr;
+	if (!glcontext)
 	{
-		MessageBoxW(hwnd, L"Couldn't create an OpenGL context.", L"fteqccgui", MB_ICONERROR);
-		DestroyWindow(hwnd);
-		UnregisterClassW(wc.lpszClassName, hinst);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "fteqccgui", "Couldn't create an OpenGL 3 context.", g_window);
+		if (g_window)
+			SDL_DestroyWindow(g_window);
+		SDL_Quit();
 		return 1;
 	}
-	ShowWindow(hwnd, SW_SHOWDEFAULT);
-	UpdateWindow(hwnd);
+	SDL_GL_MakeCurrent(g_window, glcontext);
+	SDL_GL_SetSwapInterval(1);	//vsync, otherwise we redraw as fast as possible and eat a whole core.
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -749,8 +730,8 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE, LPSTR cmdline, int)
 	style.ScaleAllSizes(scale);
 	style.FontScaleDpi = scale;
 
-	ImGui_ImplWin32_Init(hwnd);
-	ImGui_ImplOpenGL2_Init();
+	ImGui_ImplSDL2_InitForOpenGL(g_window, glcontext);
+	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	GUIprintf("Welcome to FTEQCC!\n(ImGui edition)\n");
 
@@ -763,53 +744,61 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE, LPSTR cmdline, int)
 	while (!want_quit)
 	{
 		//an editor doesn't need to redraw constantly, sleep until there's input (or ~60fps for animations).
-		MsgWaitForMultipleObjects(0, nullptr, FALSE, 16, QS_ALLINPUT);
-
-		MSG msg;
-		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		SDL_Event ev;
+		if (SDL_WaitEventTimeout(&ev, 16))
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-			if (msg.message == WM_QUIT)
-				want_quit = true;
+			do
+			{
+				ImGui_ImplSDL2_ProcessEvent(&ev);
+				if (ev.type == SDL_QUIT)
+					want_quit = true;
+				else if (ev.type == SDL_WINDOWEVENT && ev.window.event == SDL_WINDOWEVENT_CLOSE && ev.window.windowID == SDL_GetWindowID(g_window))
+					want_quit = true;
+			} while (SDL_PollEvent(&ev));
 		}
 		if (want_quit)
 			break;
-		if (IsIconic(hwnd))
+		if (SDL_GetWindowFlags(g_window) & SDL_WINDOW_MINIMIZED)
 		{
-			Sleep(10);
+			SDL_Delay(10);
 			continue;
 		}
 
-		//compiling outside of the frame, so the log/docs aren't touched while they're being drawn.
+		//compiling/switching projects outside of the frame, so the log/docs aren't touched while they're being drawn.
+		if (!want_open.empty())
+		{
+			std::string src = std::move(want_open);
+			want_open.clear();
+			SetMainSrcFile(src.c_str());
+		}
 		if (want_compile)
 		{
 			want_compile = false;
 			RunCompiler(parameters, false);
 		}
 
-		ImGui_ImplOpenGL2_NewFrame();
-		ImGui_ImplWin32_NewFrame();
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
 
-		DrawUI(hwnd);
+		DrawUI();
 
 		ImGui::Render();
-		glViewport(0, 0, g_width, g_height);
+		int width, height;
+		SDL_GL_GetDrawableSize(g_window, &width, &height);
+		glViewport(0, 0, width, height);
 		glClearColor(0.10f, 0.10f, 0.12f, 1.00f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-		SwapBuffers(g_hdc);
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		SDL_GL_SwapWindow(g_window);
 	}
 
-	ImGui_ImplOpenGL2_Shutdown();
-	ImGui_ImplWin32_Shutdown();
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
-	wglMakeCurrent(nullptr, nullptr);
-	wglDeleteContext(g_hrc);
-	ReleaseDC(hwnd, g_hdc);
-	DestroyWindow(hwnd);
-	UnregisterClassW(wc.lpszClassName, hinst);
+	SDL_GL_DeleteContext(glcontext);
+	SDL_DestroyWindow(g_window);
+	SDL_Quit();
 	return 0;
 }

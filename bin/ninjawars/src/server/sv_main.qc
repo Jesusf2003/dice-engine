@@ -11,13 +11,13 @@ void() main =
 
 void() precache_models =
 {
-  precache_model("models/testplayer.iqm");
+  precache_model("models/player_test.iqm");
   precache_model("models/weapons/v_pistol.iqm");
 };
 
 void() worldspawn =
 {
-  precache_models();
+    precache_models();
 	clientstat(STAT_WEAPONSHOT, EV_FLOAT, weaponshot);
 	print("Welcome to Ninja Wars! :)\n");
 };

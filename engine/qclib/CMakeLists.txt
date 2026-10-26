@@ -26,15 +26,25 @@ if(FTE_TOOL_QCCGUI)
 	endif()
 endif()
 
-#Dear ImGui port of the Qt frontend (qccguiqt.cpp). Win32 + OpenGL2 backends for now.
-if(FTE_TOOL_QCCGUI_IMGUI AND WIN32)
+#Dear ImGui port of the Qt frontend (qccguiqt.cpp). SDL2 + OpenGL3 backends, so it builds on any OS.
+if(FTE_TOOL_QCCGUI_IMGUI)
+	find_package(SDL2 CONFIG REQUIRED)
 	find_package(imgui CONFIG REQUIRED)
+	find_package(OpenGL REQUIRED)
 	add_executable(fteqccgui-imgui WIN32
 		qccguiimgui.cpp
 		qccguistuff.c
 		${FTE_QCC_FILES}
 	)
-	target_link_libraries(fteqccgui-imgui PRIVATE fte_compile_options fte_deps_base imgui::imgui opengl32 comdlg32)
+	target_link_libraries(fteqccgui-imgui PRIVATE fte_compile_options fte_deps_base
+		$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+		$<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+		imgui::imgui OpenGL::GL)
+	if(WIN32)
+		target_link_libraries(fteqccgui-imgui PRIVATE comdlg32)
+	else()
+		target_link_libraries(fteqccgui-imgui PRIVATE m)
+	endif()
 	fte_setup_target(fteqccgui-imgui)
 endif()
 

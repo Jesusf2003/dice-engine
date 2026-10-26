@@ -17,16 +17,17 @@ void() PlayerSpawn =
 	self.classname = "player";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_WALK;
-	self.health = 600;
+	self.health = 100;
 	self.velocity = '0 0 0';
 
-	setmodel(self, "models/testplayer.iqm");
- 	setsize(self, [-16, -16, 0], [16, 16, 56]);
+	setmodel(self, "models/player_test.iqm");
+	self.scale = 1.5;
+	setsize(self, [-16, -16, -16], [16, 16, 40]);
 	self.weaponmodel = "models/weapons/v_pistol.iqm";
 	self.weaponframe = 0;
- 	setorigin(self, spot.origin + '0 0 1');
+	setorigin(self, spot.origin + '0 0 17');
 
-	self.view_ofs = [0, 0, 48];
+	self.view_ofs = [0, 0, 32];
 	self.angles = spot.angles;
 	self.fixangle = TRUE;
 };
@@ -43,12 +44,6 @@ void() CheckImpulses =
 void() PlayerPreThink =
 {
 	CheckImpulses();
-  if (time < self.attack_finished) return;
-  if (self.button0) {
-    self.weaponframe = VM_FIRE;
-    self.weaponshot += 1;	// restarts fire on the client even if weaponframe was already VM_FIRE
-    self.attack_finished = time + 11 / 24;
-  } else self.weaponframe = VM_IDLE;
 };
 
 void() PlayerPostThink =

@@ -24,9 +24,23 @@
     "speexdsp",
     "vulkan-headers",
     {
+      "name": "glew",
+      "platform": "windows"
+    },
+    {
+      "name": "glm",
+      "platform": "windows"
+    },
+    {
+      "name": "sdl2",
+      "features": [ "vulkan" ]
+    },
+    {
       "name": "imgui",
       "features": [
         "opengl2-binding",
+        "opengl3-binding",
+        "sdl2-binding",
         { "name": "win32-binding", "platform": "windows" }
       ]
     },

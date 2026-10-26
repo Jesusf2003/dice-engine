@@ -50,6 +50,7 @@ bin/ninjawars/maps/*.prt
 bin/ninjawars/maps/*.jmx
 bin/ninjawars/maps/*.lit
 bin/ninjawars/maps/*.max
+bin/ninjawars/screenshots/
 
 # ninjawars: compiled quakec and engine-written files
 bin/ninjawars/progs.dat
@@ -58,11 +59,21 @@ bin/ninjawars/csprogs.dat
 bin/ninjawars/csprogs.lno
 bin/ninjawars/qconsole.log
 bin/ninjawars/fte.cfg
+bin/ninjawars/models/test/
+bin/ninjawars/models/weapons/
 bin/conhistory.txt
 bin/test/
+vulkan.pcache
 bin/*.exe
 bin/*.zip
 bin/*.exp
+bin/*.pdb
+#quaked3 editor runtime files
+bin/qe3*.cfg
+bin/qe3.log
+bin/crash.*.map
+#radiant editor dock layout
+bin/radiant.ini
 bin/*.lib
 bin/*.pfx
 
