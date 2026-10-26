@@ -11,7 +11,7 @@ void() main =
 
 void() precache_models =
 {
-  precache_model("models/player_test.iqm");
+  precache_model("models/sprites/marine!.spr");	// the ! makes FTE light the sprite with the map's lighting
   precache_model("models/weapons/v_pistol.iqm");
 };
 

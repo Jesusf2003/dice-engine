@@ -59,6 +59,7 @@ bin/ninjawars/csprogs.dat
 bin/ninjawars/csprogs.lno
 bin/ninjawars/qconsole.log
 bin/ninjawars/fte.cfg
+bin/ninjawars/models/sprites/
 bin/ninjawars/models/test/
 bin/ninjawars/models/weapons/
 bin/conhistory.txt
