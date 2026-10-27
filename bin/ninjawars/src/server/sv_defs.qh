@@ -4,7 +4,6 @@
 //
 
 .float attack_finished;
-.float weaponshot;	// sent as STAT_WEAPONSHOT
 
 // sv_player.qc
 void() PlayerSpawn;

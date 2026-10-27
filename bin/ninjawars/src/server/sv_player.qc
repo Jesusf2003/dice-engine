@@ -29,12 +29,10 @@ void() PlayerSpawn =
 	self.health = 100;
 	self.velocity = '0 0 0';
 
-	setmodel(self, "models/marine!.spr");
+	setmodel(self, "models/sprites/marine!.spr");
 	self.scale = 1;	// the sprite is 1 pixel per unit, with its feet on mins_z
 	self.frame = MARINE_WALK;
 	setsize(self, [-16, -16, -16], [16, 16, 40]);
-	self.weaponmodel = "models/weapons/v_pistol.iqm";
-	self.weaponframe = 0;
 	setorigin(self, spot.origin + '0 0 17');
 
 	self.view_ofs = [0, 0, 32];

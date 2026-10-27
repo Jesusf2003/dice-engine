@@ -12,13 +12,11 @@ void() main =
 void() precache_models =
 {
   precache_model("models/sprites/marine!.spr");	// the ! makes FTE light the sprite with the map's lighting
-  precache_model("models/weapons/v_pistol.iqm");
 };
 
 void() worldspawn =
 {
     precache_models();
-	clientstat(STAT_WEAPONSHOT, EV_FLOAT, weaponshot);
 	print("Welcome to Ninja Wars! :)\n");
 };
 
