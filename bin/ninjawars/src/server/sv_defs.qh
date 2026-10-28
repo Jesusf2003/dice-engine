@@ -8,12 +8,35 @@
 // sv_player.qc
 void() PlayerSpawn;
 
-enum
-{
-    MOVETYPE_NONE,
-    MOVETYPE_WALK,
-    MOVETYPE_FLY,
-    MOVETYPE_TOSS,
-    MOVETYPE_PUSH,
-    MOVETYPE_NOCLIP
-};
+// sv_subs.qc: movers. MOVETYPE_* come from fteextensions.qc, don't redefine them.
+.float speed;
+.vector finaldest;
+.vector finalangle;
+.void() think1;
+
+void() SetMovedir;
+void(vector tdest, float tspeed, void() func) SUB_CalcMove;
+void(vector tdest, float tspeed, void() func) SUB_CalcAngleMove;
+
+// sv_doors.qc
+.float wait;
+.float lip;
+.float distance;
+.float state;
+.vector pos1;
+.vector pos2;
+.void(vector tdest, float tspeed, void() func) mover;
+void() DoorSpawn;
+void() DoorRotatingSpawn;
+void() DoorGoUp;
+void() DoorGoDown;
+
+const float STATE_TOP		= 0;
+const float STATE_BOTTOM	= 1;
+const float STATE_UP		= 2;
+const float STATE_DOWN		= 3;
+
+const float DOOR_START_OPEN	= 1;
+const float DOOR_REVERSE	= 2;
+const float DOOR_X_AXIS		= 64;
+const float DOOR_Y_AXIS		= 128;

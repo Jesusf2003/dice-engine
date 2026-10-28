@@ -146,4 +146,33 @@
 @SolidClass base(EricwBrush) color(160 160 220) = func_detail_illusionary : "Non-colliding detail" []
 @SolidClass base(EricwBrush) color(160 220 160) = func_detail_wall : "Detail that doesn't clip other brushes' faces" []
 @SolidClass base() color(255 200 0) = func_ladder : "Climbable volume (invisible, place against a wall)" []
+@SolidClass base(Targetname) color(0 128 204) = func_door : "Sliding door (opens on touch)"
+[
+	angle(integer) : "Open direction (-1 up, -2 down)" : 0
+	distance(integer) : "Distance in units (0 = own size minus lip)" : 0
+	speed(integer) : "Speed (units/s)" : 100
+	wait(string) : "Seconds before closing (-1 = stay open)" : "3"
+	lip(integer) : "Lip (units left visible when open, only without distance)" : 8
+	noise1(sound) : "Moving sound"
+	noise2(sound) : "Stop sound"
+	spawnflags(flags) =
+	[
+		1 : "Start open" : 0
+	]
+]
+@SolidClass base(Targetname) color(0 128 204) = func_door_rotating : "Rotating door (needs an origin brush on the hinge)"
+[
+	distance(integer) : "Degrees to rotate" : 90
+	speed(integer) : "Speed (degrees/s)" : 100
+	wait(string) : "Seconds before closing (-1 = stay open)" : "3"
+	noise1(sound) : "Moving sound"
+	noise2(sound) : "Stop sound"
+	spawnflags(flags) =
+	[
+		1 : "Start open" : 0
+		2 : "Reverse direction" : 0
+		64 : "X axis" : 0
+		128 : "Y axis" : 0
+	]
+]
 @SolidClass base() color(220 160 160) = func_test : "prints a message" []
