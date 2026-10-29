@@ -2342,8 +2342,18 @@ void VK_SetupViewPortProjection(qboolean flipy, const float eyematrix[12], const
 			fovv_x *= -1;
 		}
 
-		Matrix4x4_CM_Projection_Offset(r_refdef.m_projection_std, fov_l, fov_r, fov_d, fov_u, r_refdef.mindist, r_refdef.maxdist, false);
-		Matrix4x4_CM_Projection_Offset(r_refdef.m_projection_view, -fovv_x/2, fovv_x/2, -fovv_y/2, fovv_y/2, r_refdef.mindist, r_refdef.maxdist, false);
+		if (r_refdef.useperspective)
+		{
+			Matrix4x4_CM_Projection_Offset(r_refdef.m_projection_std, fov_l, fov_r, fov_d, fov_u, r_refdef.mindist, r_refdef.maxdist, false);
+			Matrix4x4_CM_Projection_Offset(r_refdef.m_projection_view, -fovv_x/2, fovv_x/2, -fovv_y/2, fovv_y/2, r_refdef.mindist, r_refdef.maxdist, false);
+		}
+		else
+		{	//isometric (VF_PERSPECTIVE 0): fov is the visible size in quake units, not an angle.
+			//gl-style depth like the perspective path above; the y flip already happened in the view matrix.
+			//no infinite far plane for ortho, so fall back to a finite one like gl does.
+			Matrix4x4_CM_Orthographic(r_refdef.m_projection_std, fov_l, fov_r, fov_d, fov_u, r_refdef.mindist, r_refdef.maxdist?r_refdef.maxdist:9999);
+			memcpy(r_refdef.m_projection_view, r_refdef.m_projection_std, sizeof(r_refdef.m_projection_view));
+		}
 	}
 
 	r_refdef.m_projection_view[2+4*0] *= 0.333;

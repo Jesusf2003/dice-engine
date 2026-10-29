@@ -9,4 +9,6 @@ class info_player_start : BaseEntity
 	void() info_player_start = {};
 };
 
+
+
 void() info_null = {};
