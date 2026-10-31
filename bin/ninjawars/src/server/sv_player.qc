@@ -32,7 +32,7 @@ void() PlayerSpawn =
 	setmodel(self, "models/sprites/marine!.spr");
 	self.scale = 1;	// the sprite is 1 pixel per unit, with its feet on mins_z
 	self.frame = MARINE_WALK;
-	setsize(self, [-16, -16, -16], [16, 16, 40]);
+	setsize(self, PLAYER_MINS, PLAYER_MAXS);
 	setorigin(self, spot.origin + '0 0 17');
 
 	self.view_ofs = [0, 0, 32];

@@ -6,18 +6,24 @@
 void(float apilevel, string enginename, float engineversion) CSQC_Init =
 {
 	// registercommand("name") here, then handle it in CSQC_ConsoleCommand.
+	Cam_Init();
+	Cam_SetMode(CAM_BELTSCROLL);
 };
 
 // Commands registered in CSQC_Init.
 float(string cmd) CSQC_ConsoleCommand =
 {
 	tokenize_console(cmd);
+	if (Cam_ConsoleCommand())
+		return TRUE;
 	return FALSE;
 };
 
 // Return TRUE to eat the event so the engine doesn't run binds for it.
 float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
 {
+	if (evtype == IE_MOUSEDELTA && !in_menu)
+		return Cam_MouseMove(scanx, chary);
 	return FALSE;
 };
 
@@ -34,6 +40,8 @@ void(float vwidth, float vheight, float notmenu) CSQC_UpdateView =
 
 	clearscene();
 	Cam_SetupView();
+	if (Cam_GetMode() == CAM_FIRSTPERSON)
+		Viewmodel_Draw();
 
 	// The engine still draws its status bar and crosshair under the csqc hud.
 	setproperty(VF_DRAWENGINESBAR, TRUE);

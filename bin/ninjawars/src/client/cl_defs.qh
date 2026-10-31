@@ -26,6 +26,7 @@ float input_cursor;
 
 entity localplayer;
 
+
 vector() readvector =
 {
 	vector r = '0 0 0';

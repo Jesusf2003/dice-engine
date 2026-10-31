@@ -17,6 +17,7 @@ void() precache_models =
 void() worldspawn =
 {
     precache_models();
+	clientstat(STAT_PMOVE_FLAGS, EV_FLOAT, pmove_flags);
 	print("Welcome to Ninja Wars! :)\n");
 };
 

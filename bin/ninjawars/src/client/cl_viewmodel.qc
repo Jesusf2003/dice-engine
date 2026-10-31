@@ -9,7 +9,7 @@ entity viewgun;
 var vector autocvar_vm_tune_offset = '0 0 0';	// forward right up, in units
 var vector autocvar_vm_tune_angles = '0 0 0';	// pitch yaw roll, in model space
 
-// Called from Cam_SetupView in first person only, after clearscene has set VF_ORIGIN/VF_ANGLES.
+// Called from CSQC_UpdateView in first person only, after Cam_SetupView.
 void() Viewmodel_Draw =
 {
 	float mdl = getstati(STAT_WEAPONMODELI);

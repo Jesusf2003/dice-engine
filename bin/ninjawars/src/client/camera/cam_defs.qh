@@ -1,0 +1,31 @@
+//
+//	cam_defs.qh - camera library: modes and state. CSQC only.
+//
+//	The game must send the player's .pmove_flags as the STAT_PMOVE_FLAGS stat (ladders),
+//	and define PLAYER_MINS/PLAYER_MAXS, the player's size as given to setsize.
+//	Hook it up from the CSQC entry points, see cl_main.qc and camera.qc.
+//
+
+const float CAM_FIRSTPERSON	= 0;
+const float CAM_ORTHO		= 1;
+const float CAM_THIRDPERSON	= 2;
+const float CAM_ORBIT		= 3;
+const float CAM_SIDESCROLL	= 4;
+const float CAM_BELTSCROLL	= 5;
+const float CAM_COUNT		= 6;
+
+const float PMF_LADDER = 2;	// .pmove_flags bit the engine sets while on a ladder
+
+struct camera_t
+{
+	float mode;
+	float distance;		// orbit/third person: current distance after wall collisions
+	float pitch;
+	float yaw;
+	vector focus;		// scrollers: smoothed point the camera looks at
+	float facing;		// yaw the player faces in the cameras that turn it towards where it walks
+	float side_facing;	// side scroller: the left/right facing to return to after looking at the back
+	float ladder_time;	// last time on a ladder, to step off its top
+	float eyez;			// smoothed eye height, so stairs don't jerk the camera
+};
+camera_t cam;
