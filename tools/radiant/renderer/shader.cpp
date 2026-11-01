@@ -104,6 +104,11 @@ void Shader::Set(const char *uniform, float v)
 	qglUniform1f(qglGetUniformLocation(program, uniform), v);
 }
 
+void Shader::Set(const char *uniform, float x, float y)
+{
+	qglUniform2f(qglGetUniformLocation(program, uniform), x, y);
+}
+
 void Shader::Set(const char *uniform, const vec3 &v)
 {
 	qglUniform3f(qglGetUniformLocation(program, uniform), v.x, v.y, v.z);

@@ -80,11 +80,39 @@ if(FTE_TOOL_RADIANT)
 		${_R}/config.h
 		${_R}/mathlib.h
 
-		#map data: grid now, brushes and entities later
+		#core: log, preferences, platform helpers
+		${_R}/core/common/gameConfig.cpp
+		${_R}/core/common/gameConfig.h
+		${_R}/core/common/log.cpp
+		${_R}/core/common/log.h
+		${_R}/core/common/preferences.cpp
+		${_R}/core/common/preferences.h
+		${_R}/core/utils/fileDialog.cpp
+		${_R}/core/utils/fileDialog.h
+
+		#map data: grid, the .map document (parse, validate), entities and brushes
 		${_R}/map/grid.cpp
 		${_R}/map/grid.h
+		${_R}/map/winding.cpp
+		${_R}/map/winding.h
+		${_R}/map/brush.cpp
+		${_R}/map/brush.h
+		${_R}/map/entity.cpp
+		${_R}/map/entity.h
+		${_R}/map/entityDefs.cpp
+		${_R}/map/entityDefs.h
+		${_R}/map/fgdParser.cpp
+		${_R}/map/fgdParser.h
+		${_R}/map/map.cpp
+		${_R}/map/map.h
+		${_R}/map/mapParser.cpp
+		${_R}/map/mapParser.h
+		${_R}/map/mapReport.cpp
+		${_R}/map/mapReport.h
+		${_R}/map/mapValidator.cpp
+		${_R}/map/mapValidator.h
 
-		#gl: loader, shaders, framebuffers, cameras, textures
+		#gl: loader, shaders, framebuffers, cameras, textures, the grid and map renderers
 		${_R}/renderer/glFuncs.cpp
 		${_R}/renderer/glFuncs.h
 		${_R}/renderer/shader.cpp
@@ -95,8 +123,14 @@ if(FTE_TOOL_RADIANT)
 		${_R}/renderer/camera.h
 		${_R}/renderer/orthographicCamera.cpp
 		${_R}/renderer/orthographicCamera.h
+		${_R}/renderer/perspectiveCamera.cpp
+		${_R}/renderer/perspectiveCamera.h
 		${_R}/renderer/gridRenderer.cpp
 		${_R}/renderer/gridRenderer.h
+		${_R}/renderer/mapRenderer.cpp
+		${_R}/renderer/mapRenderer.h
+		${_R}/renderer/lightBaker.cpp
+		${_R}/renderer/lightBaker.h
 		${_R}/renderer/texture.cpp
 		${_R}/renderer/texture.h
 		${_R}/renderer/textures.cpp
@@ -111,6 +145,15 @@ if(FTE_TOOL_RADIANT)
 		${_R}/ui/wndMain_status.cpp
 		${_R}/ui/wndMain_toolbar.cpp
 
+		${_R}/ui/console/wndConsole.cpp
+		${_R}/ui/console/wndConsole.h
+
+		${_R}/ui/preferences/wndPreferences.cpp
+		${_R}/ui/preferences/wndPreferences.h
+
+		${_R}/ui/options/wndOptions.cpp
+		${_R}/ui/options/wndOptions.h
+
 		${_R}/ui/favourites/textureFavorites.cpp
 		${_R}/ui/favourites/textureFavorites.h
 
@@ -121,8 +164,12 @@ if(FTE_TOOL_RADIANT)
 
 		${_R}/ui/view/mapView2D.cpp
 		${_R}/ui/view/mapView2D.h
+		${_R}/ui/view/mapViewZ.cpp
+		${_R}/ui/view/mapViewZ.h
 		${_R}/ui/view/wndCamera.cpp
 		${_R}/ui/view/wndCamera.h
+		${_R}/ui/view/wndViewports.cpp
+		${_R}/ui/view/wndViewports.h
 	)
 	add_executable(radiant WIN32 ${RADIANT_SOURCES})
 	target_include_directories(radiant PRIVATE ${_R})	#includes are relative to tools/radiant: "ui/window.h"
@@ -139,6 +186,9 @@ if(FTE_TOOL_RADIANT)
 		OpenGL::GL
 		Vulkan::Vulkan
 	)
+	if(WIN32)
+		target_link_libraries(radiant PRIVATE comdlg32 ole32 shell32)	#GetOpenFileName, IFileOpenDialog
+	endif()
 
 	set_target_properties(radiant PROPERTIES
 		CXX_STANDARD 17

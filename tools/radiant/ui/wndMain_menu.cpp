@@ -8,6 +8,11 @@
 #include "renderer/textures.h"
 #include "ui/textures/textureView.h"
 #include "ui/view/mapView2D.h"
+#include "ui/view/mapViewZ.h"
+#include "ui/view/wndCamera.h"
+#include "ui/preferences/wndPreferences.h"
+#include "ui/options/wndOptions.h"
+#include "ui/view/wndViewports.h"
 #include "map/grid.h"
 
 #include <SDL.h>
@@ -27,6 +32,7 @@
 
 static bool s_openFilterPopup;
 static bool s_openAbout;
+static bool s_openCamSpeed;
 
 /*
 ==============
@@ -42,6 +48,12 @@ bool WndMain_Command(int id)
 	//===================================
 	// File menu
 	//===================================
+	case ID_FILE_NEW:
+		WndMain_NewMap();
+		break;
+	case ID_FILE_OPEN:
+		WndMain_OpenMapDialog();
+		break;
 	case ID_FILE_EXIT:	// exit application
 	{
 		// TODO: ConfirmModified() once the map is ported
@@ -52,12 +64,59 @@ bool WndMain_Command(int id)
 	}
 
 	//===================================
+	// Edit menu
+	//===================================
+	case ID_EDIT_PREFERENCES:
+		WndPreferences::Open();
+		break;
+
+	//===================================
+	// Tools menu
+	//===================================
+	case ID_TOOLS_OPTIONS:
+		WndOptions::Open();
+		break;
+
+	//===================================
 	// View menu
 	//===================================
 	case ID_VIEW_FILTER_POPUP:
 		WndMain_ViewFilterPopup();
 		break;
 
+	case ID_VIEW_MAXIMIZE:
+		g_wndViewports->ToggleMaximize();
+		break;
+
+	// the camera
+	case ID_VIEW_CENTER:
+		g_wndCamera->LevelView();
+		break;
+	case ID_VIEW_UPFLOOR:
+		g_wndCamera->ChangeFloor(true);
+		break;
+	case ID_VIEW_DOWNFLOOR:
+		g_wndCamera->ChangeFloor(false);
+		break;
+	case ID_VIEW_CAMSPEED:
+		s_openCamSpeed = true;
+		break;
+	case ID_VIEW_CUBICCLIP:
+		g_wndCamera->ToggleCubicClip();
+		break;
+	case ID_VIEW_CUBICCLIPNEARER:
+		g_wndCamera->CubicClipNearer();
+		break;
+	case ID_VIEW_CUBICCLIPFARTHER:
+		g_wndCamera->CubicClipFarther();
+		break;
+	case ID_DRAWMODE_WIREFRAME:
+	case ID_DRAWMODE_FLATSHADE:
+	case ID_DRAWMODE_TEXTURED:
+	case ID_DRAWMODE_TEXTUREDSHADED:
+	case ID_DRAWMODE_LIGHTING:
+		WndCamera::SetDrawMode((MapRenderer::DrawMode)(id - ID_DRAWMODE_WIREFRAME));	// same order
+		break;
 	case ID_VIEW_SWAPGRIDCAM:
 		WndMain_SwapGridCam();
 		WndMain_UpdateWindows(W_XY | W_CAMERA);
@@ -87,6 +146,18 @@ bool WndMain_Command(int id)
 		break;
 	case ID_VIEW_YZ:
 		g_wndGrid[0]->SetViewPlane(MapView2D::YZ);
+		break;
+	case ID_VIEW_Z100:
+		g_wndZ->ResetScale();
+		WndMain_UpdateWindows(W_Z);
+		break;
+	case ID_VIEW_ZZOOMIN:
+		g_wndZ->ScaleUp();
+		WndMain_UpdateWindows(W_Z);
+		break;
+	case ID_VIEW_ZZOOMOUT:
+		g_wndZ->ScaleDown();
+		WndMain_UpdateWindows(W_Z);
 		break;
 	case ID_VIEW_100:
 		g_wndGrid[0]->ResetZoom();
@@ -195,6 +266,7 @@ bool WndMain_Command(int id)
 	case ID_WINDOW_4REVERSEZCAMRIGHT:
 	case ID_WINDOW_4REVERSENOZCAMLEFT:
 	case ID_WINDOW_4REVERSENOZCAMRIGHT:
+	case ID_WINDOW_HAMMER:
 		WndMain_DefaultLayout(id - ID_WINDOW_QE3DEFAULT);
 		break;
 
@@ -223,6 +295,10 @@ bool WndMain_CommandEnabled(int id)
 {
 	switch (id)
 	{
+	case ID_FILE_NEW:
+	case ID_FILE_OPEN:
+	case ID_EDIT_PREFERENCES:
+	case ID_TOOLS_OPTIONS:
 	case ID_FILE_EXIT:
 	case ID_VIEW_FILTER_POPUP:
 	case ID_VIEW_SWAPGRIDCAM:
@@ -235,6 +311,21 @@ bool WndMain_CommandEnabled(int id)
 	case ID_VIEW_100:
 	case ID_VIEW_ZOOMIN:
 	case ID_VIEW_ZOOMOUT:
+	case ID_VIEW_Z100:
+	case ID_VIEW_ZZOOMIN:
+	case ID_VIEW_ZZOOMOUT:
+	case ID_VIEW_CENTER:
+	case ID_VIEW_UPFLOOR:
+	case ID_VIEW_DOWNFLOOR:
+	case ID_VIEW_CAMSPEED:
+	case ID_VIEW_CUBICCLIP:
+	case ID_VIEW_CUBICCLIPNEARER:
+	case ID_VIEW_CUBICCLIPFARTHER:
+	case ID_DRAWMODE_WIREFRAME:
+	case ID_DRAWMODE_FLATSHADE:
+	case ID_DRAWMODE_TEXTURED:
+	case ID_DRAWMODE_TEXTUREDSHADED:
+	case ID_DRAWMODE_LIGHTING:
 	case ID_GRID_TOGGLE:
 	case ID_GRID_SNAPTOGRID:
 	case ID_TEXTURES_RELOAD:
@@ -246,7 +337,20 @@ bool WndMain_CommandEnabled(int id)
 	if (id >= ID_GRID_1 && id <= ID_GRID_256)
 		return true;
 
-	if (id >= ID_VIEW_CAMERA && id <= ID_WINDOW_4REVERSENOZCAMRIGHT)
+	switch (id)
+	{
+	case ID_VIEW_MAXIMIZE:
+		return WndMain_HammerLayout();
+
+	// the 4 view grid paints these, a window of their own would draw them twice
+	case ID_VIEW_CAMERA:
+	case ID_VIEW_TOGGLE_XY:
+	case ID_VIEW_TOGGLE_XZ:
+	case ID_VIEW_TOGGLE_YZ:
+		return !WndMain_HammerLayout();
+	}
+
+	if (id >= ID_VIEW_CAMERA && id <= ID_WINDOW_HAMMER)
 		return true;
 	return false;
 }
@@ -268,18 +372,22 @@ bool WndMain_CommandChecked(int id)
 	case ID_VIEW_TOGGLE_YZ:	return g_wndGrid[1]->IsOpen();
 	case ID_VIEW_TOGGLE_Z:	return g_wndZ->IsOpen();
 	case ID_VIEW_STATUSBAR:	return g_bStatusBar;
+	case ID_VIEW_MAXIMIZE:	return g_wndViewports->IsMaximized();
 
 	case ID_VIEW_SHOWCOORDINATES:	return MapView2D::showCoordinates;
 	case ID_VIEW_SHOWAXIS:			return MapView2D::showAxis;
 	case ID_VIEW_XY:		return g_wndGrid[0]->Plane() == MapView2D::XY;
 	case ID_VIEW_XZ:		return g_wndGrid[0]->Plane() == MapView2D::XZ;
 	case ID_VIEW_YZ:		return g_wndGrid[0]->Plane() == MapView2D::YZ;
+	case ID_VIEW_CUBICCLIP:	return WndCamera::cubicClip;
 	case ID_GRID_TOGGLE:	return g_grid.Visible();
 	case ID_GRID_SNAPTOGRID:	return g_grid.Snap();
 	}
 
 	if (id >= ID_GRID_1 && id <= ID_GRID_256)
 		return g_grid.Size() == id - ID_GRID_1;
+	if (id >= ID_DRAWMODE_WIREFRAME && id <= ID_DRAWMODE_LIGHTING)
+		return WndCamera::drawMode == id - ID_DRAWMODE_WIREFRAME;
 
 	if (id >= ID_VIEW_TOOLBAR_FILEBAND && id <= ID_VIEW_TOOLBAR_MISCBAND)
 		return g_bToolbarBand[id - ID_VIEW_TOOLBAR_FILEBAND];
@@ -483,6 +591,7 @@ void WndMain_DrawMenu()
 			ImGui::Separator();
 			Item("Next (XY->XZ->YZ)", "Tab", ID_VIEW_NEXTVIEW);
 			Item("Swap Grid/Cam", "Shift+Tab", ID_VIEW_SWAPGRIDCAM);
+			Item("Maximize View", "Shift+Z", ID_VIEW_MAXIMIZE);
 			if (ImGui::BeginMenu("Layout"))
 			{
 				Item("XY (Top)", nullptr, ID_VIEW_XY);
@@ -506,6 +615,7 @@ void WndMain_DrawMenu()
 			Item("Next Leak Spot", "Ctrl+>", ID_MISC_NEXTLEAKSPOT);
 			Item("Previous Leak Spot", "Ctrl+<", ID_MISC_PREVIOUSLEAKSPOT);
 			ImGui::Separator();
+			Item("Camera Speed...", nullptr, ID_VIEW_CAMSPEED);
 			if (ImGui::BeginMenu("Cubic Clipping"))
 			{
 				Item("Cubic Clip", "Ctrl+\\", ID_VIEW_CUBICCLIP);
@@ -516,9 +626,8 @@ void WndMain_DrawMenu()
 			}
 			if (ImGui::BeginMenu("Draw Mode"))
 			{
-				Item("Wireframe", nullptr, ID_DRAWMODE_WIREFRAME);
-				Item("Flat Color", nullptr, ID_DRAWMODE_FLATSHADE);
-				Item("Textured", nullptr, ID_DRAWMODE_TEXTURED);
+				for (int m = 0; m < MapRenderer::DRAWMODE_COUNT; m++)
+					Item(MapRenderer::DrawModeName((MapRenderer::DrawMode)m), nullptr, ID_DRAWMODE_WIREFRAME + m);
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenu();
@@ -617,6 +726,8 @@ void WndMain_DrawMenu()
 				Item("Sphere...", nullptr, ID_BRUSH_SPHERE);
 				ImGui::EndMenu();
 			}
+			ImGui::Separator();
+			Item("Options...", nullptr, ID_TOOLS_OPTIONS);
 			ImGui::EndMenu();
 		}
 
@@ -699,6 +810,8 @@ void WndMain_DrawMenu()
 			ImGui::Separator();
 			if (ImGui::BeginMenu("Presets"))
 			{
+				Item("4 View (Hammer)", nullptr, ID_WINDOW_HAMMER);
+				ImGui::Separator();
 				Item("QE3 Default", nullptr, ID_WINDOW_QE3DEFAULT);
 				Item("QE3 Reverse", nullptr, ID_WINDOW_QE3REVERSE);
 				ImGui::Separator();
@@ -739,6 +852,21 @@ void WndMain_DrawMenu()
 	if (ImGui::BeginPopup("ViewFilter"))
 	{
 		WndMain_DrawFilterItems();
+		ImGui::EndPopup();
+	}
+
+	if (s_openCamSpeed)
+	{
+		ImGui::OpenPopup("CameraSpeed");
+		s_openCamSpeed = false;
+	}
+	if (ImGui::BeginPopup("CameraSpeed"))
+	{
+		// quaked3's camera speed dialog
+		ImGui::TextUnformatted("Camera movement speed");
+		ImGui::SetNextItemWidth(220);
+		ImGui::SliderFloat("##camspeed", &WndCamera::moveSpeed, 16.0f, 8192.0f, "%.0f units/s", ImGuiSliderFlags_Logarithmic);
+		ImGui::TextDisabled("the wheel changes it while looking around (right drag)");
 		ImGui::EndPopup();
 	}
 

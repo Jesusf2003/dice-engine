@@ -19,7 +19,7 @@ public:
 	Shader(const Shader &) = delete;
 	Shader &operator=(const Shader &) = delete;
 
-	// attribute 0 is bound to "position" before linking
+	// attribute 0 is bound to "position" before linking, others use layout(location)
 	bool	Build(const char *name, const char *vertexSrc, const char *fragmentSrc);
 	void	Destroy();
 	inline bool Valid() const	{ return program != 0; }
@@ -27,6 +27,7 @@ public:
 	void	Use();
 	void	Set(const char *uniform, int v);
 	void	Set(const char *uniform, float v);
+	void	Set(const char *uniform, float x, float y);
 	void	Set(const char *uniform, const vec3 &v);
 	void	Set(const char *uniform, float r, float g, float b, float a);
 	void	Set(const char *uniform, const mat4 &m);

@@ -24,9 +24,12 @@ namespace Textures
 	extern TextureGroup group_unknown;	// bucket for bad textures
 	extern TextureGroup group_solid;	// bucket for silly solid color entity textures
 
-	extern std::string wadPath;			// relative wad names are looked up here
+	extern std::string wadPath;			// the first search path, with a trailing slash
+	extern std::vector<std::string> searchPaths;	// the active game's folders: mod first, then the base game
 
-	void Init(const std::string &wadDir);
+	void Init();
+	void SetSearchPaths(const std::vector<std::string> &dirs);	// flushes every wad, reloads the palette
+	std::string FindWad(const std::string &wadfile);			// full path through the search paths, "" if nowhere
 	void Shutdown();					// before the GL context goes away
 	void LibraryChanged();
 	void HandleChange();				// once per frame

@@ -54,6 +54,61 @@ inline int abs_max_axis(const vec3 &v)
 	return ay >= az ? 1 : 2;
 }
 
+#define DEG2RAD(a)	((a) * 0.01745329251994329577f)
+#define RAD2DEG(a)	((a) * 57.2957795130823208768f)
+
+// rodrigues: v turned by angle radians around the unit axis, counterclockwise looking down the axis
+inline vec3 rotate_axis(const vec3 &v, const vec3 &axis, float angle)
+{
+	float c = cosf(angle), s = sinf(angle);
+	return v * c + cross(axis, v) * s + axis * (dot(axis, v) * (1.0f - c));
+}
+
+/*
+==================
+dvec3
+
+double precision, for map geometry: planes from three points and the
+polygons clipped out of them lose too much in float (trenchbroom and qbsp
+both work in double)
+==================
+*/
+struct dvec3
+{
+	double x = 0, y = 0, z = 0;
+
+	dvec3() {}
+	dvec3(double ix, double iy, double iz) : x(ix), y(iy), z(iz) {}
+
+	double &operator[](int i)				{ return (&x)[i]; }
+	const double &operator[](int i) const	{ return (&x)[i]; }
+
+	dvec3 operator+(const dvec3 &o) const	{ return dvec3(x + o.x, y + o.y, z + o.z); }
+	dvec3 operator-(const dvec3 &o) const	{ return dvec3(x - o.x, y - o.y, z - o.z); }
+	dvec3 operator-() const					{ return dvec3(-x, -y, -z); }
+	dvec3 operator*(double s) const			{ return dvec3(x * s, y * s, z * s); }
+	dvec3 operator/(double s) const			{ return dvec3(x / s, y / s, z / s); }
+	bool operator==(const dvec3 &o) const	{ return x == o.x && y == o.y && z == o.z; }
+	bool operator!=(const dvec3 &o) const	{ return !(*this == o); }
+};
+
+inline double dot(const dvec3 &a, const dvec3 &b)	{ return a.x * b.x + a.y * b.y + a.z * b.z; }
+inline dvec3 cross(const dvec3 &a, const dvec3 &b)
+{
+	return dvec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+}
+inline double length(const dvec3 &v)			{ return sqrt(dot(v, v)); }
+
+inline vec3 to_vec3(const dvec3 &v)				{ return vec3((float)v.x, (float)v.y, (float)v.z); }
+inline dvec3 to_dvec3(const vec3 &v)			{ return dvec3(v.x, v.y, v.z); }
+
+inline int abs_max_axis(const dvec3 &v)
+{
+	double ax = fabs(v.x), ay = fabs(v.y), az = fabs(v.z);
+	if (ax >= ay && ax >= az) return 0;
+	return ay >= az ? 1 : 2;
+}
+
 /*
 ==================
 mat4
@@ -114,6 +169,21 @@ inline mat4 ortho_matrix(float nearPlane, float farPlane, float left, float top,
 	r.at(0, 3) = -(right + left) / (right - left);
 	r.at(1, 3) = -(top + bottom) / (top - bottom);
 	r.at(2, 3) = -(farPlane + nearPlane) / (farPlane - nearPlane);
+	return r;
+}
+
+// glFrustum
+inline mat4 frustum_matrix(float left, float right, float bottom, float top, float nearPlane, float farPlane)
+{
+	mat4 r;
+	r.at(0, 0) = 2.0f * nearPlane / (right - left);
+	r.at(1, 1) = 2.0f * nearPlane / (top - bottom);
+	r.at(0, 2) = (right + left) / (right - left);
+	r.at(1, 2) = (top + bottom) / (top - bottom);
+	r.at(2, 2) = -(farPlane + nearPlane) / (farPlane - nearPlane);
+	r.at(2, 3) = -2.0f * farPlane * nearPlane / (farPlane - nearPlane);
+	r.at(3, 2) = -1.0f;
+	r.at(3, 3) = 0.0f;
 	return r;
 }
 

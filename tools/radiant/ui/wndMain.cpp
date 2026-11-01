@@ -8,30 +8,51 @@
 #include "renderer/textures.h"
 #include "ui/textures/wndTextures.h"
 #include "ui/view/mapView2D.h"
+#include "ui/view/wndCamera.h"
+#include "ui/view/mapViewZ.h"
+#include "ui/view/wndViewports.h"
+#include "ui/console/wndConsole.h"
+#include "ui/preferences/wndPreferences.h"
+#include "core/common/log.h"
+#include "core/common/preferences.h"
+#include "core/utils/fileDialog.h"
+#include "map/map.h"
+#include "map/entityDefs.h"
+#include "core/common/gameConfig.h"
+#include "ui/options/wndOptions.h"
 #include "renderer/glFuncs.h"
 #include "renderer/gridRenderer.h"
+#include "renderer/mapRenderer.h"
 
 #include <SDL.h>
 #include <imgui_internal.h>	// DockBuilder
 
 #include <algorithm>
 #include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <filesystem>
 #include <string>
 
 SDL_Window	*g_sdlMain;
 
-Window	*g_wndCamera;
+WndCamera	*g_wndCamera;
 MapView2D	*g_wndGrid[4];
-Window	*g_wndZ;
+MapViewZ	*g_wndZ;
 WndTexture	*g_wndTexture;
 Window	*g_wndEntity;
-Window	*g_wndConsole;
+WndConsole	*g_wndConsole;
 
 int		g_nUpdateBits = 0;
 int		g_nInspectorMode;		// W_TEXTURE, W_ENTITY, or W_CONSOLE
 
 static int	s_pendingLayout = -1;
 static bool	s_pendingSwap = false;
+static int	s_layout = -1;			// the last preset applied, saved in radiant.ini. -1: none yet
+static std::string	s_pendingMap;		// from the command line, opened once radiant.ini (the log detail) is read
+static bool	s_pendingGame = true;		// entity definitions and wads, on the first frame for the same reason
+
+static const int LAYOUT_HAMMER = ID_WINDOW_HAMMER - ID_WINDOW_QE3DEFAULT;
 
 static const char RADIANT_DOCKSPACE[] = "RadiantDockSpace";
 
@@ -64,6 +85,8 @@ public:
 protected:
 	int OnPaint() override
 	{
+		if (embedded)	// clear of the 4 view's label
+			ImGui::SetCursorPos(ImVec2(8, ImGui::GetFrameHeight() + 4));
 		ImGui::TextDisabled("not ported yet");
 		return 1;
 	}
@@ -78,7 +101,38 @@ applied at the start of the next frame, docked windows can't move while being su
 */
 void WndMain_SwapGridCam()
 {
-	s_pendingSwap = true;
+	if (WndMain_HammerLayout())
+		g_wndViewports->SwapGridCam();	// not docked, nothing to wait for
+	else
+		s_pendingSwap = true;
+}
+
+bool WndMain_HammerLayout()
+{
+	return g_wndViewports && g_wndViewports->IsOpen();
+}
+
+/*
+==================
+WndMain_ShowHammerViews
+
+the 4 view grid paints the camera and the grids itself, their own windows
+stay hidden so they aren't drawn twice
+==================
+*/
+static void WndMain_ShowHammerViews(bool show)
+{
+	if (!show)
+	{
+		g_wndViewports->Hide();
+		return;
+	}
+
+	g_wndViewports->Show();
+	g_wndCamera->Hide();
+	g_wndZ->Hide();
+	for (int i = 0; i < 3; i++)
+		g_wndGrid[i]->Hide();
 }
 
 static void WndMain_DoSwapGridCam()
@@ -122,7 +176,7 @@ void WndMain_SetInspectorMode(int nType)
 	case W_CONSOLE:
 	default:
 		to = g_wndConsole;
-		// TODO: g_wndConsole->ScrollToEnd() once WndConsole is ported
+		g_wndConsole->ScrollToEnd();
 		break;
 	}
 
@@ -179,6 +233,8 @@ static void WndMain_ApplyLayout(ImGuiID dockspace, int nStyle)
 	ImGuiID rest = dockspace;
 	ImGuiID z = 0, insp = 0, cam = 0, grid = 0;
 
+	WndMain_ShowHammerViews(false);
+
 	switch (nStyle)
 	{
 	case 0:	// QE3 Default
@@ -199,6 +255,19 @@ static void WndMain_ApplyLayout(ImGuiID dockspace, int nStyle)
 		DockInspector(insp);
 		g_wndZ->Show();
 		g_wndCamera->Show();
+		break;
+	}
+
+	case LAYOUT_HAMMER:		// inspector on the right, everything else one 2x2 grid
+	{
+		insp = ImGui::DockBuilderSplitNode(rest, ImGuiDir_Right, 320 / w, nullptr, &rest);
+		ImGui::DockBuilderDockWindow(g_wndViewports->Id(), rest);
+		// no tab bar, the cells carry their own labels
+		ImGui::DockBuilderGetNode(rest)->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+		DockInspector(insp);
+
+		g_wndViewports->Reset();
+		WndMain_ShowHammerViews(true);
 		break;
 	}
 
@@ -246,6 +315,9 @@ static void WndMain_ApplyLayout(ImGuiID dockspace, int nStyle)
 
 	ImGui::DockBuilderFinish(dockspace);
 	WndMain_SetInspectorMode(W_CONSOLE);
+
+	s_layout = nStyle;
+	ImGui::MarkIniSettingsDirty();
 }
 
 /*
@@ -306,10 +378,10 @@ WndMain_CreateViews
 */
 void WndMain_CreateViews()
 {
-	g_wndConsole = new WndPlaceholder("Console", "Console");
+	g_wndConsole = new WndConsole();
 	g_wndConsole->Create();
 
-	g_wndCamera = new WndPlaceholder("Camera", "Camera");
+	g_wndCamera = new WndCamera();
 	g_wndCamera->Create();
 	for (int i = 0; i < 3; i++)
 	{
@@ -317,8 +389,13 @@ void WndMain_CreateViews()
 		g_wndGrid[i] = new MapView2D(planes[i], i);
 		g_wndGrid[i]->Create();
 	}
-	g_wndZ = new WndPlaceholder("Z", "Z");
+	g_wndZ = new MapViewZ();
 	g_wndZ->Create();
+
+	// after the camera and grids, its cells point at them
+	g_wndViewports = new WndViewports();
+	g_wndViewports->Create();
+	g_wndViewports->Hide();
 
 	g_wndTexture = new WndTexture();
 	g_wndTexture->Initialize();
@@ -333,10 +410,258 @@ void WndMain_CreateViews()
 /*
 =============================================================
 
+LAYOUT SETTINGS
+
+the dock layout is ImGui's own, this is what it can't know: which preset is
+up, the 4 view's splitters and cells and the camera's draw mode. a
+[Radiant][Layout] entry in radiant.ini
+=============================================================
+*/
+
+static struct
+{
+	float	splitX = 0.5f, splitY = 0.5f;
+	int		cells[4] = { 0, 1, 2, 3 };
+} s_savedViews;
+
+// copied out while g_wndViewports is alive, ImGui writes the ini once more after it's gone
+static void SnapshotViewports()
+{
+	if (!g_wndViewports)
+		return;
+	s_savedViews.splitX = g_wndViewports->splitX;
+	s_savedViews.splitY = g_wndViewports->splitY;
+	for (int i = 0; i < 4; i++)
+		s_savedViews.cells[i] = g_wndViewports->CellView(i);
+}
+
+static void *Settings_ReadOpen(ImGuiContext *, ImGuiSettingsHandler *, const char *name)
+{
+	return strcmp(name, "Layout") == 0 ? (void *)&s_savedViews : nullptr;
+}
+
+static void Settings_ReadLine(ImGuiContext *, ImGuiSettingsHandler *, void *, const char *line)
+{
+	char *p;
+
+	if (strncmp(line, "Style=", 6) == 0)
+		s_layout = (int)strtol(line + 6, nullptr, 10);
+	else if (strncmp(line, "Split=", 6) == 0)
+	{
+		s_savedViews.splitX = strtof(line + 6, &p);
+		if (*p == ',')
+			s_savedViews.splitY = strtof(p + 1, nullptr);
+	}
+	else if (strncmp(line, "CameraMode=", 11) == 0)
+		WndCamera::drawMode = (MapRenderer::DrawMode)std::clamp((int)strtol(line + 11, nullptr, 10), 0, MapRenderer::DRAWMODE_COUNT - 1);
+	else if (strncmp(line, "Cells=", 6) == 0)
+	{
+		p = (char *)line + 5;
+		for (int i = 0; i < 4 && (*p == '=' || *p == ','); i++)
+			s_savedViews.cells[i] = (int)strtol(p + 1, &p, 10);
+	}
+}
+
+static void Settings_ApplyAll(ImGuiContext *, ImGuiSettingsHandler *)
+{
+	g_wndViewports->splitX = s_savedViews.splitX;
+	g_wndViewports->splitY = s_savedViews.splitY;
+	g_wndViewports->SetCellViews(s_savedViews.cells);
+	if (s_layout == LAYOUT_HAMMER)
+		WndMain_ShowHammerViews(true);
+}
+
+static void Settings_WriteAll(ImGuiContext *, ImGuiSettingsHandler *handler, ImGuiTextBuffer *buf)
+{
+	SnapshotViewports();
+	buf->appendf("[%s][Layout]\n", handler->TypeName);
+	buf->appendf("Style=%d\n", s_layout);
+	buf->appendf("Split=%.4f,%.4f\n", s_savedViews.splitX, s_savedViews.splitY);
+	buf->appendf("Cells=%d,%d,%d,%d\n", s_savedViews.cells[0], s_savedViews.cells[1], s_savedViews.cells[2], s_savedViews.cells[3]);
+	buf->appendf("CameraMode=%d\n", (int)WndCamera::drawMode);
+	buf->append("\n");
+}
+
+// before the first NewFrame, that's when radiant.ini is read
+static void WndMain_RegisterSettings()
+{
+	ImGuiSettingsHandler handler;
+	handler.TypeName = "Radiant";
+	handler.TypeHash = ImHashStr("Radiant");
+	handler.ReadOpenFn = Settings_ReadOpen;
+	handler.ReadLineFn = Settings_ReadLine;
+	handler.ApplyAllFn = Settings_ApplyAll;
+	handler.WriteAllFn = Settings_WriteAll;
+	ImGui::AddSettingsHandler(&handler);
+}
+
+
+
+/*
+=============================================================
+
 MAIN WINDOW
 
 =============================================================
 */
+
+/*
+==================
+WndMain_OpenMap
+==================
+*/
+void WndMain_OpenMap(const std::string &path)
+{
+	if (!g_map.Load(path))
+	{
+		WndMain_Status("Map not loaded, see the console", 0);
+		return;
+	}
+	g_wndCamera->ResetForMap();
+
+	char status[128];
+	std::snprintf(status, sizeof(status), "%s: %zu entities, %d brushes", g_map.Name().c_str(),
+		g_map.entities.size(), g_map.stats.worldBrushes + g_map.stats.entityBrushes);
+	WndMain_Status(status, 0);
+	WndMain_UpdateTitle();
+}
+
+void WndMain_QueueOpenMap(const std::string &path)
+{
+	s_pendingMap = path;
+}
+
+/*
+==================
+WndMain_OpenMapDialog
+
+starts where the current map is, or in the game's maps folder
+==================
+*/
+void WndMain_OpenMapDialog()
+{
+	namespace fs = std::filesystem;
+	std::string dir;
+
+	const gameConfig_t *game = GameConfigs::Active();
+	if (!g_map.filename.empty())
+		dir = fs::u8path(g_map.filename).parent_path().u8string();
+	else if (game)
+		dir = GameConfigs::MapsDir(*game);
+
+	std::string path;
+	if (FileDialog::OpenFile(path, "Open Map", "Quake map", "*.map", dir))
+		WndMain_OpenMap(path);
+}
+
+/*
+==================
+WndMain_LoadGame
+
+the active game configuration (Tools > Options): its folders become the texture
+search paths, then its entity definitions, then the wads their wadlist names
+(every wad in the game folder when there's no wadlist). with no configurations
+at all the games next to the editor are detected; with none found, Options opens
+==================
+*/
+static void WndMain_NewMapDefaults()
+{
+	std::string wads = g_entityDefs.DefaultWads();
+	if (!wads.empty() && g_map.World())
+		g_map.World()->SetKey("wad", wads);
+}
+
+static const gameConfig_t *PickGame()
+{
+	if (const gameConfig_t *cfg = GameConfigs::Active())
+		return cfg;
+
+	if (!GameConfigs::configs.empty())
+	{
+		Log::Warning("Game configuration \"%s\" doesn't exist, using \"%s\"",
+			GameConfigs::activeName.c_str(), GameConfigs::configs.front().name.c_str());
+		GameConfigs::Apply(GameConfigs::configs, GameConfigs::configs.front().name);
+		return GameConfigs::Active();
+	}
+
+	std::vector<gameConfig_t> found = GameConfigs::Detect();
+	if (found.empty())
+		return nullptr;
+
+	std::string names;
+	for (const gameConfig_t &g : found)
+		names += (names.empty() ? "" : ", ") + g.name;
+	Log::Info("No game configurations yet, detected %zu next to the editor: %s (Tools > Options to change them)",
+		found.size(), names.c_str());
+	GameConfigs::Apply(found, found.front().name);
+	return GameConfigs::Active();
+}
+
+void WndMain_LoadGame()
+{
+	const gameConfig_t *cfg = PickGame();
+	if (!cfg)
+	{
+		Log::Warning("No game configuration: set one up in Tools > Options");
+		Textures::SetSearchPaths({});
+		g_entityDefs = EntityDefs();
+		WndOptions::Open();
+		WndMain_UpdateTitle();
+		return;
+	}
+
+	Log::Info("---- Game: %s ----", cfg->name.c_str());
+
+	std::vector<std::string> dirs = GameConfigs::SearchPaths(*cfg);
+	if (dirs.empty())
+		Log::Warning("%s has no game directory (Tools > Options)", cfg->name.c_str());
+	for (const std::string &d : dirs)
+	{
+		std::error_code ec;
+		if (!std::filesystem::is_directory(std::filesystem::u8path(d), ec))
+			Log::Warning("%s: folder %s doesn't exist", cfg->name.c_str(), d.c_str());
+		else
+			Log::Verbose("  search path %s", d.c_str());
+	}
+	Textures::SetSearchPaths(dirs);
+
+	std::vector<std::string> fgds;
+	for (const std::string &f : cfg->fgds)
+		fgds.push_back(GameConfigs::Resolve(f));
+	if (fgds.empty())
+		Log::Warning("%s has no game data files (FGD), Tools > Options", cfg->name.c_str());
+
+	std::vector<std::string> wads;
+	if (g_entityDefs.Load(fgds))
+		wads = g_entityDefs.WadList();
+
+	if (!wads.empty())
+	{
+		for (const std::string &w : wads)
+			Textures::LoadWad(w);
+	}
+	else if (!dirs.empty())
+	{
+		Log::Warning("No wadlist in the entity definitions, loading every wad in %s", dirs.front().c_str());
+		Textures::LoadWadDir(dirs.front());
+	}
+	Textures::LibraryChanged();
+
+	if (g_map.filename.empty())
+		WndMain_NewMapDefaults();
+	WndMain_UpdateTitle();
+}
+
+void WndMain_NewMap()
+{
+	// TODO: ConfirmModified() once maps can be edited
+	g_map.New();
+	g_wndCamera->ResetForMap();
+	WndMain_NewMapDefaults();
+	Log::Info("New map");
+	WndMain_Status("New map", 0);
+	WndMain_UpdateTitle();
+}
 
 /*
 ==================
@@ -347,8 +672,10 @@ void WndMain_UpdateTitle()
 {
 	char title[256];
 
-	// TODO: map name and modified flag once the map is ported
-	std::snprintf(title, sizeof(title), "%s - [%s%s]", radiantdef.title, "unnamed", "");
+	// TODO: the modified flag once the map can be edited
+	const gameConfig_t *game = GameConfigs::Active();
+	std::snprintf(title, sizeof(title), "%s - [%s%s] - %s", radiantdef.title, g_map.Name().c_str(), "",
+		game ? game->name.c_str() : "no game");
 	SDL_SetWindowTitle(g_sdlMain, title);
 }
 
@@ -360,22 +687,23 @@ WndMain_Create
 void WndMain_Create(SDL_Window *window)
 {
 	g_sdlMain = window;
+	Log::Init();	// first, so the console gets the texture and GL messages too
+	Log::Info("%s %s", radiantdef.title, radiantdef.version);
 
 	if (!GL_LoadFunctions())
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "radiant", "Some OpenGL 3.3 functions are missing, the views won't draw.", window);
 	g_gridRenderer.Init();
+	g_mapRenderer.Init();
 
 	WndMain_CreateToolbar();
 
-	// TODO: wads come from the map's worldspawn "wad" key once the map is ported,
-	// for now every wad in the game dir
-	char *base = SDL_GetBasePath();
-	std::string wadDir = std::string(base ? base : "") + radiantdef.wadPath;
-	SDL_free(base);
-	Textures::Init(wadDir);
-	Textures::LoadWadDir(wadDir);
+	// the game (folders, definitions, wads) loads on the first frame, WndMain_LoadGame
+	Textures::Init();
 
 	WndMain_CreateViews();
+	WndMain_RegisterSettings();
+	Preferences::RegisterSettings();
+	GameConfigs::RegisterSettings();
 	WndMain_UpdateTitle();
 	WndMain_UpdateGridStatusBar();
 }
@@ -387,13 +715,20 @@ WndMain_Destroy
 */
 void WndMain_Destroy()
 {
-	Window **views[] = { &g_wndCamera, &g_wndZ, &g_wndEntity, &g_wndConsole };
+	SnapshotViewports();
+	delete g_wndViewports;
+	g_wndViewports = nullptr;
 
-	for (Window **v : views)
-	{
-		delete *v;
-		*v = nullptr;
-	}
+	delete g_wndZ;
+	g_wndZ = nullptr;
+
+	delete g_wndConsole;
+	g_wndConsole = nullptr;
+
+	delete g_wndCamera;
+	g_wndCamera = nullptr;
+	delete g_wndEntity;
+	g_wndEntity = nullptr;
 	for (MapView2D *&grid : g_wndGrid)
 	{
 		delete grid;
@@ -404,7 +739,9 @@ void WndMain_Destroy()
 
 	Textures::Shutdown();
 	g_gridRenderer.Shutdown();
+	g_mapRenderer.Shutdown();
 	WndMain_DestroyToolbar();
+	Log::Shutdown();
 }
 
 /*
@@ -421,9 +758,10 @@ void WndMain_Draw()
 
 	ImGuiID dockspace = ImGui::GetID(RADIANT_DOCKSPACE);
 
-	// no saved layout in radiant.ini yet: start with the QE3 default
-	if (!ImGui::DockBuilderGetNode(dockspace) && s_pendingLayout < 0)
-		s_pendingLayout = 0;
+	// no saved layout in radiant.ini yet (or one from before the presets were saved):
+	// start with hammer's 4 view, the main layout
+	if ((!ImGui::DockBuilderGetNode(dockspace) || s_layout < 0) && s_pendingLayout < 0)
+		s_pendingLayout = LAYOUT_HAMMER;
 
 	if (s_pendingLayout >= 0)
 	{
@@ -438,6 +776,22 @@ void WndMain_Draw()
 
 	ImGui::DockSpaceOverViewport(dockspace);
 	Window::DrawAll();
+	WndPreferences::Draw();
+	WndOptions::Draw();
+
+	if (s_pendingGame)
+	{
+		WndMain_LoadGame();
+		s_pendingGame = false;
+	}
+	if (!s_pendingMap.empty())
+	{
+		std::string path;
+		path.swap(s_pendingMap);
+		WndMain_OpenMap(path);
+	}
+	if (Log::TakeErrorFlag() && g_prefs.console.showOnError)
+		WndMain_SetInspectorMode(W_CONSOLE);
 
 	Textures::HandleChange();
 	WndMain_ForceUpdateWindows();

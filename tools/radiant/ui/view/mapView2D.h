@@ -5,10 +5,11 @@
 //	ui::MapView2D: an OrthographicCamera per view, CameraTool2D for pan and
 //	zoom, the grid drawn by GridRenderer. the overlays are netradiant-custom's
 //	XYWnd: coordinates along the edges, the axis widget in the corner and the
-//	small axes at the world origin.
+//	small axes at the world origin, and the 3D view's camera (control +
+//	middle click or drag moves it there).
 //
 //	each view renders into its own framebuffer, shown with the ImGui draw list.
-//	brushes, entities and the tools come once the map is ported
+//	brushes, entities and the tools come next
 //==============================
 
 #ifndef __MAP_VIEW_2D_H__
@@ -50,13 +51,15 @@ private:
 	void	ZoomAt(ImVec2 mouse, float factor);		// keeps the point under the mouse in place
 	void	RenderScene();
 	void	DrawOverlays(ImDrawList *dl, ImVec2 origin, ImVec2 size);
+	void	DrawCamera(ImDrawList *dl, ImVec2 origin, ImVec2 size);
+	void	MoveCamera(ImVec2 mouse);
 	ImVec2	ToScreen(const vec3 &world, ImVec2 origin, ImVec2 size) const;
 
 	ViewPlane			plane;
 	OrthographicCamera	camera;
 	Framebuffer			fbo;
 
-	enum { DRAG_NONE, DRAG_PAN, DRAG_ZOOM };
+	enum { DRAG_NONE, DRAG_PAN, DRAG_ZOOM, DRAG_CAMERA };
 	int		drag;
 	ImVec2	lastMouse;				// view local, y down
 };

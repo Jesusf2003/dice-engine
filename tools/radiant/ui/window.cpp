@@ -21,7 +21,7 @@ Window::Window() :
 	instance(0), minWidth(64), minHeight(32), vbits(0),
 	clientRect(0, 0, 0, 0),
 	mouseWithin(false),
-	name("Window"), flags(0), noPadding(false),
+	name("Window"), flags(0), noPadding(false), embedded(false),
 	cursorX(-1), cursorY(-1),
 	created(false), open(false), focused(false), wantFocus(false), wantPos(false),
 	pendingPos({ 0, 0, 0, 0, false }), lastPos({ 0, 0, 0, 0, false }),
@@ -161,6 +161,53 @@ void Window::Draw()
 	}
 
 	ImGui::End();
+}
+
+/*
+==================
+Window::PaintEmbedded
+
+what Draw does between Begin and End, for a window shown inside another one's
+child region instead of its own ImGui window. the host keeps it Hide()'d so
+DrawAll doesn't draw it a second time
+==================
+*/
+void Window::PaintEmbedded()
+{
+	if (!created)
+		return;
+
+	if (wantFocus)
+	{
+		ImGui::SetWindowFocus();
+		wantFocus = false;
+	}
+
+	ImVec2 pos = ImGui::GetWindowPos();
+	ImVec2 size = ImGui::GetWindowSize();
+	lastPos = { pos.x, pos.y, pos.x + size.x, pos.y + size.y, true };
+
+	bool nowFocused = ImGui::IsWindowFocused();
+	if (nowFocused && !focused)
+		OnFocus();
+	focused = nowFocused;
+
+	ImVec2 cmin = ImGui::GetCursorScreenPos();
+	ImVec2 avail = ImGui::GetContentRegionAvail();
+	clientRect = ImVec4(cmin.x, cmin.y, cmin.x + avail.x, cmin.y + avail.y);
+
+	if (avail.x != lastSize.x || avail.y != lastSize.y)
+	{
+		lastSize = avail;
+		OnResized();
+	}
+
+	mouseWithin = ImGui::IsWindowHovered();
+	GetMouseXY(cursorX, cursorY);
+
+	embedded = true;
+	OnPaint();
+	embedded = false;
 }
 
 /*

@@ -47,7 +47,7 @@ void ShutdownSDL(SDL_Window *w, SDL_GLContext gl)
 	SDL_Quit();
 }
 
-int main(int, char **)
+int main(int argc, char **argv)
 {
     InitSDL();
 	SDL_Window *window = SDL_CreateWindow(radiantdef.title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, radiantdef.width, radiantdef.height,
@@ -79,6 +79,8 @@ int main(int, char **)
 	ImGui_ImplOpenGL3_Init("#version 330 core");
 
 	WndMain_Create(window);
+	if (argc > 1)
+		WndMain_QueueOpenMap(argv[1]);	// radiant <file.map>
 
 	bool running = true;
 	while (running)

@@ -11,6 +11,8 @@
 
 #include <imgui.h>
 
+#include <string>
+
 struct SDL_Window;
 class Window;
 
@@ -63,11 +65,11 @@ enum
 
 	// View
 	ID_VIEW_CENTER, ID_VIEW_UPFLOOR, ID_VIEW_DOWNFLOOR,
-	ID_VIEW_NEXTVIEW, ID_VIEW_SWAPGRIDCAM, ID_VIEW_XY, ID_VIEW_XZ, ID_VIEW_YZ,
+	ID_VIEW_NEXTVIEW, ID_VIEW_SWAPGRIDCAM, ID_VIEW_MAXIMIZE, ID_VIEW_XY, ID_VIEW_XZ, ID_VIEW_YZ,
 	ID_VIEW_100, ID_VIEW_ZOOMIN, ID_VIEW_ZOOMOUT, ID_VIEW_Z100, ID_VIEW_ZZOOMIN, ID_VIEW_ZZOOMOUT,
 	ID_VIEW_CENTERONSELECTION, ID_MISC_NEXTLEAKSPOT, ID_MISC_PREVIOUSLEAKSPOT,
 	ID_VIEW_CAMSPEED, ID_VIEW_CUBICCLIP, ID_VIEW_CUBICCLIPNEARER, ID_VIEW_CUBICCLIPFARTHER,
-	ID_DRAWMODE_WIREFRAME, ID_DRAWMODE_FLATSHADE, ID_DRAWMODE_TEXTURED,
+	ID_DRAWMODE_WIREFRAME, ID_DRAWMODE_FLATSHADE, ID_DRAWMODE_TEXTURED, ID_DRAWMODE_TEXTUREDSHADED, ID_DRAWMODE_LIGHTING,
 
 	// Selection
 	ID_SELECTION_SELECTCOMPLETETALL, ID_SELECTION_SELECTTOUCHING, ID_SELECTION_SELECTPARTIALTALL, ID_SELECTION_SELECTINSIDE,
@@ -76,7 +78,7 @@ enum
 	ID_SELECTION_BRUSHESTOFACES, ID_SELECTION_FACESTOBRUSHESCOMPLETE, ID_SELECTION_FACESTOBRUSHESPARTIAL,
 
 	// Tools
-	ID_TOOLS_DRAWBRUSHESTOOL,
+	ID_TOOLS_DRAWBRUSHESTOOL, ID_TOOLS_OPTIONS,
 	ID_SELECTION_CLIPPER, ID_SELECTION_CLIPSELECTED, ID_SELECTION_SPLITSELECTED, ID_SELECTION_FLIPCLIP,
 	ID_SELECTION_DRAGEDGES, ID_SELECTION_DRAGVERTICES, ID_SELECTION_DRAGFACES,
 	ID_MISC_SELECTENTITYCOLOR, ID_TOOLS_SETENTITYKEYS, ID_SELECTION_CONNECT, ID_SELECTION_UNGROUPENTITY, ID_SELECTION_INSERTBRUSH,
@@ -108,6 +110,7 @@ enum
 	ID_WINDOW_QE3DEFAULT, ID_WINDOW_QE3REVERSE,
 	ID_WINDOW_4WINDOWZCAMLEFT, ID_WINDOW_4WINDOWZCAMRIGHT, ID_WINDOW_4WINDOWNOZCAMLEFT, ID_WINDOW_4WINDOWNOZCAMRIGHT,
 	ID_WINDOW_4REVERSEZCAMLEFT, ID_WINDOW_4REVERSEZCAMRIGHT, ID_WINDOW_4REVERSENOZCAMLEFT, ID_WINDOW_4REVERSENOZCAMRIGHT,
+	ID_WINDOW_HAMMER,
 
 	// Misc / Help
 	ID_MISC_TESTMAP,
@@ -118,29 +121,38 @@ enum
 
 extern SDL_Window *g_sdlMain;
 
-// TODO: these become WndCamera, WndGrid, ... once those windows are ported.
-// until then they are empty placeholder panels so the layout can be built
+// TODO: g_wndEntity becomes WndEntity once it's ported, until then it's an
+// empty placeholder panel so the layout can be built
 class WndTexture;
+class WndCamera;
 class MapView2D;
+class MapViewZ;
+class WndConsole;
 extern WndTexture	*g_wndTexture;	// ui/textures/wndTextures.h
 
-extern Window	*g_wndCamera;
+extern WndCamera	*g_wndCamera;	// ui/view/wndCamera.h
 extern MapView2D	*g_wndGrid[4];	// ui/view/mapView2D.h: [0] XY, [1] YZ, [2] XZ
-extern Window	*g_wndZ;
+extern MapViewZ	*g_wndZ;		// ui/view/mapViewZ.h
 extern Window	*g_wndEntity;
-extern Window	*g_wndConsole;
+extern WndConsole	*g_wndConsole;	// ui/console/wndConsole.h
 
 extern int		g_nInspectorMode;	// W_TEXTURE, W_ENTITY, or W_CONSOLE
 
 void	WndMain_SwapGridCam();
 void	WndMain_SetInspectorMode(int nType);
 Window	*WndMain_WindowForPoint(ImVec2 point);
-void	WndMain_DefaultLayout(int nStyle = 0);
+void	WndMain_DefaultLayout(int nStyle = 0);	// ID_WINDOW_xxx - ID_WINDOW_QE3DEFAULT
+bool	WndMain_HammerLayout();					// the 4 view grid (WndViewports) holds the camera and grids
 
 void    WndMain_UpdateWindows(int bits);
 void	WndMain_ForceUpdateWindows(int bits = 0);
 
 void	WndMain_UpdateTitle();
+void	WndMain_LoadGame();		// the active game configuration: folders, entity definitions, their wads
+void	WndMain_NewMap();
+void	WndMain_OpenMap(const std::string &path);		// loads and reports to the console
+void	WndMain_OpenMapDialog();
+void	WndMain_QueueOpenMap(const std::string &path);	// opened on the first frame, once the preferences are read
 void	WndMain_CreateViews();
 void	WndMain_Create(SDL_Window *window);	// after the GL context and ImGui are up
 void	WndMain_Destroy();					// before ImGui shuts down

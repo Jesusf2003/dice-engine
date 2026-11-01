@@ -4,6 +4,7 @@
 
 #include "ui/view/mapView2D.h"
 #include "ui/wndMain.h"
+#include "ui/view/wndCamera.h"
 #include "renderer/glFuncs.h"
 #include "renderer/gridRenderer.h"
 #include "map/grid.h"
@@ -25,6 +26,7 @@ static const ImU32 s_axisColors[3] = {
 	IM_COL32(15, 156, 255, 230),	// z
 };
 static const ImU32 s_gridTextColor = IM_COL32(170, 170, 170, 255);
+static const ImU32 s_cameraColor = IM_COL32(80, 140, 255, 255);
 static const char s_axisNames[3] = { 'X', 'Y', 'Z' };
 
 #define ZOOM_STEP	1.25f		// netradiant: 5/4 per wheel notch
@@ -147,10 +149,26 @@ void MapView2D::ZoomAt(ImVec2 mouse, float factor)
 
 /*
 ==================
+MapView2D::MoveCamera
+
+netradiant's control + middle click: the 3D camera goes to the point under
+the mouse, keeping its depth along this view
+==================
+*/
+void MapView2D::MoveCamera(ImVec2 mouse)
+{
+	vec3 world = camera.Unproject(mouse.x, mouse.y, 0.0f);
+	int d1 = abs_max_axis(camera.Right());
+	int d2 = abs_max_axis(camera.Up());
+	g_wndCamera->SetPosition2D(d1, world[d1], d2, world[d2]);
+}
+
+/*
+==================
 MapView2D::HandleInput
 
 CameraTool2D: wheel zooms to the mouse, right or middle drag pans, alt + middle
-drag zooms
+drag zooms. control + middle drag moves the 3D camera
 ==================
 */
 void MapView2D::HandleInput(bool hovered, bool active, ImVec2 mouse)
@@ -165,7 +183,12 @@ void MapView2D::HandleInput(bool hovered, bool active, ImVec2 mouse)
 
 	if (hovered && drag == DRAG_NONE)
 	{
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) ||
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle) && io.KeyCtrl)
+		{
+			Focus();
+			drag = DRAG_CAMERA;
+		}
+		else if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) ||
 			(ImGui::IsMouseClicked(ImGuiMouseButton_Middle) && !io.KeyAlt))
 		{
 			Focus();
@@ -202,6 +225,15 @@ void MapView2D::HandleInput(bool hovered, bool active, ImVec2 mouse)
 		float factor = 1.0f - io.MouseDelta.y / 100.0f;
 		if (factor > 0)
 			ZoomAt(lastMouse, factor);
+	}
+	else if (drag == DRAG_CAMERA)
+	{
+		if (!active)
+		{
+			drag = DRAG_NONE;
+			return;
+		}
+		MoveCamera(mouse);
 	}
 
 	// cursor position in the status bar, in the view's two axes
@@ -253,6 +285,40 @@ ImVec2 MapView2D::ToScreen(const vec3 &world, ImVec2 origin, ImVec2 size) const
 
 /*
 ==================
+MapView2D::DrawCamera
+
+netradiant's XYWnd::DrawCameraIcon: a box at the camera and its view cone,
+the direction flattened onto this view's plane
+==================
+*/
+void MapView2D::DrawCamera(ImDrawList *dl, ImVec2 origin, ImVec2 size)
+{
+	if (!g_wndCamera)
+		return;
+
+	const PerspectiveCamera &cam = g_wndCamera->GetCamera();
+	ImVec2 p = ToScreen(cam.Position(), origin, size);
+	ImVec2 q = ToScreen(cam.Position() + cam.Direction() * 64.0f, origin, size);
+	float dx = q.x - p.x, dy = q.y - p.y;
+	float len = sqrtf(dx * dx + dy * dy);
+
+	dl->AddRect(ImVec2(p.x - 6, p.y - 6), ImVec2(p.x + 6, p.y + 6), s_cameraColor, 0.0f, 0, 1.5f);
+	if (len < 1e-3f)	// looking straight into this view
+		return;
+
+	dx /= len;
+	dy /= len;
+	float half = DEG2RAD(cam.Fov() / 2);
+	float c = cosf(half), s = sinf(half);
+	ImVec2 a(p.x + (dx * c - dy * s) * 32, p.y + (dx * s + dy * c) * 32);
+	ImVec2 b(p.x + (dx * c + dy * s) * 32, p.y + (-dx * s + dy * c) * 32);
+	dl->AddLine(p, a, s_cameraColor, 1.5f);
+	dl->AddLine(p, b, s_cameraColor, 1.5f);
+	dl->AddLine(a, b, s_cameraColor, 1.5f);
+}
+
+/*
+==================
 MapView2D::DrawOverlays
 
 netradiant-custom's XY_DrawGrid text and XY_DrawAxis
@@ -292,6 +358,8 @@ void MapView2D::DrawOverlays(ImDrawList *dl, ImVec2 origin, ImVec2 size)
 
 		// the top left corner belongs to the y labels, the x labels start after it
 		float leftColumn = ImGui::CalcTextSize("-32768").x + 8;
+		if (embedded)	// the 4 view's label (wndViewports.cpp) shares the corner, its widest one
+			leftColumn = fmaxf(leftColumn, ImGui::CalcTextSize("front (y/z)").x + 12);
 
 		float xb = stepx * floorf(fmaxf(c[d1] - halfW, -MAX_WORLD_COORD) / stepx);
 		float xe = fminf(c[d1] + halfW, MAX_WORLD_COORD);
@@ -332,7 +400,7 @@ void MapView2D::DrawOverlays(ImDrawList *dl, ImVec2 origin, ImVec2 size)
 		dl->AddText(ImVec2(a.x + 25 - fontH * 0.55f, a.y + 3), s_axisColors[d1], &s_axisNames[d1], &s_axisNames[d1] + 1);
 		dl->AddText(ImVec2(a.x - 4 - fontH * 0.55f, a.y - 25 - 3), s_axisColors[d2], &s_axisNames[d2], &s_axisNames[d2] + 1);
 	}
-	else
+	else if (!embedded)		// the 4 view grid draws its own label
 	{
 		dl->AddText(ImVec2(origin.x + 35, origin.y + fontH * (showCoordinates ? 2.0f : 1.0f)),
 			HasFocus() ? IM_COL32_WHITE : s_gridTextColor, PlaneTitle(plane));
@@ -370,6 +438,7 @@ int MapView2D::OnPaint()
 	dl->PushClipRect(origin, max, true);
 	// GL textures start at the bottom row
 	dl->AddImage((ImTextureID)(uintptr_t)fbo.ColorTexture(), origin, max, ImVec2(0, 1), ImVec2(1, 0));
+	DrawCamera(dl, origin, size);
 	DrawOverlays(dl, origin, size);
 	dl->PopClipRect();
 

@@ -415,10 +415,12 @@ void WndTexture::DrawTextureInfo()
 		where = "?";
 	else if (tg == &Textures::group_unknown)
 		where = "not found in any wad";
-	else if (std::filesystem::u8path(tg->name).is_absolute())
-		where = tg->name;
 	else
-		where = std::string(radiantdef.wadPath) + "/" + tg->name;
+	{
+		where = Textures::FindWad(tg->name);
+		if (where.empty())
+			where = tg->name;
+	}
 	ImGui::Text("Group: \"%s\"", where.c_str());
 	ImGui::SetItemTooltip("%s", where.c_str());
 

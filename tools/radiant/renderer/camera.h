@@ -55,6 +55,7 @@ protected:
 	virtual void	DoValidateMatrices(mat4 &projection, mat4 &view) const = 0;
 	virtual void	DoUpdateZoom() = 0;
 	virtual bool	IsValidZoom(float z) const	{ return z >= 0.02f && z <= 100.0f; }
+	inline void		Invalidate()				{ valid = false; }	// a subclass' projection setting changed
 
 private:
 	void	ValidateMatrices() const;

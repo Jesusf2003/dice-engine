@@ -30,6 +30,7 @@ std::map<std::string, Texture*>	Textures::texMap;
 TextureGroup					Textures::group_solid;
 TextureGroup					Textures::group_unknown;
 std::string						Textures::wadPath;
+std::vector<std::string>		Textures::searchPaths;
 
 
 /*
@@ -41,7 +42,8 @@ std::string						Textures::wadPath;
 ========================================================================
 */
 
-static unsigned char s_palette[768] = {
+static unsigned char s_palette[768];		// the game's, or quake's when it has none
+static const unsigned char s_quakePalette[768] = {
 	0, 0, 0, 15, 15, 15, 31, 31, 31, 47, 47, 47, 63, 63, 63, 75, 75, 75, 91, 91, 91, 107, 107, 107,
 	123, 123, 123, 139, 139, 139, 155, 155, 155, 171, 171, 171, 187, 187, 187, 203, 203, 203, 219, 219, 219, 235, 235, 235,
 	15, 11, 7, 23, 15, 11, 31, 23, 11, 39, 27, 15, 47, 35, 19, 55, 43, 23, 63, 47, 23, 75, 55, 27,
@@ -80,15 +82,26 @@ static unsigned char s_palette[768] = {
 ==================
 Textures::LoadPalette
 
-<wadPath>/gfx/palette.lmp if there is one, otherwise the built in quake palette
+gfx/palette.lmp from the first search path that has one (the mod's, then the
+game's), otherwise the built in quake palette
 TODO: gamma/brightness once there are editor settings
 ==================
 */
 void Textures::LoadPalette()
 {
-	fs::path pal = fs::path(wadPath) / "gfx" / "palette.lmp";
-	std::ifstream f(pal, std::ios::binary);
-	if (!f)
+	memcpy(s_palette, s_quakePalette, sizeof(s_palette));
+
+	fs::path pal;
+	std::ifstream f;
+	for (const std::string &dir : searchPaths)
+	{
+		pal = fs::u8path(dir) / "gfx" / "palette.lmp";
+		f.open(pal, std::ios::binary);
+		if (f.is_open())
+			break;
+		f.clear();
+	}
+	if (!f.is_open())
 		return;
 
 	unsigned char buf[768];
@@ -274,13 +287,9 @@ static TextureGroup *ReadWad(const std::string &filename)
 Textures::Init
 ==================
 */
-void Textures::Init(const std::string &wadDir)
+void Textures::Init()
 {
 	SDL_Log("Initializing textures");
-
-	wadPath = wadDir;
-	if (!wadPath.empty() && wadPath.back() != '/' && wadPath.back() != '\\')
-		wadPath += '/';
 
 	LoadPalette();
 
@@ -607,9 +616,51 @@ WadFilePath
 */
 static std::string WadFilePath(const std::string &wadfile)
 {
-	if (fs::u8path(wadfile).is_absolute())
-		return wadfile;
-	return Textures::wadPath + wadfile;
+	std::string found = Textures::FindWad(wadfile);
+	return found.empty() ? Textures::wadPath + wadfile : found;		// not there: the error names the first place
+}
+
+/*
+==================
+Textures::SetSearchPaths
+
+where relative wad names and the palette are looked up, first match wins: a
+mod's folder before its base game's. drops the loaded wads, the caller loads
+the new game's
+==================
+*/
+void Textures::SetSearchPaths(const std::vector<std::string> &dirs)
+{
+	FlushAll();
+
+	searchPaths = dirs;
+	wadPath = dirs.empty() ? std::string() : dirs.front();
+	if (!wadPath.empty() && wadPath.back() != '/' && wadPath.back() != '\\')
+		wadPath += '/';
+
+	LoadPalette();
+}
+
+/*
+==================
+Textures::FindWad
+==================
+*/
+std::string Textures::FindWad(const std::string &wadfile)
+{
+	std::error_code ec;
+	fs::path p = fs::u8path(wadfile);
+
+	if (p.is_absolute())
+		return fs::is_regular_file(p, ec) ? wadfile : std::string();
+
+	for (const std::string &dir : searchPaths)
+	{
+		fs::path full = (fs::u8path(dir) / p).lexically_normal();
+		if (fs::is_regular_file(full, ec))
+			return full.u8string();
+	}
+	return std::string();
 }
 
 /*

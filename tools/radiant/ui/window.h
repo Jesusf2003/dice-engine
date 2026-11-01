@@ -28,6 +28,7 @@ public:
 	void Create();
 	void Destroy();
 	void Draw();
+	void PaintEmbedded();		// contents only, inside a child region another window owns (the 4 view grid)
 
 	View	*v;
 	int		instance, minWidth, minHeight, vbits;
@@ -63,6 +64,7 @@ protected:
 	std::string		id;
 	ImGuiWindowFlags	flags;
 	bool	noPadding;			// content reaches the window edges (views)
+	bool	embedded;			// being painted by PaintEmbedded, the host draws the caption
 	int		cursorX, cursorY;
 
 	virtual int OnCreate();

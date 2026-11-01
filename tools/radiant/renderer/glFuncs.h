@@ -28,6 +28,8 @@
 	X(PFNGLGETUNIFORMLOCATIONPROC,			glGetUniformLocation) \
 	X(PFNGLUNIFORM1IPROC,					glUniform1i) \
 	X(PFNGLUNIFORM1FPROC,					glUniform1f) \
+	X(PFNGLUNIFORM2FPROC,					glUniform2f) \
+	X(PFNGLACTIVETEXTUREPROC,				glActiveTexture) \
 	X(PFNGLUNIFORM3FPROC,					glUniform3f) \
 	X(PFNGLUNIFORM4FPROC,					glUniform4f) \
 	X(PFNGLUNIFORMMATRIX4FVPROC,			glUniformMatrix4fv) \
