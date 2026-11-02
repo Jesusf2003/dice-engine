@@ -10,7 +10,6 @@
 		"engine/debug": true
 	},
 	"files.watcherExclude": {
-		"**/bin/ThirdParty/**": true,
 		"**/engine/libs-*/**": true,
 		"**/engine/release/**": true,
 		"**/engine/debug/**": true
@@ -33,7 +32,7 @@
   },
   "makefile.configurations": [
     {
-      "makePath": "C://mingw64/bin/mingw64-make.exe",
+      "makePath": "C:\\mingw64\\bin\\mingw32-make.exe",
       "name": "Unnamed configuration 1"
     }
   ]

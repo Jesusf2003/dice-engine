@@ -670,3 +670,51 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.30/Modules/CheckIPOSupported.cmake:138 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.30/Modules/CheckIPOSupported.cmake:261 (_ipo_run_language_check)"
+      - "CMakeLists.txt:104 (check_ipo_supported)"
+    directories:
+      source: "F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-CXX/src"
+      binary: "F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-CXX/bin"
+    buildResult:
+      variable: "_IPO_LANGUAGE_CHECK_RESULT"
+      cached: true
+      stdout: |
+        Change Dir: 'F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-CXX/bin'
+        
+        Run Build Command(s): C:/mingw64/bin/ninja.exe -v
+        [1/4] C:\\msys64\\mingw64\\bin\\g++.exe   -flto=auto -fno-fat-lto-objects -o CMakeFiles/boo.dir/main.cpp.obj -c F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-CXX/src/main.cpp
+        [2/4] C:\\msys64\\mingw64\\bin\\g++.exe   -flto=auto -fno-fat-lto-objects -o CMakeFiles/foo.dir/foo.cpp.obj -c F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-CXX/src/foo.cpp
+        [3/4] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f libfoo.a && "C:/msys64/mingw64/bin/gcc-ar.exe" qc libfoo.a  CMakeFiles/foo.dir/foo.cpp.obj && "C:/msys64/mingw64/bin/gcc-ranlib.exe" libfoo.a && cd ."
+        [4/4] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\msys64\\mingw64\\bin\\g++.exe -flto=auto -fno-fat-lto-objects  CMakeFiles/boo.dir/main.cpp.obj -o boo.exe -Wl,--out-implib,libboo.dll.a -Wl,--major-image-version,0,--minor-image-version,0  libfoo.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.30/Modules/CheckIPOSupported.cmake:138 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.30/Modules/CheckIPOSupported.cmake:261 (_ipo_run_language_check)"
+      - "CMakeLists.txt:104 (check_ipo_supported)"
+    directories:
+      source: "F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-C/src"
+      binary: "F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-C/bin"
+    buildResult:
+      variable: "_IPO_LANGUAGE_CHECK_RESULT"
+      cached: true
+      stdout: |
+        Change Dir: 'F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-C/bin'
+        
+        Run Build Command(s): C:/mingw64/bin/ninja.exe -v
+        [1/4] C:\\msys64\\mingw64\\bin\\gcc.exe   -flto=auto -fno-fat-lto-objects -o CMakeFiles/foo.dir/foo.c.obj -c F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-C/src/foo.c
+        [2/4] C:\\msys64\\mingw64\\bin\\gcc.exe   -flto=auto -fno-fat-lto-objects -o CMakeFiles/boo.dir/main.c.obj -c F:/VSCodeProjects/CppProjects/dice-engine/build/CMakeFiles/_CMakeLTOTest-C/src/main.c
+        [3/4] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f libfoo.a && "C:/msys64/mingw64/bin/gcc-ar.exe" qc libfoo.a  CMakeFiles/foo.dir/foo.c.obj && "C:/msys64/mingw64/bin/gcc-ranlib.exe" libfoo.a && cd ."
+        [4/4] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\msys64\\mingw64\\bin\\gcc.exe -flto=auto -fno-fat-lto-objects  CMakeFiles/boo.dir/main.c.obj -o boo.exe -Wl,--out-implib,libboo.dll.a -Wl,--major-image-version,0,--minor-image-version,0  libfoo.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 && cd ."
+        
+      exitCode: 0
+...

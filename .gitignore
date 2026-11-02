@@ -10,6 +10,12 @@ engine/common/config_base.h
 engine/common/base.ico
 
 # Nuclide: junctions to ./engine and ./plugins, recreated by build_win64.sh
-bin/ThirdParty/
-bin/build/
-bin/*.exe
+/bin/ThirdParty/
+/bin/build/
+/build/
+/bin/*.exe
+/bin/*.dll
+/bin/base/*.dat
+/bin/base/*.lno
+/bin/base/maps/*.dat
+/bin/base/maps/*.lno
