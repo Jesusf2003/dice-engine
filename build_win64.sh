@@ -12,6 +12,7 @@
 #   fteqw    - builds the generic, unbranded engine as bin/fteqw.exe          (make fteqw)
 #   plugins  - builds the plugins listed in bin/$GAME/PLUGINS or $NATIVE_PLUGINS
 #   makelibs - builds the static third-party libs (zlib, png, jpeg, ogg, vorbis, opus, speex, freetype)
+#   vmap     - builds the map compiler into tools/vmap/bin/vmap.exe (plus the DLLs it needs)
 #   clean    - removes engine objects (keeps the third-party libs)
 # Environment: GAME (default base), JOBS (default: nproc), NATIVE_PLUGINS.
 
@@ -20,6 +21,7 @@ set -e
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 NUCLIDE="$ROOT/bin"
 ENGINE="$ROOT/engine"
+VMAP="$ROOT/tools/vmap"
 GAME="${GAME:-base}"
 JOBS="${JOBS:-$(nproc)}"
 
@@ -102,6 +104,54 @@ do_plugins() {
 	find "$ENGINE/release/" -maxdepth 1 -name "fteplug_*.dll" -exec install -m 0755 '{}' "$NUCLIDE/" \;
 }
 
+# vmap needs glib, libxml2 and minizip. Installing them through pacman would force a full MSYS2
+# upgrade (and a new GCC for the engine), so the packages are unpacked into tools/vmap/deps instead.
+VMAP_PKGS="glib2-2.90.1-1 pcre2-10.49-1 libxml2-2.15.4-3 minizip-1.3.2-3"
+
+vmap_deps() {
+	local deps="$VMAP/deps"
+	[ -f "$deps/ucrt64/lib/pkgconfig/minizip.pc" ] && return
+	mkdir -p "$deps/pkgs"
+	for p in $VMAP_PKGS; do
+		local f="mingw-w64-ucrt-x86_64-$p-any.pkg.tar.zst"
+		[ -f "$deps/pkgs/$f" ] || curl -sfL -o "$deps/pkgs/$f" "https://repo.msys2.org/mingw/ucrt64/$f"
+		tar --zstd -xf "$deps/pkgs/$f" -C "$deps" ucrt64
+	done
+	# The .pc files say prefix=/ucrt64; point them at the unpacked copy.
+	sed -i "s#^prefix=.*#prefix=$deps/ucrt64#" "$deps"/ucrt64/lib/pkgconfig/*.pc
+	# vmap's bundled unzip.h includes "ioapi.h", which MSYS2 keeps in include/minizip/.
+	sed -i 's#^Cflags: -I${includedir}$#Cflags: -I${includedir}/minizip -I${includedir}#' "$deps/ucrt64/lib/pkgconfig/minizip.pc"
+}
+
+# Copies the non-system DLLs an exe imports, recursively, from the vmap deps or the UCRT64 prefix.
+copy_dlls() {
+	local dll src
+	for dll in $(objdump -p "$1" | sed -n 's/^\s*DLL Name: //p'); do
+		[ -f "$2/$dll" ] && continue
+		for src in "$VMAP/deps/ucrt64/bin/$dll" "/ucrt64/bin/$dll"; do
+			if [ -f "$src" ]; then
+				install -m 0755 "$src" "$2/"
+				copy_dlls "$src" "$2"
+				break
+			fi
+		done
+	done
+}
+
+do_vmap() {
+	vmap_deps
+	# l_net uses Winsock on Windows, which the upstream Makefile does not link.
+	# Windows' default 1 MB stack overflows in PatchMapDrawSurfs (Linux gives 8 MB), so ask for 16 MB.
+	# The link rule only depends on the objects, so drop the old exe to make LDFLAGS changes take effect.
+	rm -f "$VMAP/vmap.exe"
+	PKG_CONFIG_PATH="$VMAP/deps/ucrt64/lib/pkgconfig:/ucrt64/lib/pkgconfig" \
+		make -C "$VMAP" LDFLAGS="-lws2_32 -Wl,--stack,16777216" -j"$JOBS"
+	mkdir -p "$VMAP/bin"
+	install -m 0755 "$VMAP/vmap.exe" "$VMAP/bin/vmap.exe"
+	copy_dlls "$VMAP/bin/vmap.exe" "$VMAP/bin"
+	echo "vmap: tools/vmap/bin/vmap.exe"
+}
+
 do_clean() {
 	make -C "$ENGINE" clean FTE_TARGET=win64
 	rm -f "$ENGINE/release/.fte_config"
@@ -112,7 +162,7 @@ ensure_thirdparty
 for t in "$@"; do
 	echo "=== $t (GAME=$GAME) ==="
 	case "$t" in
-		fteqcc|game|engine|fteqw|plugins|makelibs|clean) "do_$t" ;;
+		fteqcc|game|engine|fteqw|plugins|makelibs|vmap|clean) "do_$t" ;;
 		*) echo "unknown target: $t" >&2; exit 1 ;;
 	esac
 done
