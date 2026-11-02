@@ -1,0 +1,7 @@
+#pragma target fte_5768
+#define QWSSQC
+
+#includelist
+common/include.src
+server/api.h
+#endlist

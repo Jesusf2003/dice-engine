@@ -1,82 +1,15 @@
-#misc build artifacts
-build
-*.o
-*.o.d
-engine/debug/
+# Engine build output (build_win64.sh / engine/Makefile)
 engine/release/
+engine/debug/
+engine/profile/
 engine/libs-*/
-engine/bullet3-*/
 engine/*.tar.gz
-engine/shaders/generatebuiltinsl
-engine/shaders/makevulkanblob
-engine/shaders/vulkanblobs/
-plugins/cef/cef_linux64/
-plugins/cef/cef_windows64/
 
-#quakec build artifacts...
-quakec/csaddon/csaddon.dat
-quakec/csaddon/csaddon.lno
-quakec/csqctest/csprogs.dat
-quakec/csqctest/csprogs.lno
-quakec/csqctest/progs.dat
-quakec/csqctest/progs.lno
-quakec/menu.dat
-quakec/menu.lno
+# Copied from bin/<game>/engine.h and icon by Nuclide's engine targets
+engine/common/config_base.h
+engine/common/base.ico
 
-# clangd artifacts
-compile_commands.json
-.cache/
-
-#for qtcreator users.
-CMakeLists.txt.user
-
-# android target has a load of debris
-engine/droid/bin/
-engine/droid/gen/
-engine/droid/libs/
-engine/droid/default.properties
-engine/droid/local.properties
-engine/droid/proguard.cfg
-engine/droid/build.xml
-engine/droid/ftekeystore
-engine/droid/proguard-project.txt
-engine/droid/project.properties
-
-references/
-bin/ninjawars/maps/autosave/
-bin/ninjawars/maps/*.log
-bin/ninjawars/maps/*.json
-bin/ninjawars/maps/*.prt
-bin/ninjawars/maps/*.jmx
-bin/ninjawars/maps/*.lit
-bin/ninjawars/maps/*.max
-bin/ninjawars/screenshots/
-
-# ninjawars: compiled quakec and engine-written files
-
-bin/ninjawars/*.dat
-bin/ninjawars/*.lno
-bin/ninjawars/*.wad
-bin/ninjawars/qconsole.log
-bin/ninjawars/fte.cfg
-bin/ninjawars/models/sprites/
-bin/ninjawars/models/test/
-bin/ninjawars/models/weapons/
-bin/conhistory.txt
-bin/test/
-vulkan.pcache
+# Nuclide: junctions to ./engine and ./plugins, recreated by build_win64.sh
+bin/ThirdParty/
+bin/build/
 bin/*.exe
-bin/*.zip
-bin/*.exp
-bin/*.pdb
-#quaked3 editor runtime files
-bin/qe3*.cfg
-bin/qe3.log
-bin/crash.*.map
-#radiant editor dock layout
-bin/radiant.ini
-bin/*.lib
-bin/*.pfx
-
-# Flatpak build artifacts
-.flatpak-builder

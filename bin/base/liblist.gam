@@ -1,0 +1,60 @@
+// Mayhem liblist.gam file
+// Take this one and adjust for your game
+
+// window title
+game "Nuclide II: Mayhem"
+// main game directory
+gamedir "base"
+// folder to also include in the path (before game dir)
+fallback_dir ""
+// first folder to include, before gamedir and fallback_dir
+base_dir ""
+// author information
+url_info "www.vera-visions.com"
+// download location (.zip/pk3)
+url_dl
+// version string
+version "1.0"
+// size of game in bytes
+size 10519918
+// whether this game is only for dedicated servers
+svonly 0
+// whether this game has a client-side progs
+cldll 1
+// if we're singleplayer, multiplayer or both
+type "Both"
+// minimum game-revision required to play
+minversion 0
+// if we should show player model selection in the multiplayer options
+nomodels 1
+// if we should show the 'high quality players' option
+nohimodels 1
+// if we should allow spraylogos in the multiplayer options
+nosprays 0
+// name of the entity used for multiplayer map identifcation
+mpentity "info_player_deathmatch"
+// which server progs.dat to use
+gamedll "progs.dat"
+// which map we'll start a new singleplayer game on
+startmap "e0m1"
+// which map the training button will go to
+trainingmap "dev"
+// names of the packages this game needs
+pkgname ""
+// name of file inside the packages we should check for 
+pkgfile ""
+// which chat-room to join by default
+chatroom "lobby"
+// which file is to view when clicking the readme menu button
+readme "readme.txt"
+// which map to use as a level background
+menumap "background01"
+// what movie to play when starting the game
+introvideo ""
+// whether to use a steam styled resource background cut into multiple parts
+steambg 0
+// the title text of the game
+title "Mayhem"
+// the subtitle of the game
+subtitle "Nuclide + LibreQuad"
+

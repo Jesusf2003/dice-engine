@@ -1,0 +1,8 @@
+#pragma target fte_5768
+//#pragma flag enable assumeint
+#pragma progs_dat  "../../platform/menu.dat"
+#define MENU
+
+#includelist
+includes.src
+#endlist

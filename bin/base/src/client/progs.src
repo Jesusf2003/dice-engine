@@ -1,0 +1,32 @@
+#pragma target fte_5768
+#pragma progs_dat  "../../csprogs.dat"
+//#pragma flag enable assumeint
+#pragma forcecrc 54730
+
+#define CSQC
+#define CLIENT
+
+#includelist
+/* first the engine, then nuclide headers for client/shared */
+../../../src/common/include.src
+../../../src/shared/defs.h
+../../../src/client/defs.h
+
+/* mod specific header */
+defs.h
+/* for VGUI elements, we want to include this (optional) */
+../../../src/vgui/include.src
+
+/* include the entity codebase */
+../../../src/gs-entbase/client.src
+../../../src/gs-entbase/shared.src
+
+/* mod specific functions */
+../shared/include.src
+
+main.qc
+
+/* global client/shared code */
+../../../src/client/include.src
+../../../src/shared/include.src
+#endlist

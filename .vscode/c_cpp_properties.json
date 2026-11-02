@@ -1,0 +1,27 @@
+{
+	"configurations": [
+		{
+			"name": "FTEQW (MinGW-w64 UCRT64)",
+			"compilerPath": "C:/msys64/ucrt64/bin/gcc.exe",
+			"intelliSenseMode": "windows-gcc-x64",
+			"cStandard": "gnu11",
+			"cppStandard": "gnu++17",
+			"includePath": [
+				"${workspaceFolder}/engine",
+				"${workspaceFolder}/engine/common",
+				"${workspaceFolder}/engine/client",
+				"${workspaceFolder}/engine/server",
+				"${workspaceFolder}/engine/gl",
+				"${workspaceFolder}/engine/qclib",
+				"${workspaceFolder}/engine/libs-x86_64-w64-mingw32",
+				"${workspaceFolder}/plugins"
+			],
+			"defines": [
+				"_WIN32",
+				"MULTITHREAD",
+				"CONFIG_FILE_NAME=config_fteqw.h"
+			]
+		}
+	],
+	"version": 4
+}

@@ -1,0 +1,223 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-051b7a418a9927003e62.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "FTEQuake",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "csaddon::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-csaddon-Release-7bb1e4519980e87792fb.json",
+					"name" : "csaddon",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fteqcc::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fteqcc-Release-b9bb27ad8388eca88aa8.json",
+					"name" : "fteqcc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fteqccgui::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fteqccgui-Release-2b0c6366bdb1337701a1.json",
+					"name" : "fteqccgui",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fteqw::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fteqw-Release-904cc56d94ffa061f7ca.json",
+					"name" : "fteqw",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fteqw-i18n::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fteqw-i18n-Release-f9f402d61472f7376eec.json",
+					"name" : "fteqw-i18n",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fteqw-sv::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fteqw-sv-Release-e7eb5c73d12ba80cfef4.json",
+					"name" : "fteqw-sv",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "httpserver::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-httpserver-Release-da797f090cf51dc25820.json",
+					"name" : "httpserver",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "imgtool::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-imgtool-Release-c2abbe388beaa780a02d.json",
+					"name" : "imgtool",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "iqmtool::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-iqmtool-Release-1434cc082cdc3b3cdf7d.json",
+					"name" : "iqmtool",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "menusys::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-menusys-Release-14708977907ecedca9d7.json",
+					"name" : "menusys",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "plug_cod::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-plug_cod-Release-00196cc32693afff2364.json",
+					"name" : "plug_cod",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "plug_ezhud::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-plug_ezhud-Release-5a455a64876fc59ca793.json",
+					"name" : "plug_ezhud",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "plug_hl2::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-plug_hl2-Release-b8394f212477288462a4.json",
+					"name" : "plug_hl2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "plug_irc::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-plug_irc-Release-d546e5fd2029ea7df7df.json",
+					"name" : "plug_irc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "plug_models::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-plug_models-Release-51012ad87cbea1b23514.json",
+					"name" : "plug_models",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "plug_qi::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-plug_qi-Release-4ad6ee6caac803bbd19e.json",
+					"name" : "plug_qi",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "plug_quake3::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-plug_quake3-Release-4b670176812885e80d3e.json",
+					"name" : "plug_quake3",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "plug_xmpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-plug_xmpp-Release-881d9b67fe512cae3aec.json",
+					"name" : "plug_xmpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "qtv::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-qtv-Release-4e620719537735a948d4.json",
+					"name" : "qtv",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "F:/VSCodeProjects/CppProjects/dice-engine/build",
+		"source" : "F:/VSCodeProjects/CppProjects/dice-engine"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

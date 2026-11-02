@@ -1,0 +1,33 @@
+step_default.left
+{
+	attenuation static
+	footstep
+	sample common/null.wav
+}
+
+step_default.right
+{
+	attenuation static
+	footstep
+	sample common/null.wav
+}
+
+damage_bullet.hit
+{
+	sample common/null.wav
+}
+
+step_ladder.left
+{
+	sample common/null.wav
+}
+
+step_ladder.right
+{
+	sample common/null.wav
+}
+
+sfx_impact.default
+{
+	sample common/null.wav
+}

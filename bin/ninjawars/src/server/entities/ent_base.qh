@@ -1,4 +1,0 @@
-class BaseEntity : entity {
-public:
-  virtual void() Spawn = {};
-};

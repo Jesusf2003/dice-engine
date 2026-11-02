@@ -1,17 +1,40 @@
 {
-    "makefile.configurations": [
-        {
-            "makePath": "C://mingw64/bin/mingw64-make.exe",
-            "name": "Unnamed configuration 1"
-        }
-    ],
-    "C_Cpp.errorSquiggles": "disabled",
-    "[quakec]": {
-        "editor.insertSpaces": true,
-        "editor.tabSize": 4
-    },
-    "[jsonc]": {
-        "editor.insertSpaces": true,
-        "editor.tabSize": 4
+	// bin/ThirdParty/fteqw/{engine,plugins} are junctions back to ./engine and ./plugins; skip them to avoid duplicate results.
+	"files.exclude": {
+		"bin/ThirdParty": true
+	},
+	"search.exclude": {
+		"bin/ThirdParty": true,
+		"engine/libs-*": true,
+		"engine/release": true,
+		"engine/debug": true
+	},
+	"files.watcherExclude": {
+		"**/bin/ThirdParty/**": true,
+		"**/engine/libs-*/**": true,
+		"**/engine/release/**": true,
+		"**/engine/debug/**": true
+	},
+	"C_Cpp.files.exclude": {
+		"**/bin/ThirdParty": true,
+		"**/engine/libs-*": true
+	},
+	"files.associations": {
+		"*.mat": "plaintext",
+		"*.def": "plaintext",
+		"*.fmf": "plaintext"
+	},
+	"terminal.integrated.profiles.windows": {
+		"MSYS2 UCRT64": {
+			"path": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["--login", "-i"],
+			"env": { "MSYSTEM": "UCRT64", "CHERE_INVOKING": "1" }
+		}
+  },
+  "makefile.configurations": [
+    {
+      "makePath": "C://mingw64/bin/mingw64-make.exe",
+      "name": "Unnamed configuration 1"
     }
+  ]
 }

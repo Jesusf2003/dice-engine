@@ -1,0 +1,98 @@
+{
+	// Builds run inside MSYS2 UCRT64 through build_win64.sh (see Nuclide: bin/Documentation/Building.md).
+	"version": "2.0.0",
+	"options": {
+		"env": {
+			"MSYSTEM": "UCRT64",
+			"CHERE_INVOKING": "1",
+			"GAME": "${input:game}"
+		}
+	},
+	"tasks": [
+		{
+			"label": "Nuclide: build all (fteqcc + game + engine + plugins)",
+			"type": "process",
+			"command": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["-lc", "./build_win64.sh fteqcc game engine plugins"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"group": { "kind": "build", "isDefault": true },
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "Nuclide: make fteqcc",
+			"type": "process",
+			"command": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["-lc", "./build_win64.sh fteqcc"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"group": "build",
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "Nuclide: make game",
+			"type": "process",
+			"command": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["-lc", "./build_win64.sh game"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"group": "build",
+			"problemMatcher": {
+				"owner": "fteqcc",
+				"fileLocation": ["relative", "${workspaceFolder}/bin/${input:game}/src"],
+				"pattern": {
+					"regexp": "^(.+?):(\\d+):\\s+(error|warning)[^:]*:\\s+(.*)$",
+					"file": 1, "line": 2, "severity": 3, "message": 4
+				}
+			}
+		},
+		{
+			"label": "Nuclide: make engine (branded, from <game>/engine.h)",
+			"type": "process",
+			"command": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["-lc", "./build_win64.sh engine"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"group": "build",
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "FTEQW: make fteqw (generic engine)",
+			"type": "process",
+			"command": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["-lc", "./build_win64.sh fteqw"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"group": "build",
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "FTEQW: make plugins",
+			"type": "process",
+			"command": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["-lc", "./build_win64.sh plugins"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"group": "build",
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "FTEQW: makelibs (static third-party libs)",
+			"type": "process",
+			"command": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["-lc", "./build_win64.sh makelibs"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"problemMatcher": []
+		},
+		{
+			"label": "FTEQW: clean engine objects",
+			"type": "process",
+			"command": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["-lc", "./build_win64.sh clean"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"problemMatcher": []
+		}
+	],
+	"inputs": [
+		{
+			"id": "game",
+			"type": "promptString",
+			"description": "Game directory inside bin/ (GAME=)",
+			"default": "base"
+		}
+	]
+}
