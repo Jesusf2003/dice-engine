@@ -318,9 +318,7 @@ with a desired font.
 @param fnt is the font to be used for rendering the text.
 @param iAlignFlags sets how the text may be aligned. */
 	void TextFieldAtHeight(vector vecOrigin, vector vecSize, int iTextHeight, string strText, font_s fnt, alignflags_t iAlignFlags);
-	
-	/** Draws an opaque, rectangular radar that is centered around the current player, or the player that is being spectated. */
-	void RadarRect(vector vecOrigin, vector vecSize);
+
 } drawAPI_t;
 var drawAPI_t draw;/**< Access drawAPI_t functions using this variable. */
 
@@ -665,7 +663,6 @@ _client_main(void)
 	draw.Text_A= linkToClientProgs("Font_DrawText_A");
 	draw.Text_RGB= linkToClientProgs("Font_DrawText_RGB");
 	draw.Text_RGBA = linkToClientProgs("Font_DrawText_RGBA");
-	draw.RadarRect = linkToClientProgs("CLPF_draw_RadarRect");
 
 	spectating.Mode = linkToClientProgs("CLPF_spectating_Mode");
 	spectating.LocalizedMode = linkToClientProgs("CLPF_spectating_LocalizedMode");

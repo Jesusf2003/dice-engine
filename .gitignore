@@ -50,3 +50,5 @@ engine/common/base.ico
 /tools/vmap/vmap.exe
 /tools/vmap/bin/
 /tools/vmap/build/
+# Local notes and code set aside from the SDK (e.g. docs/radar)
+/docs/

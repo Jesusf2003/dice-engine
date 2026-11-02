@@ -471,21 +471,11 @@ ncView::UpdateView(void)
 			if (is.Player(c)) {
 				SetCameraOrigin(c.origin);
 			}
-			
-			drawfill(m_vecPosition, m_vecSize, [0,0,0], 1.0f, DRAWFLAG_NORMAL);
-			g_overview.SetViewPosition(m_vecPosition);
-			g_overview.SetViewSize(m_vecSize);
-			g_overview.SetRadarPitch(view_angles[0]);
-			g_overview.UpdateView();
-			return;
+			SetCameraAngle(view_angles);
+			break;
 		case SPECMODE_FREEOVERVIEW:
 			SetCameraOrigin(pSeat->m_vecPredictedOrigin);
-			drawfill(m_vecPosition, m_vecSize, [0,0,0], 1.0f, DRAWFLAG_NORMAL);
-			g_overview.SetViewPosition(m_vecPosition);
-			g_overview.SetViewSize(m_vecSize);
-			g_overview.SetRadarPitch(view_angles[0]);
-			g_overview.UpdateView();
-			return;
+			SetCameraAngle(view_angles);
 			break;
 		default:
 			SetCameraOrigin(cl.GetEyePos());

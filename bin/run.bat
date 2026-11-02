@@ -1,7 +1,7 @@
 @echo off
-rem Build/launch helper for dice-engine on Windows; usable from cmd, PowerShell or a VS Code task.
+rem Build/launch helper for dice-engine on Windows (bin\run.bat); usable from cmd, PowerShell or a VS Code task.
 rem
-rem   run.bat [command] [-game <dir>] [-map <map>] [-dev] [-n] [extra args...]
+rem   run.bat [command] [-game DIR] [-map MAP] [-dev] [-n] [extra args...]
 rem
 rem Commands:
 rem   buildrun  compile the game's QuakeC, then start the engine (default)
@@ -12,8 +12,8 @@ rem   fteqw     start the generic engine bin\fteqw.exe
 rem   fteqcc    run bin\fteqcc.exe inside bin\<game>\src (no extra args: compiles progs.src there)
 rem
 rem Options:
-rem   -game <dir>  game/mod directory under bin\ (default: %GAME% or base)
-rem   -map <map>   map to load on start (+map <map>)
+rem   -game DIR    game/mod directory under bin\ (default: %GAME% or base)
+rem   -map MAP     map to load on start (+map MAP)
 rem   -dev         developer 1, and +devmap instead of +map (cheats allowed)
 rem   -n           print the command instead of running it
 rem   Anything else goes to the engine (e.g. +set sv_cheats 1) or, for fteqcc, to the compiler.
@@ -22,9 +22,10 @@ rem Environment: MSYS2_ROOT (default C:\msys64), GAME.
 
 setlocal EnableExtensions DisableDelayedExpansion
 
-set "ROOT=%~dp0"
-set "ROOT=%ROOT:~0,-1%"
-set "BIN=%ROOT%\bin"
+rem This script lives in bin\; the repo root (build_win64.sh) is its parent.
+set "BIN=%~dp0"
+set "BIN=%BIN:~0,-1%"
+for %%I in ("%BIN%\..") do set "ROOT=%%~fI"
 if not defined GAME set "GAME=base"
 if not defined MSYS2_ROOT set "MSYS2_ROOT=C:\msys64"
 set "CMD=buildrun"
@@ -175,18 +176,22 @@ start "" /D "%BIN%" "%ENGINE%" %ARGS%%EXTRA%
 exit /b 0
 
 :usage
-echo usage: run.bat [buildrun^|build^|run^|fteqw^|fteqcc] [-game ^<dir^>] [-map ^<map^>] [-dev] [-n] [args...]
+echo usage: run.bat [buildrun^|build^|run^|fteqw^|fteqcc] [-game DIR] [-map MAP] [-dev] [-n] [args...]
 echo.
 echo   buildrun  compile the game's QuakeC, then start the engine (default)
 echo   build     compile the game's QuakeC only
-echo   run       start the game's engine (bin\^<PROJECT^>_x64.exe, else bin\fteqw.exe)
+echo   run       start the game's engine (bin\PROJECT_x64.exe, else bin\fteqw.exe)
 echo   fteqw     start the generic engine bin\fteqw.exe
-echo   fteqcc    run bin\fteqcc.exe in bin\^<game^>\src with the extra args
+echo   fteqcc    run bin\fteqcc.exe in bin\DIR\src with the extra args
 echo.
-echo   -game ^<dir^>  game/mod directory under bin\ (default: base)
-echo   -map ^<map^>   map to load on start
+echo   -game DIR    game/mod directory under bin\ (default: base)
+echo   -map MAP     map to load on start, a name from bin\DIR\maps without .bsp
 echo   -dev         developer mode, +devmap instead of +map
 echo   -n           print the command instead of running it
+echo.
+echo   Type DIR and MAP as plain names: in cmd, ^< and ^> redirect files.
+echo   In the game console, load a map with "map MAP" or "devmap MAP";
+echo   "gamedir MAP" switches the game directory instead and creates bin\MAP.
 echo.
 echo examples:
 echo   run.bat                              build base and play

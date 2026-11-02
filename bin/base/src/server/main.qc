@@ -1,5 +1,1 @@
-void
-Game_Worldspawn(void)
-{
-
-}
+void(void) Game_Worldspawn = {}

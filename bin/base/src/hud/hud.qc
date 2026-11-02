@@ -58,9 +58,6 @@ HUD_Draw(void)
 	draw.Text(iconPos + [(baseIconSize/2) + (baseIconPadding/2) + baseIconSize + baseIconPadding, 0], armorValue, FONT_HUD);
 	draw.Pic(iconPos + [(baseIconSize/2) + (baseIconPadding/2), 0], "gfx/hud/armor", [baseIconSize, baseIconSize], [1,1,1], 1.0f, DRAWFLAG_NORMAL);
 
-	draw.RadarRect(hud_mins + [hudSize[0] - 127 - 16, 17], [126,126]);
-	draw.RectOutline(hud_mins + [hudSize[0] - 128 - 16, 16], [128,128], 1.0f, [0.5,0.5,0.5], 1.0f);
-
 	/* ammo */
 	if (weapon.AmmoRequired() == true) {
 		iconPos[0] = hud_mins[0] + (hudSize[0] - baseIconSize) - baseIconPadding;

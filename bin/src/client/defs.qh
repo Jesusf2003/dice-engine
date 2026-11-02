@@ -25,7 +25,6 @@
 #include "cmd.qh"
 #include "util.qh"
 #include "View.qh"
-#include "Radar.qh"
 #include "crosshair.qh"
 #include "hud.qh"
 #include "InterfaceSpriteSheet.qh"
@@ -435,8 +434,6 @@ struct
 var vector g_vecMousePos;
 var vector g_hudmins;
 var vector g_hudres;
-
-var ncRadar g_overview;
 
 /** @defgroup cliententity Entities that are client-side
  *  @ingroup client

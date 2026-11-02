@@ -107,8 +107,6 @@ CSQC_Init(float apilevel, string enginename, float engineversion)
 	Ammo_Init();
 	WorldSpawn_Init();
 
-	g_overview = ncRadar::InitForCurrentMap();
-
 	HUD_Init();
 
 	/* because the engine will do really bad hacks to our models otherwise. e.g. R6284 */

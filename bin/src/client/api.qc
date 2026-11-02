@@ -529,12 +529,6 @@ CLPF_weapon_SelectWeapon(entity weaponCheck)
 }
 
 void
-CLPF_draw_RadarRect(vector pos, vector size)
-{
-	Radar_Draw(pos, size);
-}
-
-void
 CLPF_draw_Rect(vector pos, vector size, vector rgb, float a)
 {
 	drawfill(pos, size, rgb, a);
