@@ -20,6 +20,7 @@
 #include "map/entityDefs.h"
 #include "core/common/gameConfig.h"
 #include "ui/options/wndOptions.h"
+#include "ui/run/wndRun.h"
 #include "renderer/glFuncs.h"
 #include "renderer/gridRenderer.h"
 #include "renderer/mapRenderer.h"
@@ -571,29 +572,39 @@ static void WndMain_NewMapDefaults()
 		g_map.World()->SetKey("wad", wads);
 }
 
+static const gameConfig_t *FirstPlayable(const std::vector<gameConfig_t> &list)
+{
+	for (const gameConfig_t &c : list)
+		if (GameConfigs::CanBeActive(c.kind))
+			return &c;
+	return nullptr;
+}
+
 static const gameConfig_t *PickGame()
 {
 	if (const gameConfig_t *cfg = GameConfigs::Active())
 		return cfg;
 
-	if (!GameConfigs::configs.empty())
+	if (const gameConfig_t *first = FirstPlayable(GameConfigs::configs))
 	{
 		Log::Warning("Game configuration \"%s\" doesn't exist, using \"%s\"",
-			GameConfigs::activeName.c_str(), GameConfigs::configs.front().name.c_str());
-		GameConfigs::Apply(GameConfigs::configs, GameConfigs::configs.front().name);
+			GameConfigs::activeName.c_str(), first->name.c_str());
+		GameConfigs::Apply(GameConfigs::configs, first->name);
 		return GameConfigs::Active();
 	}
+	if (!GameConfigs::configs.empty())
+		return nullptr;		// only engines: a game is for Options to add
 
 	std::vector<gameConfig_t> found = GameConfigs::Detect();
-	if (found.empty())
+	const gameConfig_t *first = FirstPlayable(found);
+	if (!first)
 		return nullptr;
 
 	std::string names;
 	for (const gameConfig_t &g : found)
-		names += (names.empty() ? "" : ", ") + g.name;
-	Log::Info("No game configurations yet, detected %zu next to the editor: %s (Tools > Options to change them)",
-		found.size(), names.c_str());
-	GameConfigs::Apply(found, found.front().name);
+		names += (names.empty() ? "" : ", ") + std::string(GameConfigs::KindName(g.kind)) + " " + g.name;
+	Log::Info("No game configurations yet, detected next to the editor: %s (Tools > Options to change them)", names.c_str());
+	GameConfigs::Apply(found, first->name);
 	return GameConfigs::Active();
 }
 
@@ -610,7 +621,7 @@ void WndMain_LoadGame()
 		return;
 	}
 
-	Log::Info("---- Game: %s ----", cfg->name.c_str());
+	Log::Info("---- %s: %s ----", GameConfigs::KindName(cfg->kind), cfg->name.c_str());
 
 	std::vector<std::string> dirs = GameConfigs::SearchPaths(*cfg);
 	if (dirs.empty())
@@ -778,6 +789,8 @@ void WndMain_Draw()
 	Window::DrawAll();
 	WndPreferences::Draw();
 	WndOptions::Draw();
+	WndCompile::Draw();
+	WndLaunch::Draw();
 
 	if (s_pendingGame)
 	{

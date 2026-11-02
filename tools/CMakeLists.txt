@@ -89,6 +89,10 @@ if(FTE_TOOL_RADIANT)
 		${_R}/core/common/preferences.h
 		${_R}/core/utils/fileDialog.cpp
 		${_R}/core/utils/fileDialog.h
+		${_R}/core/utils/process.cpp
+		${_R}/core/utils/process.h
+		${_R}/core/compile/compilation.cpp
+		${_R}/core/compile/compilation.h
 
 		#map data: grid, the .map document (parse, validate), entities and brushes
 		${_R}/map/grid.cpp
@@ -105,6 +109,8 @@ if(FTE_TOOL_RADIANT)
 		${_R}/map/fgdParser.h
 		${_R}/map/map.cpp
 		${_R}/map/map.h
+		${_R}/map/selection.cpp
+		${_R}/map/selection.h
 		${_R}/map/mapParser.cpp
 		${_R}/map/mapParser.h
 		${_R}/map/mapReport.cpp
@@ -153,6 +159,9 @@ if(FTE_TOOL_RADIANT)
 
 		${_R}/ui/options/wndOptions.cpp
 		${_R}/ui/options/wndOptions.h
+
+		${_R}/ui/run/wndRun.cpp
+		${_R}/ui/run/wndRun.h
 
 		${_R}/ui/favourites/textureFavorites.cpp
 		${_R}/ui/favourites/textureFavorites.h

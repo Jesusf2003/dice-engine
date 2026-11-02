@@ -1,0 +1,5 @@
+// Entry point: compiles each module as its own progs.
+// Client (CSQC) and server (SSQC) run in separate VMs with different builtins,
+// so they can't share one .dat.
+#pragma sourcefile client.src
+#pragma sourcefile server.src

@@ -8,7 +8,10 @@
 #include "renderer/glFuncs.h"
 #include "renderer/gridRenderer.h"
 #include "map/grid.h"
+#include "map/selection.h"
+#include "renderer/mapRenderer.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
@@ -32,7 +35,7 @@ static const char s_axisNames[3] = { 'X', 'Y', 'Z' };
 #define ZOOM_STEP	1.25f		// netradiant: 5/4 per wheel notch
 
 MapView2D::MapView2D(ViewPlane p, int inst) :
-	plane(p), drag(DRAG_NONE), lastMouse(0, 0)
+	plane(p), drag(DRAG_NONE), lastMouse(0, 0), selectStart(0, 0), selectToggle(false), selectDouble(false)
 {
 	name = "Grid";		// keeps the ids ("###Grid0".."###Grid2") the layouts dock by
 	instance = inst;
@@ -117,6 +120,16 @@ void MapView2D::CycleViewPlane()
 	}
 }
 
+void MapView2D::CenterOn(const vec3 &point)
+{
+	vec3 pos = camera.Position();
+	int d1 = abs_max_axis(camera.Right());
+	int d2 = abs_max_axis(camera.Up());
+	pos[d1] = point[d1];
+	pos[d2] = point[d2];
+	camera.MoveTo(pos);
+}
+
 void MapView2D::ResetZoom()
 {
 	camera.SetZoom(1.0f);
@@ -183,7 +196,15 @@ void MapView2D::HandleInput(bool hovered, bool active, ImVec2 mouse)
 
 	if (hovered && drag == DRAG_NONE)
 	{
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle) && io.KeyCtrl)
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		{
+			Focus();
+			drag = DRAG_SELECT;
+			selectStart = mouse;
+			selectToggle = io.KeyCtrl;
+			selectDouble = ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
+		}
+		else if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle) && io.KeyCtrl)
 		{
 			Focus();
 			drag = DRAG_CAMERA;
@@ -203,7 +224,26 @@ void MapView2D::HandleInput(bool hovered, bool active, ImVec2 mouse)
 		}
 	}
 
-	if (drag == DRAG_PAN)
+	if (drag == DRAG_SELECT || drag == DRAG_MARQUEE)
+	{
+		if (ImGui::IsKeyPressed(ImGuiKey_Escape, false))
+		{
+			drag = DRAG_NONE;		// dropped, the release does nothing
+			return;
+		}
+		float dx = mouse.x - selectStart.x, dy = mouse.y - selectStart.y;
+		if (drag == DRAG_SELECT && !selectDouble && dx * dx + dy * dy > 4 * 4)
+			drag = DRAG_MARQUEE;
+		if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
+		{
+			if (drag == DRAG_SELECT)
+				ClickSelect(selectStart, selectToggle, selectDouble);
+			else
+				MarqueeSelect(selectStart, mouse, selectToggle);
+			drag = DRAG_NONE;
+		}
+	}
+	else if (drag == DRAG_PAN)
 	{
 		if (!active)
 		{
@@ -250,6 +290,86 @@ void MapView2D::HandleInput(bool hovered, bool active, ImVec2 mouse)
 
 /*
 ==================
+MapView2D::ClickSelect
+
+everything along the depth axis under the cursor, the point entities first:
+they're small and sit inside the brushes drawn around them. clicking the
+same spot again steps to the next one
+==================
+*/
+void MapView2D::ClickSelect(ImVec2 mouse, bool toggle, bool doubleClick)
+{
+	static const MapView2D *lastView;
+	static ImVec2 lastClick;
+
+	vec3 start = camera.Unproject(mouse.x, mouse.y, 0.0f);
+	double tolerance = 3.0 / camera.Zoom();		// pixels, in world units
+	std::vector<pickHit_t> hits = Selection::Pick(to_dvec3(start), to_dvec3(camera.Direction()), tolerance);
+	std::stable_partition(hits.begin(), hits.end(), [](const pickHit_t &h) { return h.item.brush < 0; });
+
+	float dx = mouse.x - lastClick.x, dy = mouse.y - lastClick.y;
+	bool cycle = lastView == this && dx * dx + dy * dy <= 3 * 3;
+	lastView = this;
+	lastClick = mouse;
+
+	g_selection.Click(hits, toggle, cycle, doubleClick);
+	WndMain_UpdateWindows(W_ALL);
+}
+
+void MapView2D::MarqueeSelect(ImVec2 a, ImVec2 b, bool add)
+{
+	vec3 wa = camera.Unproject(a.x, a.y, 0.0f);
+	vec3 wb = camera.Unproject(b.x, b.y, 0.0f);
+	int d1 = abs_max_axis(camera.Right());
+	int d2 = abs_max_axis(camera.Up());
+	g_selection.SelectInside(d1, std::min(wa[d1], wb[d1]), std::max(wa[d1], wb[d1]),
+		d2, std::min(wa[d2], wb[d2]), std::max(wa[d2], wb[d2]), add);
+	WndMain_UpdateWindows(W_ALL);
+}
+
+void MapView2D::DrawMarquee(ImDrawList *dl, ImVec2 origin)
+{
+	if (drag != DRAG_MARQUEE)
+		return;
+	ImVec2 m(ImGui::GetIO().MousePos.x - origin.x, ImGui::GetIO().MousePos.y - origin.y);
+	ImVec2 a(origin.x + std::min(selectStart.x, m.x), origin.y + std::min(selectStart.y, m.y));
+	ImVec2 b(origin.x + std::max(selectStart.x, m.x), origin.y + std::max(selectStart.y, m.y));
+	dl->AddRectFilled(a, b, IM_COL32(255, 60, 40, 30));
+	dl->AddRect(a, b, IM_COL32(255, 80, 60, 220), 0.0f, 0, 1.0f);
+}
+
+/*
+==================
+MapView2D::HandleKeys
+
+while the view has focus: escape drops the selection, the arrows scroll the
+view a grid step at a time (hammer), shift for half a view
+==================
+*/
+void MapView2D::HandleKeys()
+{
+	if (!HasFocus() || ImGui::GetIO().WantTextInput || drag == DRAG_SELECT || drag == DRAG_MARQUEE)
+		return;
+
+	if (ImGui::IsKeyPressed(ImGuiKey_Escape, false) && !g_selection.Empty())
+	{
+		g_selection.Clear();
+		WndMain_UpdateWindows(W_ALL);
+	}
+
+	const Camera::Viewport &vp = camera.GetViewport();
+	float step = ImGui::GetIO().KeyShift ? vp.width / 2.0f / camera.Zoom() : (float)std::max(Grid::ActualSize(g_grid.Size()), 8.0 / camera.Zoom());
+	vec3 move(0, 0, 0);
+	if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow))	move -= camera.Right() * step;
+	if (ImGui::IsKeyPressed(ImGuiKey_RightArrow))	move += camera.Right() * step;
+	if (ImGui::IsKeyPressed(ImGuiKey_UpArrow))		move += camera.Up() * step;
+	if (ImGui::IsKeyPressed(ImGuiKey_DownArrow))	move -= camera.Up() * step;
+	if (move != vec3(0, 0, 0))
+		camera.MoveBy(move);
+}
+
+/*
+==================
 MapView2D::RenderScene
 ==================
 */
@@ -267,7 +387,10 @@ void MapView2D::RenderScene()
 		g_gridRenderer.Render(camera, (float)Grid::ActualSize(g_grid.Size()), s_gridColor, alpha);
 	}
 
-	// TODO: map (brushes, entities), selection and tool rendering
+	// the map in wireframe, brush entities and point entities in their class color,
+	// then the selection over everything
+	g_mapRenderer.Render(camera, MapRenderer::WIREFRAME);
+	g_mapRenderer.RenderSelection(camera, false);
 
 	Framebuffer::Unbind();
 }
@@ -426,7 +549,8 @@ int MapView2D::OnPaint()
 	bool active = ImGui::IsItemActive();
 	ImVec2 mouse(ImGui::GetIO().MousePos.x - origin.x, ImGui::GetIO().MousePos.y - origin.y);
 	HandleInput(hovered, active, mouse);
-	if (drag != DRAG_NONE)
+	HandleKeys();
+	if (drag == DRAG_PAN || drag == DRAG_ZOOM || drag == DRAG_CAMERA)
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
 
 	if (!fbo.Resize((int)size.x, (int)size.y))
@@ -440,6 +564,7 @@ int MapView2D::OnPaint()
 	dl->AddImage((ImTextureID)(uintptr_t)fbo.ColorTexture(), origin, max, ImVec2(0, 1), ImVec2(1, 0));
 	DrawCamera(dl, origin, size);
 	DrawOverlays(dl, origin, size);
+	DrawMarquee(dl, origin);
 	dl->PopClipRect();
 
 	return 1;

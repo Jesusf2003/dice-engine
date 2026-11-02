@@ -4,6 +4,7 @@
 
 #include "ui/wndMain.h"
 #include "map/grid.h"
+#include "map/selection.h"
 
 #include <imgui_internal.h>	// BeginViewportSideBar
 
@@ -70,6 +71,14 @@ void WndMain_DrawStatusBar()
 {
 	if (!g_bStatusBar)
 		return;
+
+	// the selection's part follows it
+	static unsigned shownSelection;
+	if (shownSelection != g_selection.Revision())
+	{
+		shownSelection = g_selection.Revision();
+		s_status[3] = g_selection.Describe();
+	}
 
 	ImGuiWindowFlags flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
 	float height = ImGui::GetFrameHeight();

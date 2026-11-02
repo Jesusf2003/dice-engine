@@ -2,10 +2,13 @@
 //	wndOptions.h
 //
 //	Tools > Options, hammer's options dialog. for now its Game Configurations
-//	tab: the games and mods, each with its game data files (FGDs) and folders
-//	(core/common/gameConfig.h). edits a copy until OK / Apply; applying a
-//	change to the active configuration reloads its definitions and wads.
-//	TODO: Build Programs (qbsp, vis, light, the engine) once maps compile from here
+//	tab: the engine, game and mod profiles (core/common/gameConfig.h), each
+//	under the one it builds on: an engine's folder, program, launch parameters and compilation tools,
+//	a game's or mod's game data files (FGDs) and folders. edits a copy until
+//	OK / Apply; applying a change to what the active game or mod loads reloads
+//	its definitions and wads.
+//	the compilation tools and launch parameters set here are used by the Run
+//	menu (ui/run/wndRun.h)
 //==============================
 
 #ifndef __WND_OPTIONS_H__

@@ -8,6 +8,7 @@
 #include "renderer/glFuncs.h"
 #include "map/grid.h"
 #include "map/map.h"
+#include "map/selection.h"
 
 #include <SDL.h>
 #include <imgui_internal.h>	// MarkIniSettingsDirty
@@ -240,7 +241,16 @@ void WndCamera::HandleMouse(bool hovered, bool active, ImVec2 mouse)
 		}
 		else if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 		{
-			Focus();	// TODO: selection, once the map can be edited
+			// trenchbroom: the nearest brush or entity under the cursor, control adds
+			// or takes it away, a double click takes the brush entity's every brush
+			Focus();
+			vec3 origin, dir;
+			camera.PickRay(mouse.x, mouse.y, origin, dir);
+			std::vector<pickHit_t> hits = Selection::Pick(to_dvec3(origin), to_dvec3(dir), 0.0);
+			// not what the camera is inside of
+			hits.erase(std::remove_if(hits.begin(), hits.end(), [](const pickHit_t &h) { return h.dist <= 0; }), hits.end());
+			g_selection.Click(hits, io.KeyCtrl, false, ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left));
+			WndMain_UpdateWindows(W_ALL);
 		}
 	}
 
@@ -301,6 +311,12 @@ void WndCamera::HandleKeys()
 	if ((!HasFocus() && drag != DRAG_LOOK) || io.WantTextInput || io.KeyCtrl || io.KeyAlt)
 		return;
 
+	if (ImGui::IsKeyPressed(ImGuiKey_Escape, false) && !g_selection.Empty())
+	{
+		g_selection.Clear();
+		WndMain_UpdateWindows(W_ALL);
+	}
+
 	float dt = io.DeltaTime;
 	vec3 forward = camera.Direction(), right = camera.Right(), up(0, 0, 1);
 	vec3 move;
@@ -344,8 +360,9 @@ void WndCamera::RenderScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	g_mapRenderer.Render(camera, drawMode);
+	g_mapRenderer.RenderSelection(camera, true);
 
-	// TODO: selection, tools
+	// TODO: tools
 
 	Framebuffer::Unbind();
 }
@@ -452,4 +469,22 @@ int WndCamera::OnPaint()
 	dl->PopClipRect();
 
 	return 1;
+}
+
+/*
+==================
+WndCamera::FocusOn
+
+trenchbroom's Focus Camera on Selection: the same direction, back far enough
+for the whole box to fit
+==================
+*/
+void WndCamera::FocusOn(const dvec3 &mins, const dvec3 &maxs)
+{
+	vec3 center = to_vec3((mins + maxs) * 0.5);
+	float radius = std::max(length(to_vec3(maxs - mins)) * 0.5f, 16.0f);
+	float half = DEG2RAD(camera.Fov() * 0.75f) / 2;		// the vertical half angle, PerspectiveCamera's 4:3 convention
+	float dist = radius / sinf(half);
+	camera.MoveTo(center - camera.Direction() * dist);
+	ShowStatus();
 }

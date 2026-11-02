@@ -12,6 +12,12 @@
 #include "ui/view/wndCamera.h"
 #include "ui/preferences/wndPreferences.h"
 #include "ui/options/wndOptions.h"
+#include "ui/run/wndRun.h"
+#include "core/compile/compilation.h"
+#include "core/common/gameConfig.h"
+#include "core/common/log.h"
+#include "map/map.h"
+#include "map/selection.h"
 #include "ui/view/wndViewports.h"
 #include "map/grid.h"
 
@@ -78,6 +84,28 @@ bool WndMain_Command(int id)
 		break;
 
 	//===================================
+	// Run menu, trenchbroom's
+	//===================================
+	case ID_RUN_COMPILE:
+		WndCompile::Open();
+		break;
+	case ID_RUN_LAUNCH:
+		WndLaunch::Open();
+		break;
+	case ID_MISC_TESTMAP:	// the toolbar's: the engine straight away, the dialog when it can't
+	{
+		const gameConfig_t *game = GameConfigs::Active();
+		std::string error;
+		if (!game || !Compilation::LaunchEngine(*game, Compilation::Variables(*game, g_map.filename), error))
+		{
+			if (!error.empty())
+				Log::Error("Launch Engine: %s", error.c_str());
+			WndLaunch::Open();
+		}
+		break;
+	}
+
+	//===================================
 	// View menu
 	//===================================
 	case ID_VIEW_FILTER_POPUP:
@@ -91,6 +119,32 @@ bool WndMain_Command(int id)
 	// the camera
 	case ID_VIEW_CENTER:
 		g_wndCamera->LevelView();
+		break;
+
+	// the selection: every 2D view centered on it, the camera backed off to see all of it
+	case ID_VIEW_CENTERONSELECTION:
+	{
+		dvec3 mins, maxs;
+		if (!g_selection.Bounds(mins, maxs))
+			break;
+		vec3 center = to_vec3((mins + maxs) * 0.5);
+		for (MapView2D *v : g_wndGrid)
+			if (v)
+				v->CenterOn(center);
+		g_wndCamera->FocusOn(mins, maxs);
+		break;
+	}
+	case ID_SELECTION_SELECTALL:
+		g_selection.SelectAll();
+		WndMain_UpdateWindows(W_ALL);
+		break;
+	case ID_SELECTION_DESELECT:
+		g_selection.Clear();
+		WndMain_UpdateWindows(W_ALL);
+		break;
+	case ID_SELECTION_INVERT:
+		g_selection.Invert();
+		WndMain_UpdateWindows(W_ALL);
 		break;
 	case ID_VIEW_UPFLOOR:
 		g_wndCamera->ChangeFloor(true);
@@ -299,6 +353,9 @@ bool WndMain_CommandEnabled(int id)
 	case ID_FILE_OPEN:
 	case ID_EDIT_PREFERENCES:
 	case ID_TOOLS_OPTIONS:
+	case ID_RUN_COMPILE:
+	case ID_RUN_LAUNCH:
+	case ID_MISC_TESTMAP:
 	case ID_FILE_EXIT:
 	case ID_VIEW_FILTER_POPUP:
 	case ID_VIEW_SWAPGRIDCAM:
@@ -315,6 +372,8 @@ bool WndMain_CommandEnabled(int id)
 	case ID_VIEW_ZZOOMIN:
 	case ID_VIEW_ZZOOMOUT:
 	case ID_VIEW_CENTER:
+	case ID_SELECTION_SELECTALL:
+	case ID_SELECTION_INVERT:
 	case ID_VIEW_UPFLOOR:
 	case ID_VIEW_DOWNFLOOR:
 	case ID_VIEW_CAMSPEED:
@@ -341,6 +400,10 @@ bool WndMain_CommandEnabled(int id)
 	{
 	case ID_VIEW_MAXIMIZE:
 		return WndMain_HammerLayout();
+
+	case ID_SELECTION_DESELECT:
+	case ID_VIEW_CENTERONSELECTION:
+		return !g_selection.Empty();
 
 	// the 4 view grid paints these, a window of their own would draw them twice
 	case ID_VIEW_CAMERA:
@@ -776,6 +839,15 @@ void WndMain_DrawMenu()
 			Item("Set YZ", "Alt+Y", ID_REGION_SETYZ);
 			Item("Set Brush", "Alt+B", ID_REGION_SETBRUSH);
 			Item("Set Brush Tall", nullptr, ID_REGION_SETTALLBRUSH);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Run"))
+		{
+			Item("Compile Map...", nullptr, ID_RUN_COMPILE);
+			Item("Launch Engine...", nullptr, ID_RUN_LAUNCH);
+			ImGui::Separator();
+			Item("Test Current Map", nullptr, ID_MISC_TESTMAP);
 			ImGui::EndMenu();
 		}
 

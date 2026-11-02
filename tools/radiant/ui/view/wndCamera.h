@@ -15,6 +15,11 @@
 //		End					level the view (View > Center)
 //		Page Up / Down		up or down a floor (qe4's ChangeFloor)
 //
+//		left click			select the nearest brush or entity under the cursor
+//		control + click		add it to the selection, or take it away
+//		double click		a brush entity's every brush
+//		escape				drop the selection
+//
 //	the 2D views draw the camera and move it with control + middle click,
 //	the Z view sets its height the same way
 //==============================
@@ -40,6 +45,7 @@ public:
 	void	ChangeFloor(bool up);
 	void	SetPosition2D(int axis1, float v1, int axis2, float v2);	// from a 2D view, the third axis stays
 	void	SetHeight(float z);			// from the Z view
+	void	FocusOn(const dvec3 &mins, const dvec3 &maxs);	// View > Center on Selection
 
 	static void	SetDrawMode(MapRenderer::DrawMode mode);	// saved in radiant.ini
 

@@ -8,6 +8,7 @@
 #include "renderer/texture.h"
 #include "renderer/textures.h"
 #include "map/map.h"
+#include "map/selection.h"
 
 #include <algorithm>
 #include <cmath>
@@ -561,6 +562,9 @@ bool MapRenderer::Init()
 
 	SetupVertexArray(faceVao, faceVbo);
 	SetupVertexArray(lineVao, lineVbo);
+	SetupVertexArray(selFaceVao, selFaceVbo);
+	SetupVertexArray(selLineVao, selLineVbo);
+	selRevision = 0;
 
 	glGenTextures(1, &lightmapTex);
 	glBindTexture(GL_TEXTURE_2D, lightmapTex);
@@ -581,8 +585,13 @@ void MapRenderer::Shutdown()
 	if (faceVao) qglDeleteVertexArrays(1, &faceVao);
 	if (lineVbo) qglDeleteBuffers(1, &lineVbo);
 	if (lineVao) qglDeleteVertexArrays(1, &lineVao);
+	if (selFaceVbo) qglDeleteBuffers(1, &selFaceVbo);
+	if (selFaceVao) qglDeleteVertexArrays(1, &selFaceVao);
+	if (selLineVbo) qglDeleteBuffers(1, &selLineVbo);
+	if (selLineVao) qglDeleteVertexArrays(1, &selLineVao);
 	if (lightmapTex) glDeleteTextures(1, &lightmapTex);
 	faceVao = faceVbo = lineVao = lineVbo = lightmapTex = 0;
+	selFaceVao = selFaceVbo = selLineVao = selLineVbo = 0;
 	shader.Destroy();
 	batches.clear();
 	lightmapReady = bakePending = false;
@@ -1058,5 +1067,120 @@ void MapRenderer::Render(const Camera &camera, DrawMode mode)
 	qglUseProgram(0);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+}
+
+/*
+========================================================================
+
+	SELECTION
+
+========================================================================
+*/
+
+static const vec3 s_selectedColor(1.0f, 0.15f, 0.1f);		// netradiant's and hammer's red
+
+void MapRenderer::BuildSelection()
+{
+	std::vector<mapVertex_t> tris, lines;
+
+	for (const selItem_t &item : g_selection.Items())
+	{
+		const Entity &e = g_map.entities[item.entity];
+		if (item.brush < 0)
+		{
+			dvec3 mins, maxs;
+			if (e.PointBounds(mins, maxs))
+				AddBox(tris, lines, mins, maxs, s_selectedColor);
+			continue;
+		}
+		const Brush &b = e.brushes[item.brush];
+		for (const BrushFace &f : b.faces)
+		{
+			size_t n = f.winding.size();
+			if (n < 3)
+				continue;
+			vec3 normal = to_vec3(f.plane.normal);
+			for (size_t i = 1; i + 1 < n; i++)
+			{
+				tris.push_back(MakeVertex(to_vec3(f.winding[0]), normal, 0, 0, s_selectedColor));
+				tris.push_back(MakeVertex(to_vec3(f.winding[i + 1]), normal, 0, 0, s_selectedColor));
+				tris.push_back(MakeVertex(to_vec3(f.winding[i]), normal, 0, 0, s_selectedColor));
+			}
+			for (size_t i = 0; i < n; i++)
+			{
+				lines.push_back(MakeVertex(to_vec3(f.winding[i]), vec3(), 0, 0, s_selectedColor));
+				lines.push_back(MakeVertex(to_vec3(f.winding[(i + 1) % n]), vec3(), 0, 0, s_selectedColor));
+			}
+		}
+	}
+
+	Upload(selFaceVbo, tris);
+	Upload(selLineVbo, lines);
+	selFaceCount = (int)tris.size();
+	selLineCount = (int)lines.size();
+	selRevision = g_selection.Revision();
+	selMapRevision = g_map.revision;
+}
+
+void MapRenderer::RenderSelection(const Camera &camera, bool view3D)
+{
+	if (!shader.Valid())
+		return;
+	Validate();
+	if (selRevision != g_selection.Revision() || selMapRevision != g_map.revision)
+		BuildSelection();
+	if (!selLineCount)
+		return;
+
+	shader.Use();
+	shader.Set("ModelViewProjection", camera.Matrix());
+	shader.Set("Mode", 0);
+	shader.Set("Shade", 0);
+	shader.Set("Lighting", 0);
+	shader.Set("Alpha", 1.0f);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	if (view3D)
+	{
+		glEnable(GL_DEPTH_TEST);
+		glDepthMask(GL_FALSE);
+
+		// the faces tinted, pulled a little toward the camera so they win over the map's
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CCW);
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glPolygonOffset(-1.0f, -1.0f);
+		glDepthFunc(GL_LEQUAL);
+		shader.Set("Tint", 1.0f, 1.0f, 1.0f, 0.3f);
+		qglBindVertexArray(selFaceVao);
+		glDrawArrays(GL_TRIANGLES, 0, selFaceCount);
+		glDisable(GL_POLYGON_OFFSET_FILL);
+		glDisable(GL_CULL_FACE);
+
+		// trenchbroom's: the edges, then the hidden ones faint
+		qglBindVertexArray(selLineVao);
+		shader.Set("Tint", 1.0f, 1.0f, 1.0f, 1.0f);
+		glDrawArrays(GL_LINES, 0, selLineCount);
+		glDepthFunc(GL_GREATER);
+		shader.Set("Tint", 1.0f, 1.0f, 1.0f, 0.3f);
+		glDrawArrays(GL_LINES, 0, selLineCount);
+
+		glDepthFunc(GL_LEQUAL);
+		glDepthMask(GL_TRUE);
+	}
+	else
+	{
+		glDisable(GL_DEPTH_TEST);
+		shader.Set("Tint", 1.0f, 1.0f, 1.0f, 1.0f);
+		qglBindVertexArray(selLineVao);
+		glDrawArrays(GL_LINES, 0, selLineCount);
+	}
+
+	qglBindVertexArray(0);
+	qglUseProgram(0);
+	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 }

@@ -1,0 +1,13 @@
+#pragma target fte
+#pragma PROGS_DAT ../csprogs.dat
+
+// Must come before fteextensions.qc so it exposes the client builtins (drawstring, getstatf, ...).
+#define CSQC
+#include "fteextensions.qc"
+#include "shared/sh_defs.qc"
+
+#include "client/cl_defs.qh"
+#include "client/cl_hud.qc"
+
+// engine entry points
+#include "client/cl_main.qc"

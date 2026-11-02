@@ -44,6 +44,9 @@ public:
 	void	Shutdown();
 
 	void	Render(const Camera &camera, DrawMode mode);
+	// g_selection over what Render drew, in red: in 3D tinted faces and edges (the
+	// hidden ones faint), in 2D the edges on top of everything
+	void	RenderSelection(const Camera &camera, bool view3D);
 
 	// the lighting preview, as of the last Render
 	inline int	LightCount() const		{ return lightCount; }
@@ -63,6 +66,7 @@ private:
 	void	GatherLights(bakeInput_t &bake);
 	void	DrawFaces(DrawMode mode, bool translucent, bool lit);
 	void	UpdateLightmap(bool wanted);
+	void	BuildSelection();
 
 	Shader			shader;
 	unsigned int	faceVao = 0, faceVbo = 0;
@@ -72,6 +76,12 @@ private:
 	int				lineCount = 0;
 	unsigned		builtRevision = 0;
 	bool			built = false;
+
+	// the selection, rebuilt when it or the map changes
+	unsigned int	selFaceVao = 0, selFaceVbo = 0;
+	unsigned int	selLineVao = 0, selLineVbo = 0;
+	int				selFaceCount = 0, selLineCount = 0;
+	unsigned		selRevision = 0, selMapRevision = 0;
 
 	// lighting preview
 	LightBaker		baker;
