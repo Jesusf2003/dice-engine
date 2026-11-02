@@ -1,11 +1,11 @@
 #includelist
 ../common/include.src
-../client/font.h
-../platform/defs.h
-defs.h
+../client/font.qh
+../platform/defs.qh
+defs.qh
 ../vgui/include.src
 loading.qc
-main.h
+main.qh
 ui_console.qc
 ui_friends.qc
 ui_newgame.qc

@@ -19,7 +19,7 @@
 #pragma PROGS_DAT  "../../base/plugins/voxannouncer.dat"
 #define SERVER
 
-#include "../server/api.h"
+#include "../server/api.qh"
 
 void
 VoxFunc(string strMessage)

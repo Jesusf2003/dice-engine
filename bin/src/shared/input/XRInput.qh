@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-/*! @file NSXRInput.h
+/*! @file NSXRInput.qh
     @brief Managing of Input sources.
 
     An NSXRInput contains the state of a potential input source.

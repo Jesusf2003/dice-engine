@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#include "../client/font.h"
+#include "../client/font.qh"
 
 var int autocvar_menu_intro = TRUE;
 var int autocvar__menu_singleplayer;

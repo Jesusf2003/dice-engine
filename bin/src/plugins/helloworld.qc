@@ -1,6 +1,6 @@
 #pragma target fte_5768
 #pragma PROGS_DAT  "../../base/plugins/helloworld.dat"
-#include "../server/api.h"
+#include "../server/api.qh"
 
 var bool g_firstLoaded = false;
 

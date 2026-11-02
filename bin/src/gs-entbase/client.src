@@ -3,7 +3,7 @@
 #endif
 
 #includelist
-client/defs.h
+client/defs.qh
 client/env_cubemap.qc
 client/env_sun.qc
 client/env_soundscape.qc

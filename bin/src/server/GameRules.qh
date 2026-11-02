@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*! @file ncRuleDelegate.h
+/*! @file ncRuleDelegate.qh
     @brief Gamerule top level class.
 
     There's a lot of methods you're allowed to override.
@@ -66,7 +66,7 @@ The progs in question is then able to override any methods of the ncGameRule cla
 # Implementing RuleC Progs
 
 When we decide to load a rule from an external progs, that progs can be implemented with
-as many binds as you like. The only requirement is you include the header found under `src/server/api.h`.
+as many binds as you like. The only requirement is you include the header found under `src/server/api.qh`.
 
 ## Example RuleC
 
@@ -76,7 +76,7 @@ player frag:
 ```
 #pragma PROGS_DAT  "../../progs/deathmatch.dat"
 
-#include "../../../src/server/api.h"
+#include "../../../src/server/api.qh"
 
 void
 CodeCallback_Precaches(void)

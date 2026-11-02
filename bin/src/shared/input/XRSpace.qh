@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-/*! @file NSXRSpace.h
+/*! @file NSXRSpace.qh
     @brief Managing of simulated Spaces.
 
     NSXRSpace manages the conversion between real-world

@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*! @file ncAddonDelegate.h
+/*! @file ncAddonDelegate.qh
     @brief AddonC Delegate
 
     Everything regarding AddonC multi-progs on the server.
@@ -54,7 +54,7 @@ It is located under `src/plugins/helloworld.qc`:
 ```
 #pragma target fte_5768
 #pragma PROGS_DAT  "../../base/plugins/helloworld.dat"
-#include "../server/api.h"
+#include "../server/api.qh"
 
 var bool g_firstLoaded = false;
 

@@ -16,7 +16,7 @@
 
 #warning vguiWidget needs methods to deal with .res/.gui type files.
 
-#include "Widget.h"
+#include "Widget.qh"
 
 .string classname;
 .bool isVGUI;

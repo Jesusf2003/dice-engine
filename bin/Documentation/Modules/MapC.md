@@ -23,7 +23,7 @@ An example source file from Nuclide's `base/test_maps.pk3dir/maps/mapscript.mapC
 ```cpp
 #pragma PROGS_DAT  "mapscript.dat"
 
-#include "../../../src/server/mapC.h"
+#include "../../../src/server/mapC.qh"
 
 void main()
 {
@@ -43,7 +43,7 @@ This ensures that the server-side progs gets to load all available [EntityDef](E
 
 If you don't use spawnClass(), expect to not be able to use the I/O system with the entity.
 
-To have access to all features, make sure to include `mapC.h` from Nuclide's `src/server` directory. That file will continously be updated to add more functionality.
+To have access to all features, make sure to include `mapC.qh` from Nuclide's `src/server` directory. That file will continously be updated to add more functionality.
 
 You can compile the MapC file with fteqcc (`fteqcc mapscript.mapC`) to receive `mapscript.dat`.
 

@@ -14,24 +14,24 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#include "../platform/localize.h"
-#include "api_func.h"
-#include "../shared/api.h"
-#include "../shared/system/entityDef.h"
-#include "text.h"
-#include "textmenu.h"
-#include "font.h"
-#include "fade.h"
-#include "cmd.h"
-#include "util.h"
-#include "View.h"
-#include "Radar.h"
-#include "crosshair.h"
-#include "hud.h"
-#include "InterfaceSpriteSheet.h"
-#include "UserInfo.h"
-#include "UserInfoManager.h"
-#include "ServerInfo.h"
+#include "../platform/localize.qh"
+#include "api_func.qh"
+#include "../shared/api.qh"
+#include "../shared/system/entityDef.qh"
+#include "text.qh"
+#include "textmenu.qh"
+#include "font.qh"
+#include "fade.qh"
+#include "cmd.qh"
+#include "util.qh"
+#include "View.qh"
+#include "Radar.qh"
+#include "crosshair.qh"
+#include "hud.qh"
+#include "InterfaceSpriteSheet.qh"
+#include "UserInfo.qh"
+#include "UserInfoManager.qh"
+#include "ServerInfo.qh"
 
 var bool g_net_debug = false;
 var bool g_cheats = false;
@@ -178,7 +178,7 @@ vector video_mins;
 vector g_vidsize;
 int g_iIntermission;
 
-/* this actually belongs in builtins.h since its an undocumented global */
+/* this actually belongs in builtins.qh since its an undocumented global */
 float clframetime;
 
 string(string modelname, int frame, float frametime) spriteframe = #0;

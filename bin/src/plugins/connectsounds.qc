@@ -19,7 +19,7 @@
 #pragma PROGS_DAT  "../../base/plugins/connectsounds.dat"
 #define SERVER
 
-#include "../server/api.h"
+#include "../server/api.qh"
 
 entity g_cnspk;
 

@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-/*! @file ncView.h
+/*! @file ncView.qh
     @brief ncView handles camera and viewpoints.
 
     The job of the ncView is to draw a 3D view into an area of the screen.

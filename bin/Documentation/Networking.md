@@ -16,7 +16,7 @@ In **Nuclide**, we make heavy use of custom entity networking. In **FTE**, you c
 
 ## Entity updates within Nuclide
 
-To see the type of entity updates we handle internally in Nuclide, look no further than `src/shared/entities.h`. For one-time event updates, you can check `src/shared/events.h`.
+To see the type of entity updates we handle internally in Nuclide, look no further than `src/shared/entities.qh`. For one-time event updates, you can check `src/shared/events.qh`.
 
 Generally, those entity updates happen and are controlled by these three common methods that are implemented by any entity class that chooses to override networking:
 

@@ -4,5 +4,5 @@
 
 #includelist
 common/include.src
-client/api.h
+client/api.qh
 #endlist

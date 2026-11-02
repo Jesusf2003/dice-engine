@@ -19,7 +19,7 @@
 #pragma PROGS_DAT  "../../base/plugins/chatfilter.dat"
 #define SERVER
 
-#include "../server/api.h"
+#include "../server/api.qh"
 
 var int autocvar_chatplug_filter = 1;
 

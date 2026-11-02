@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Vera Visions LLC.
+ * Copyright (c) 2016-2024 Vera Visions LLC.
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,15 +15,16 @@
 */
 
 #pragma target fte_5768
-#define QWSSQC
-#define SERVER
+#define CSQC
+#define CLIENT
 
-#include "api_func.h"
-#include "../shared/api.h"
+#include "../shared/api.qh"
+#include "../shared/input/input.qh"
+#include "api_func.qh"
 
 void
 main(void)
 {
-	_server_main();
+	_client_main();
 	_shared_main();
 }

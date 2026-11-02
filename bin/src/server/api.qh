@@ -14,17 +14,16 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-/*! @file cmd.h
-    @brief Console Commands
+#pragma target fte_5768
+#define QWSSQC
+#define SERVER
 
-    Handles console commands that we deem helpful across the entire game platform.
-    If you're building your own menu system, ensure to call Platform_RegisterCommands()
-    somewhere in your m_init() function. In addition, all non-handled console commands
-    in your menu's m_consolecommand() function should be forwarded to Platform_ConsoleCommand().
-*/
+#include "api_func.qh"
+#include "../shared/api.qh"
 
-/** Handles a platform library specific console command. Make this the `default` case in your m_consolecommand() function. */
-bool Platform_ConsoleCommand(string commandString, int wordCount);
-
-/** Called in order to register the platform library console commands. Called in your menu progs' m_init() function. */
-void Platform_RegisterCommands(void);
+void
+main(void)
+{
+	_server_main();
+	_shared_main();
+}

@@ -19,8 +19,8 @@
 #pragma PROGS_DAT  "../../base/plugins/ircbridge.dat"
 #define SERVER
 
-#include "../server/api.h"
-#include "../platform/tcp.h"
+#include "../server/api.qh"
+#include "../platform/tcp.qh"
 #include "../platform/tcp.qc"
 
 entity g_ircbridge;

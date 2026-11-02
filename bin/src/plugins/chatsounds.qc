@@ -19,7 +19,7 @@
 #pragma PROGS_DAT  "../../base/plugins/chatsounds.dat"
 #define SERVER
 
-#include "../server/api.h"
+#include "../server/api.qh"
 
 /* our sound boogeyman */
 static entity emitter;

@@ -19,7 +19,7 @@
 #pragma PROGS_DAT  "../../base/plugins/banner.dat"
 #define SERVER
 
-#include "../server/api.h"
+#include "../server/api.qh"
 
 void BannerPlugin_MapInfo(void);
 void BannerPlugin_Hostname(void);

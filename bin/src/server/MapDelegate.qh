@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*! @file ncMapDelegate.h
+/*! @file ncMapDelegate.qh
     @brief MapC Delegate
 
     Everything regarding MapC multi-progs on the server.
@@ -34,7 +34,7 @@ If you load `map foobar` in the console, and it'll find the map at `<gamedir>/ma
 # Implementing MapC Progs
 
 Similarily to [RuleC](@ref ruleC), that progs can be implemented with
-as many binds to the ncMapDelegate class as you like. The only requirement is you include the header found under `src/server/api.h`.
+as many binds to the ncMapDelegate class as you like. The only requirement is you include the header found under `src/server/api.qh`.
 
 ## Example MapC
 

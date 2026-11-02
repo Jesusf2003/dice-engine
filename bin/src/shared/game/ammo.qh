@@ -23,7 +23,7 @@
     deal with these sorts of issues.
     It is usually included by default in a library project.
     If you want to include this file into your own progs, you
-    can include `math.h` from `src/shared/`.
+    can include `math.qh` from `src/shared/`.
 
 @{
 */

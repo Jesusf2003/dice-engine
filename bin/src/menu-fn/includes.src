@@ -1,10 +1,10 @@
 #includelist
 ../common/include.src
-../platform/defs.h
+../platform/defs.qh
 
-defs.h
-bitmaps.h
-strings.h
+defs.qh
+bitmaps.qh
+strings.qh
 strings.qc
 colors.qc
 

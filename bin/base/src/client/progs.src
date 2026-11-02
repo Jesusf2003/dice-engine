@@ -9,11 +9,11 @@
 #includelist
 /* first the engine, then nuclide headers for client/shared */
 ../../../src/common/include.src
-../../../src/shared/defs.h
-../../../src/client/defs.h
+../../../src/shared/defs.qh
+../../../src/client/defs.qh
 
 /* mod specific header */
-defs.h
+defs.qh
 /* for VGUI elements, we want to include this (optional) */
 ../../../src/vgui/include.src
 

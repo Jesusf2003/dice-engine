@@ -3,5 +3,5 @@
 
 #includelist
 common/include.src
-server/api.h
+server/api.qh
 #endlist

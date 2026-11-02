@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-/*! @file math_vector.h
+/*! @file math_vector.qh
     @brief Math Vector Helper Functions
 
     Helper functions for various vector maths operations.

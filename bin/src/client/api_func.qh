@@ -81,7 +81,7 @@ From `base/src/client/hud.qc`
 ```
 #pragma PROGS_DAT  "../../hud.dat"
 
-#include "../../../src/client/api.h"
+#include "../../../src/client/api.qh"
 
 const float baseIconSize = 32.0;
 const float baseIconPadding = 16.0;

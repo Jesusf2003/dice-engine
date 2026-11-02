@@ -14,8 +14,8 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#include "cvars.h"
-#include "profiles.h"
+#include "cvars.qh"
+#include "profiles.qh"
 
 /** @defgroup bot Bot
 @brief Multiplayer game opponents, allies.
