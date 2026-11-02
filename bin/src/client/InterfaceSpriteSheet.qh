@@ -22,8 +22,7 @@ typedef struct
 	vector m_vecCanvasPos;
 } hlsprite_t;
 
-class
-ncInterfaceSpriteSheet
+class ncInterfaceSpriteSheet
 {
 	nonvirtual int Load(string spriteName);
 	nonvirtual void Initialize(void);

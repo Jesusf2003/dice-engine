@@ -35,8 +35,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-game_team_master:multisource
+class game_team_master:multisource
 {
 public:
 	void game_team_master(void);

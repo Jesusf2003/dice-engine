@@ -21,8 +21,7 @@
 
 @ingroup baseclass
 */
-class
-ncDecal
+class ncDecal
 {
 public:
 	void ncDecal(void);

@@ -43,8 +43,7 @@ The 'IgnoreFacing' field can be one of 3 values:
   - YES = 1
   - AUTO = 2
 */
-class
-ncHint:ncPointTrigger
+class ncHint:ncPointTrigger
 {
 public:
 	void ncHint(void);

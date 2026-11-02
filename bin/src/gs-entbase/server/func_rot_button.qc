@@ -64,8 +64,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_rot_button:ncSurfacePropEntity
+class func_rot_button:ncSurfacePropEntity
 {
 public:
 	void func_rot_button(void);

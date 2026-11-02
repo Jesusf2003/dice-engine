@@ -41,8 +41,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-button_target:ncSurfacePropEntity
+class button_target:ncSurfacePropEntity
 {
 public:
 	void button_target(void);

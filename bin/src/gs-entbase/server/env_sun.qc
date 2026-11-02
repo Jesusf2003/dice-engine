@@ -1,5 +1,4 @@
-class
-env_sun:ncPointTrigger
+class env_sun:ncPointTrigger
 {
 	void env_sun(void);
 };

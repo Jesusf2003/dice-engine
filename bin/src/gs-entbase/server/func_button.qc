@@ -74,8 +74,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_button:ncMoverEntity
+class func_button:ncMoverEntity
 {
 public:
 	void func_button(void);

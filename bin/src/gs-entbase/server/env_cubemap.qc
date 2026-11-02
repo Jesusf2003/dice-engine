@@ -1,5 +1,4 @@
-class
-env_cubemap:ncPointTrigger
+class env_cubemap:ncPointTrigger
 {
 	void env_cubemap(void);
 };

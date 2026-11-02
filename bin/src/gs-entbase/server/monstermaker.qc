@@ -49,8 +49,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-monstermaker:ncPointTrigger
+class monstermaker:ncPointTrigger
 {
 public:
 	void monstermaker(void);

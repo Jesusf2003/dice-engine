@@ -45,8 +45,7 @@ It can also be used to render picture-in-picture views on top
 of other views. 
 
 @ingroup baseclass*/
-class
-ncView
+class ncView
 {
 public:
 	void ncView(void);

@@ -33,8 +33,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-multisource:ncPointTrigger
+class multisource:ncPointTrigger
 {
 public:
 	void multisource(void);

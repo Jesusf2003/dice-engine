@@ -36,8 +36,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_recharge:ncRenderableEntity
+class func_recharge:ncRenderableEntity
 {
 public:
 	void func_recharge(void);

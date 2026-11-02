@@ -42,8 +42,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-gibshooter:env_shooter
+class gibshooter:env_shooter
 {
 public:
 	void gibshooter(void);

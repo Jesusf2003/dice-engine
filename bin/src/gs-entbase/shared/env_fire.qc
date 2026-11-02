@@ -66,8 +66,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_fire:ncPointTrigger
+class env_fire:ncPointTrigger
 {
 public:
 	void env_fire(void);

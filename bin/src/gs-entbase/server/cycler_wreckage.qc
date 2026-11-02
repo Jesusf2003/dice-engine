@@ -30,8 +30,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-cycler_wreckage:ncRenderableEntity
+class cycler_wreckage:ncRenderableEntity
 {
 public:
 	void cycler_wreckage(void);

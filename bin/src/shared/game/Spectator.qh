@@ -55,8 +55,7 @@ of type ncSpectator.
 
 @ingroup baseclass
 */
-class
-ncSpectator:ncClient
+class ncSpectator:ncClient
 {
 public:
 	void ncSpectator(void);

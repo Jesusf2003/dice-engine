@@ -86,8 +86,7 @@ perform the named schedule `foobar`.
 
 */
 
-class
-ncSchedule:ncIO
+class ncSchedule:ncIO
 {
 public:
 	void ncSchedule(void);

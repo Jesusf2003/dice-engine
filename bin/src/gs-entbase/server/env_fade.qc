@@ -46,8 +46,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-env_fade:ncRenderableEntity
+class env_fade:ncRenderableEntity
 {
 public:
 	void env_fade(void);

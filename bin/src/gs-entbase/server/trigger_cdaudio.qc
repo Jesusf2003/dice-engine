@@ -30,8 +30,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup brushentity
 */
 
-class
-trigger_cdaudio:ncBrushTrigger
+class trigger_cdaudio:ncBrushTrigger
 {
 public:
 	void trigger_cdaudio(void);

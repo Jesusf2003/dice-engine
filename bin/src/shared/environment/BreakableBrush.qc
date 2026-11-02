@@ -15,8 +15,7 @@ vector selnormals[BREAKABLE_CARVE_PLANES];
 
 #endif
 
-class
-ncBreakableBrush:ncSurfacePropEntity
+class ncBreakableBrush:ncSurfacePropEntity
 {
 public:
 	void ncBreakableBrush(void);

@@ -71,8 +71,7 @@ This entity was introduced in Quake II (1997).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_door_rotating:ncMoverEntity
+class func_door_rotating:ncMoverEntity
 {
 public:
 	void func_door_rotating(void);

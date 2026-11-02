@@ -14,8 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-class
-vguiLoadingPanel:vguiWindow
+class vguiLoadingPanel:vguiWindow
 {
 	void vguiLoadingPanel(void);
 	virtual void Spawned(void);

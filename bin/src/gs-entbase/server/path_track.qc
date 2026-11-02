@@ -56,8 +56,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup pointentity
 */
 
-class
-path_track:path_corner
+class path_track:path_corner
 {
 public:
 	void path_track(void);

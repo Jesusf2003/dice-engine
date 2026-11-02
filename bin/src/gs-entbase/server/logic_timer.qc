@@ -58,8 +58,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-logic_timer:ncPointTrigger
+class logic_timer:ncPointTrigger
 {
 public:
 	void logic_timer(void);

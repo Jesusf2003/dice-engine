@@ -31,8 +31,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-info_landmark:ncPointTrigger
+class info_landmark:ncPointTrigger
 {
 
 };
@@ -112,8 +111,7 @@ The PVS-culling method can prove difficult to work with. Developers have been sp
 # TRIVIA
 This entity was introduced in Quake (1996).
 */
-class
-trigger_changelevel:ncBrushTrigger
+class trigger_changelevel:ncBrushTrigger
 {
 public:
 	void trigger_changelevel(void);

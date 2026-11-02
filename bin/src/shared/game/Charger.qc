@@ -36,8 +36,7 @@ set up that way.
 @ingroup server
 @ingroup brushentity
 */
-class
-ncCharger:ncRenderableEntity
+class ncCharger:ncRenderableEntity
 {
 public:
 	void ncCharger(void);

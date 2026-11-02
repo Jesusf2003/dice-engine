@@ -35,8 +35,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-info_intermission:ncPointTrigger
+class info_intermission:ncPointTrigger
 {
 public:
 	void info_intermission(void);

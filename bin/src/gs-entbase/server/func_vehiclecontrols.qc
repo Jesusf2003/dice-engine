@@ -34,8 +34,7 @@ This entity was introduced in Counter-Strike (2000).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_vehiclecontrols:func_traincontrols
+class func_vehiclecontrols:func_traincontrols
 {
 	void func_vehiclecontrols(void);
 };

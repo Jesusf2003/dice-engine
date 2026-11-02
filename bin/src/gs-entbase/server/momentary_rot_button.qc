@@ -51,8 +51,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-momentary_rot_button:ncMomentary
+class momentary_rot_button:ncMomentary
 {
 public:
 	void momentary_rot_button(void);

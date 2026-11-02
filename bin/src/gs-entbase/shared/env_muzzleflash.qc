@@ -34,8 +34,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_muzzleflash:ncEntity
+class env_muzzleflash:ncEntity
 {
 public:
 	void env_muzzleflash(void);

@@ -52,8 +52,7 @@ This entity was introduced in Nuclide in February of 2025.
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_hudcounter:ncPointTrigger
+class env_hudcounter:ncPointTrigger
 {
 public:
 	void env_hudcounter(void);

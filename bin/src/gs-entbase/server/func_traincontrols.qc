@@ -30,8 +30,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_traincontrols:ncBrushTrigger
+class func_traincontrols:ncBrushTrigger
 {
 public:
 	void func_traincontrols(void);

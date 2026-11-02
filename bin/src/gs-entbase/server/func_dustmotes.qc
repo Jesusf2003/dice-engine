@@ -1,5 +1,4 @@
-class
-func_dustmotes:ncPointTrigger
+class func_dustmotes:ncPointTrigger
 {
 	void func_dustmotes(void);
 };

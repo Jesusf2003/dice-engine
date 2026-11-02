@@ -62,8 +62,7 @@ This entity was introduced in Spirit of Half-Life (2001).
 @ingroup sharedentity
 @ingroup brushentity
 */
-class
-env_rain:ncBrushTrigger
+class env_rain:ncBrushTrigger
 {
 #ifdef SERVER
 	bool m_bInitialState;

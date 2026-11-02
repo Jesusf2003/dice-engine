@@ -55,8 +55,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_trackchange:func_platrot
+class func_trackchange:func_platrot
 {
 public:
 	void func_trackchange(void);

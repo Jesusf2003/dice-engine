@@ -14,8 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-class
-prop_static:ncEntity
+class prop_static:ncEntity
 {
 public:
 	void prop_static(void);

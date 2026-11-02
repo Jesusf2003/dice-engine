@@ -21,8 +21,7 @@
 #define PRPDRFL_NOALERT		16384
 #define PRPDRFL_NOUSE		32768
 
-class
-prop_door_rotating:ncRenderableEntity
+class prop_door_rotating:ncRenderableEntity
 {
 public:
 	void prop_door_rotating(void);

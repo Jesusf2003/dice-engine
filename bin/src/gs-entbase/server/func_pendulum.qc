@@ -53,8 +53,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_pendulum:ncRenderableEntity
+class func_pendulum:ncRenderableEntity
 {
 public:
 	void func_pendulum(void);

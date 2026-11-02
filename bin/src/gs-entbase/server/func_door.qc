@@ -68,8 +68,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_door:ncMoverEntity
+class func_door:ncMoverEntity
 {
 public:
 	void func_door(void);

@@ -28,8 +28,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-info_node_air:ncPointTrigger
+class info_node_air:ncPointTrigger
 {
 public:
 	void info_node_air(void);

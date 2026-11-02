@@ -34,8 +34,7 @@ This entity was introduced in Opposing Force (1999).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-trigger_playerfreeze:ncBrushTrigger
+class trigger_playerfreeze:ncBrushTrigger
 {
 public:
 	void trigger_playerfreeze(void);

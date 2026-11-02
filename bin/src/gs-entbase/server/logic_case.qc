@@ -71,8 +71,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-logic_case:ncPointTrigger
+class logic_case:ncPointTrigger
 {
 public:
 	void logic_case(void);

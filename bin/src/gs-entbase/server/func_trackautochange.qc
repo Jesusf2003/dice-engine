@@ -40,8 +40,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_trackautochange:func_trackchange
+class func_trackautochange:func_trackchange
 {
 	void func_trackautochange(void);
 

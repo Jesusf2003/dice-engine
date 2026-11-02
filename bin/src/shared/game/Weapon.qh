@@ -300,8 +300,7 @@ As you can see given the previous baseball-bat example, you don't have to define
 
 @ingroup baseclass
 */
-class
-ncWeapon:ncItem
+class ncWeapon:ncItem
 {
 public:
 	void ncWeapon(void);

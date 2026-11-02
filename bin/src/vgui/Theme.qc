@@ -49,8 +49,7 @@ typedef enum
 } VGUIBorderStyle_t;
 
 /** Abstract class than can be set/overriden to customize to final appearance of GUI widgets */
-class
-vguiTheme
+class vguiTheme
 {
 public:
 	virtual void vguiTheme(void);

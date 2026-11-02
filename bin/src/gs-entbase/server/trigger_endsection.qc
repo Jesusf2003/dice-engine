@@ -29,8 +29,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-trigger_endsection:ncBrushTrigger
+class trigger_endsection:ncBrushTrigger
 {
 public:
 	void trigger_endsection(void);

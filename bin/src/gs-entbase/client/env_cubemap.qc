@@ -37,8 +37,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup cliententity
 @ingroup pointentity
 */
-class
-env_cubemap:ncEntity
+class env_cubemap:ncEntity
 {
 public:
 	void env_cubemap(void);

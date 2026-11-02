@@ -35,8 +35,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-target_cdaudio:ncPointTrigger
+class target_cdaudio:ncPointTrigger
 {
 public:
 	void target_cdaudio(void);

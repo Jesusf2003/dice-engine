@@ -19,8 +19,7 @@ enumflags
 	FNCPLAT_TRIGGER,
 };
 
-class
-func_plat_helper:ncEntity
+class func_plat_helper:ncEntity
 {
 public:
 	void func_plat_helper(void);
@@ -57,8 +56,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_plat:ncMoverEntity
+class func_plat:ncMoverEntity
 {
 public:
 	void func_plat(void);

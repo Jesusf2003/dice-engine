@@ -18,8 +18,7 @@
 
 @ingroup vgui
 */
-class
-vguiRect:vguiWidget
+class vguiRect:vguiWidget
 {
 public:
 	void vguiRect(void);

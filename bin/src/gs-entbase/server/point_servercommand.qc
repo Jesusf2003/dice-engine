@@ -31,8 +31,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-point_servercommand:ncPointTrigger
+class point_servercommand:ncPointTrigger
 {
 public:
 	void point_servercommand(void);

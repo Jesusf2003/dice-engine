@@ -30,8 +30,7 @@ You will commonly find them within `<gamedir>/decls/`.
 
 @ingroup decl
 */
-class
-ncDict
+class ncDict
 {
 public:
 	void ncDict(void);

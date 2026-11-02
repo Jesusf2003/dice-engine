@@ -43,8 +43,7 @@ This entity was introduced in The Orange Box (2007) for Xbox 360.
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-logic_achievement:ncPointTrigger
+class logic_achievement:ncPointTrigger
 {
 public:
 	void logic_achievement(void);

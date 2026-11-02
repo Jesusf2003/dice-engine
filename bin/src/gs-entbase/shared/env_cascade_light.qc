@@ -53,8 +53,7 @@ This entity was introduced in Counter-Strike: Global Offensive (2012).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_cascade_light:ncPointTrigger
+class env_cascade_light:ncPointTrigger
 {
 public:
 	void env_cascade_light(void);

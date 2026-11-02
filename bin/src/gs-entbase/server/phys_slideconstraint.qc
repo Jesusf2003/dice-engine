@@ -42,8 +42,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup pointentity
 @ingroup physics
 */
-class
-phys_slideconstraint:ncPhysicsConstraint
+class phys_slideconstraint:ncPhysicsConstraint
 {
 public:
 	void phys_slideconstraint(void);

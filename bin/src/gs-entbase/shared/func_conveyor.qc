@@ -59,8 +59,7 @@ This entity was introduced in Quake II (1997).
 @ingroup sharedentity
 @ingroup brushentity
 */
-class
-func_conveyor:ncRenderableEntity
+class func_conveyor:ncRenderableEntity
 {
 public:
 	void func_conveyor(void);

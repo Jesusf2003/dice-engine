@@ -37,8 +37,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-cycler:ncSurfacePropEntity
+class cycler:ncSurfacePropEntity
 {
 public:
 	void cycler(void);

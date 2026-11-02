@@ -14,8 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-class
-team_control_point:ncPointTrigger
+class team_control_point:ncPointTrigger
 {
 public:
 	void team_control_point(void);

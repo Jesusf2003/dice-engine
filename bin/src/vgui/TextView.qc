@@ -22,8 +22,7 @@ as well as **Page Up** and **Page Down**.
 
 @ingroup vgui
 */
-class
-vguiTextView:vguiWidget
+class vguiTextView:vguiWidget
 {
 public:
 	void vguiTextView(void);

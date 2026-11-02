@@ -4,8 +4,7 @@ Player profiles don't just tell us details about the identity but also
 preferences. If a player doesn't consent to an external online service
 we'll query the player profile and ensure in all the right places that it works.
 */
-class
-ncProfile
+class ncProfile
 {
 public:
 	void ncProfile(void);
@@ -29,8 +28,7 @@ a special account with an offline only setting.
 
 A profile stores a unique location for user configs, progression and the certificates
 are generally tied to it as well. */
-class
-ncProfileManager
+class ncProfileManager
 {
 	void ncProfileManager(void);
 

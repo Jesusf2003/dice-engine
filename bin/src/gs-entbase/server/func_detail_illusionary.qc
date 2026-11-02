@@ -35,8 +35,7 @@ This entity was introduced in ericw-tools (2017).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_detail_illusionary:info_null
+class func_detail_illusionary:info_null
 {
 public:
 	void func_detail_illusionary(void);

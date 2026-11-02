@@ -34,8 +34,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_guntarget:ncSurfacePropEntity
+class func_guntarget:ncSurfacePropEntity
 {
 public:
 	void func_guntarget(void);

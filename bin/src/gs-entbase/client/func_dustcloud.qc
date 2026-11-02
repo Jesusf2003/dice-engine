@@ -55,8 +55,7 @@ private:
 };
 
 #if 1
-static class
-func_dustcloud_cloud
+static class func_dustcloud_cloud
 {
 public:
 	void func_dustcloud_cloud(void);

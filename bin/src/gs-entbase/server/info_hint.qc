@@ -134,8 +134,7 @@ However, that was never completed.
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-info_hint:ncHint
+class info_hint:ncHint
 {
 public:
 	void info_hint(void);

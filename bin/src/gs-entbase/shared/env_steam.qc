@@ -37,8 +37,7 @@ enumflags
 };
 
 #ifdef CLIENT
-static class
-env_steam_particle
+static class env_steam_particle
 {
 public:
 	void env_steam_particle(void);
@@ -146,8 +145,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_steam:ncPointTrigger
+class env_steam:ncPointTrigger
 {
 #ifdef SERVER
 	bool m_bInitialState;

@@ -23,8 +23,7 @@ enumflags
 
 @ingroup vgui
 */
-class
-vguiPic:vguiWidget
+class vguiPic:vguiWidget
 {
 public:
 	void vguiPic(void);

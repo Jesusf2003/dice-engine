@@ -66,8 +66,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_fog_controller:ncPointTrigger
+class env_fog_controller:ncPointTrigger
 {
 public:
 	void env_fog_controller(void);

@@ -31,8 +31,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-trigger_monsterjump:ncBrushTrigger
+class trigger_monsterjump:ncBrushTrigger
 {
 public:
 	void trigger_monsterjump(void);

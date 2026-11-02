@@ -38,8 +38,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-env_global:ncPointTrigger
+class env_global:ncPointTrigger
 {	
 public:
 	void env_global(void);

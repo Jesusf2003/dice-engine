@@ -31,8 +31,7 @@ It's also known as item_sodacan.
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-item_food:ncRenderableEntity
+class item_food:ncRenderableEntity
 {
 public:
 	void item_food(void);

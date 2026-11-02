@@ -47,8 +47,7 @@ This entity was introduced in Spirit of Half-Life (2000).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_shockwave:ncEntity
+class env_shockwave:ncEntity
 {
 public:
 	void env_shockwave(void);

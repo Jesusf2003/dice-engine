@@ -76,8 +76,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_tracktrain:ncVehicle
+class func_tracktrain:ncVehicle
 {
 public:
 	void func_tracktrain(void);

@@ -16,8 +16,7 @@
 
 env_cascade_light g_sun;
 
-class
-ncSunEdit:vguiWindow
+class ncSunEdit:vguiWindow
 {
 public:
 	void ncSunEdit(void);

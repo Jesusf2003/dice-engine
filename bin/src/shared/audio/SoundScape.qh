@@ -62,8 +62,7 @@ Environmental soundscape and reverb controller.
 @ingroup sound
 @ingroup baseclass
 */
-class
-ncSoundScape:ncPointTrigger
+class ncSoundScape:ncPointTrigger
 {
 public:
 	void ncSoundScape(void);

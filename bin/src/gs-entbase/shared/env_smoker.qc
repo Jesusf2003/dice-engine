@@ -15,8 +15,7 @@
 */
 
 #ifdef CLIENT
-static class
-env_smoker_cloud:ncEntity
+static class env_smoker_cloud:ncEntity
 {
 public:
 	void env_smoker_cloud(void);
@@ -90,8 +89,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_smoker:ncRenderableEntity
+class env_smoker:ncRenderableEntity
 {
 public:
 	void env_smoker(void);

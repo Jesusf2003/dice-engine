@@ -59,8 +59,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup sharedentity
 @ingroup brushentity
 */
-class
-env_bubbles:ncPointTrigger
+class env_bubbles:ncPointTrigger
 {
 public:
 	void env_bubbles(void);

@@ -30,8 +30,7 @@ enumflags
 	VEHFL_FLAGS
 };
 
-static class
-prop_vehicle_driveable_wheel:ncIO
+static class prop_vehicle_driveable_wheel:ncIO
 {
 public:
 	void prop_vehicle_driveable_wheel(void);

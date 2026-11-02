@@ -3,8 +3,7 @@ var float g_portalSpawnRed;
 var float g_portalFizzleBlue;
 var float g_portalFizzleRed;
 
-class
-prop_portal:ncPortal
+class prop_portal:ncPortal
 {
 public:
 	void prop_portal(void);

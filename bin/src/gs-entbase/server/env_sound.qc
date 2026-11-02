@@ -64,8 +64,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup pointentity
 @ingroup sound
 */
-class
-env_sound:ncSoundScape
+class env_sound:ncSoundScape
 {
 public:
 	void env_sound(void);

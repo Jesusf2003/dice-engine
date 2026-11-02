@@ -45,8 +45,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup pointentity
 @ingroup physics
 */
-class
-phys_hinge:ncPhysicsConstraint
+class phys_hinge:ncPhysicsConstraint
 {
 public:
 	void phys_hinge(void);

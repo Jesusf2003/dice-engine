@@ -28,8 +28,7 @@ This entity was introduced in Call of Duty (2003).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-script_origin:ncBrushTrigger
+class script_origin:ncBrushTrigger
 {
 public:
 	void script_origin(void);

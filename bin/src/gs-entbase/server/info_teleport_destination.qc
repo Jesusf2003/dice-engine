@@ -8,8 +8,7 @@ Entity designed to designate a destination for a trigger_teleport.
 # TRIVIA
 This entity was introduced in Quake (1996).
 */
-class
-info_teleport_destination:ncPointTrigger
+class info_teleport_destination:ncPointTrigger
 {
 	void info_teleport_destination(void);
 };

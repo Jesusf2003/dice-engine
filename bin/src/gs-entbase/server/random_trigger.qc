@@ -35,8 +35,7 @@ It was introduced in Gunman Chronicles (2000).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-random_trigger:ncPointTrigger
+class random_trigger:ncPointTrigger
 {
 public:
 	void random_trigger(void);

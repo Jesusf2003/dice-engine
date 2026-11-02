@@ -1,5 +1,4 @@
-class
-ncDispenser:ncItem
+class ncDispenser:ncItem
 {
 	void ncDispenser(void);
 

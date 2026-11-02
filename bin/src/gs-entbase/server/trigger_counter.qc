@@ -40,8 +40,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-trigger_counter:ncBrushTrigger
+class trigger_counter:ncBrushTrigger
 {
 public:
 	void trigger_counter(void);

@@ -19,8 +19,7 @@
 /** ncSquadMonster based NPCs are able to communicate strategies together. 
 @ingroup baseclass
 */
-class
-ncSquadMonster:ncMonster
+class ncSquadMonster:ncMonster
 {
 public:
 	void ncSquadMonster(void);

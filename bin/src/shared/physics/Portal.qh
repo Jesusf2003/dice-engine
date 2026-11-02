@@ -34,8 +34,7 @@ typedef enumflags
 } nsportal_changed_t;
 
 #warning Needs documentation
-class
-ncPortal:ncEntity
+class ncPortal:ncEntity
 {
 	void ncPortal(void);
 

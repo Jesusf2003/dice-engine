@@ -18,8 +18,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-npc_furniture:ncActor
+class npc_furniture:ncActor
 {
 public:
 	void npc_furniture(void);

@@ -28,8 +28,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup sharedentity
 @ingroup brushentity
 */
-class
-func_ladder:ncRenderableEntity
+class func_ladder:ncRenderableEntity
 {
 public:
 	void func_ladder(void);

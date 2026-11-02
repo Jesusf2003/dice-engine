@@ -63,8 +63,7 @@ This entity was introduced in Left 4 Dead 2 (2009).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_instructor_hint:ncPointTrigger
+class env_instructor_hint:ncPointTrigger
 {
 public:
 	void env_instructor_hint(void);

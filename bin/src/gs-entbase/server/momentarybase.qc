@@ -23,8 +23,7 @@ typedef enum
 } momentary_state_t;
 
 /** This entity class represents momentary entities. */
-class
-ncMomentary:ncRenderableEntity
+class ncMomentary:ncRenderableEntity
 {
 public:
 	void ncMomentary(void);

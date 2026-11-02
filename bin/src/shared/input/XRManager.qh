@@ -30,8 +30,7 @@ You can take advantage of **Extended Reality**, aka **XR** by using the `openxr`
 
 ### xr_testInputs 0/1
 */
-class
-ncXRManager
+class ncXRManager
 {
 	/** Called internally by client/server modules for when a player joins. */
 	nonvirtual void Init(entity);

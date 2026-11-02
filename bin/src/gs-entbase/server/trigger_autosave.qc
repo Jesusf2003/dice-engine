@@ -29,8 +29,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-trigger_autosave:ncBrushTrigger
+class trigger_autosave:ncBrushTrigger
 {
 public:
 	void trigger_autosave(void);

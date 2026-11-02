@@ -279,8 +279,7 @@ phys_rope::phys_rope(void)
 #endif
 }
 
-class
-move_rope:phys_rope
+class move_rope:phys_rope
 {
 	void move_rope(void);
 };
@@ -291,8 +290,7 @@ move_rope::move_rope(void)
 
 }
 
-class
-keyframe_rope:phys_rope
+class keyframe_rope:phys_rope
 {
 	void keyframe_rope(void);
 };

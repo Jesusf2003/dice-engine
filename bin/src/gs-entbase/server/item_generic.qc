@@ -33,8 +33,7 @@ This entity was introduced in Half-Life: Opposing Force (1999).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-item_generic:ncRenderableEntity
+class item_generic:ncRenderableEntity
 {
 public:
 	void item_generic(void);

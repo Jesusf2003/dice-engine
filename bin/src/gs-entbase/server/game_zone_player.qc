@@ -32,8 +32,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-game_zone_player:ncBrushTrigger
+class game_zone_player:ncBrushTrigger
 {
 public:
 	void game_zone_player(void);

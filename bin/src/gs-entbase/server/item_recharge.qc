@@ -46,8 +46,7 @@ This entity was introduced in Half-Life for PS2 (2001).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-item_recharge:ncRenderableEntity
+class item_recharge:ncRenderableEntity
 {
 public:
 	void item_recharge(void);

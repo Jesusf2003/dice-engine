@@ -28,8 +28,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-player_weaponstrip:ncPointTrigger
+class player_weaponstrip:ncPointTrigger
 {
 public:
 	void player_weaponstrip(void);

@@ -21,8 +21,7 @@ It has the ability to clean itself up afterwards, too.
 
 @ingroup baseclass
 */
-class
-ncTimer:ncEntity
+class ncTimer:ncEntity
 {
 public:
 	void ncTimer(void);

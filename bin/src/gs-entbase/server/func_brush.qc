@@ -42,8 +42,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_brush:ncRenderableEntity
+class func_brush:ncRenderableEntity
 {
 public:
 	void func_brush(void);

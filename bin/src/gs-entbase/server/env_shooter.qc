@@ -45,8 +45,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-env_shooter:ncRenderableEntity
+class env_shooter:ncRenderableEntity
 {
 public:
 	void env_shooter(void);

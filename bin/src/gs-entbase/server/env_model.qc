@@ -38,8 +38,7 @@ This entity was introduced in Spirit of Half-Life (2000).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-env_model:ncRenderableEntity
+class env_model:ncRenderableEntity
 {
 public:
 	void env_model(void);

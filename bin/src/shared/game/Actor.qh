@@ -88,8 +88,7 @@ types of pathfinding in the future.
 
 @ingroup baseclass
 */
-class
-ncActor:ncSurfacePropEntity
+class ncActor:ncSurfacePropEntity
 {
 
 public:

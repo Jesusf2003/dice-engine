@@ -1,5 +1,4 @@
-class
-env_soundscape:ncPointTrigger
+class env_soundscape:ncPointTrigger
 {
 	void env_soundscape(void);
 };

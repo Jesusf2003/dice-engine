@@ -31,8 +31,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-trigger_changetarget:ncPointTrigger
+class trigger_changetarget:ncPointTrigger
 {
 	string m_strNewTarget;
 

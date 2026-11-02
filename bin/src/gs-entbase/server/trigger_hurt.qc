@@ -69,8 +69,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-trigger_hurt:ncBrushTrigger
+class trigger_hurt:ncBrushTrigger
 {
 public:
 	void trigger_hurt(void);

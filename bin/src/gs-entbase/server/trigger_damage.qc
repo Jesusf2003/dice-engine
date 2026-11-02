@@ -1,5 +1,4 @@
-class
-trigger_damage:ncBrushTrigger
+class trigger_damage:ncBrushTrigger
 {
 	void trigger_damage(void);
 

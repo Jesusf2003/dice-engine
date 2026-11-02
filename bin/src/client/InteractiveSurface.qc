@@ -38,8 +38,7 @@ This entity was introduced in Nuclide (2022).
 
 Place one around a map and you can render any UI class of your choosing.
 */
-class
-ncInteractiveSurface:ncEntity
+class ncInteractiveSurface:ncEntity
 {
 private:
 	vguiWidget m_UIChain;
@@ -276,8 +275,7 @@ ncInteractiveSurface::ncInteractiveSurface(void)
 
 #if 1
 /* test interface */
-class
-TestUI:vguiWindow
+class TestUI:vguiWindow
 {
 public:
 	void TestUI(void);
@@ -317,8 +315,7 @@ TestUI::TestUI(void)
 }
 #else
 /* test interface */
-class
-TestUI:VGUIConsole
+class TestUI:VGUIConsole
 {
 	void(void) TestUI;
 

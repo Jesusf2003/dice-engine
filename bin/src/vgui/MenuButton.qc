@@ -29,8 +29,7 @@ enumflags
 
 @ingroup vgui
 */
-class
-vguiMenuButton: vguiButton
+class vguiMenuButton: vguiButton
 {
 public:
 	void vguiMenuButton(void);

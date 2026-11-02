@@ -36,8 +36,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-player_loadsaved:ncRenderableEntity /* for the rendercolor values */
+class player_loadsaved:ncRenderableEntity /* for the rendercolor values */
 {
 public:
 	void player_loadsaved(void);

@@ -35,8 +35,7 @@ This entity was introduced in Quake (1996).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-info_notnull:ncPointTrigger
+class info_notnull:ncPointTrigger
 {
 public:
 	void info_notnull(void);

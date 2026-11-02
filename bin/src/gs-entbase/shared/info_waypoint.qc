@@ -48,8 +48,7 @@ This entity was introduced in Obsidian Conflict (2006).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-info_waypoint:ncPointTrigger
+class info_waypoint:ncPointTrigger
 {
 public:
 	void info_waypoint(void);

@@ -36,8 +36,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_wall_toggle:ncRenderableEntity
+class func_wall_toggle:ncRenderableEntity
 {
 public:
 	void func_wall_toggle(void);

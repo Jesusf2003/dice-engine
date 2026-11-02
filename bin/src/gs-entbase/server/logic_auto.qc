@@ -53,8 +53,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-logic_auto:ncPointTrigger
+class logic_auto:ncPointTrigger
 {
 public:
 	void logic_auto(void);

@@ -33,8 +33,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-cycler_sprite:ncRenderableEntity
+class cycler_sprite:ncRenderableEntity
 {
 
 };

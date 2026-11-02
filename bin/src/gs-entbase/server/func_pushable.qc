@@ -68,8 +68,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_pushable:func_breakable
+class func_pushable:func_breakable
 {
 public:
 	void func_pushable(void);

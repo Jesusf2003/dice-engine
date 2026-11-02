@@ -20,8 +20,7 @@ int g_iFriendsListInitialized;
 
 
 
-class
-VGUIFNMOTD:vguiWindow
+class VGUIFNMOTD:vguiWindow
 {
 	void VGUIFNMOTD(void);
 
@@ -81,8 +80,7 @@ VGUIFNMOTD::ChatWindowResized(void)
 
 
 
-class
-VGUIChatWindow:vguiWindow
+class VGUIChatWindow:vguiWindow
 {
 	void VGUIChatWindow(void);
 
@@ -187,8 +185,7 @@ VGUIChatWindow::Spawned(void)
 
 
 
-class
-VGUIFriendsList:vguiWindow
+class VGUIFriendsList:vguiWindow
 {
 	void VGUIFriendsList(void);
 

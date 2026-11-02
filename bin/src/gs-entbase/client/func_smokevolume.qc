@@ -60,8 +60,7 @@ private:
 };
 
 #if 1
-static class
-func_smokevolume_cloud
+static class func_smokevolume_cloud
 {
 public:
 	void func_smokevolume_cloud(void);

@@ -14,8 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-class
-trigger_capture_area:ncBrushTrigger
+class trigger_capture_area:ncBrushTrigger
 {
 public:
 	void trigger_capture_area(void);

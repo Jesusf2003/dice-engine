@@ -63,8 +63,7 @@ This entity was introduced in Quake II (1997).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_rotating:ncRenderableEntity
+class func_rotating:ncRenderableEntity
 {
 public:
 	void func_rotating(void);

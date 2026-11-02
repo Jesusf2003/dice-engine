@@ -37,8 +37,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup cliententity
 @ingroup pointentity
 */
-class
-sky_camera:ncEntity
+class sky_camera:ncEntity
 {
 public:
 	void sky_camera(void);

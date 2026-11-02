@@ -53,8 +53,7 @@ This entity was introduced in Counter-Strike (1998).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_fog:ncPointTrigger
+class env_fog:ncPointTrigger
 {
 public:
 	void env_fog(void);

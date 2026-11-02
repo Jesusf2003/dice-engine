@@ -49,8 +49,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-trigger_relay:ncPointTrigger
+class trigger_relay:ncPointTrigger
 {
 public:
 	void trigger_relay(void);

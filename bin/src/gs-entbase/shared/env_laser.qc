@@ -67,8 +67,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_laser:ncRenderableEntity
+class env_laser:ncRenderableEntity
 {
 public:
 	void env_laser(void);

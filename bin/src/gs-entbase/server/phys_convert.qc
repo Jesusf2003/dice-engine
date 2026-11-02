@@ -42,8 +42,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup pointentity
 @ingroup physics
 */
-class
-phys_convert:ncPhysicsConstraint
+class phys_convert:ncPhysicsConstraint
 {
 public:
 	void phys_convert(void);

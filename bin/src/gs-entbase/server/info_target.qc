@@ -1,5 +1,4 @@
-class
-info_target:ncPointTrigger
+class info_target:ncPointTrigger
 {
 	void info_target(void);
 };
@@ -10,8 +9,7 @@ info_target::info_target(void)
 
 }
 
-class
-target_position:ncPointTrigger
+class target_position:ncPointTrigger
 {
 	void target_position(void);
 };
@@ -22,8 +20,7 @@ target_position::target_position(void)
 
 }
 
-class
-misc_teleporter_dest:ncPointTrigger
+class misc_teleporter_dest:ncPointTrigger
 {
 	void misc_teleporter_dest(void);
 };
@@ -36,8 +33,7 @@ misc_teleporter_dest::misc_teleporter_dest(void)
 
 
 
-class
-target_location:ncPointTrigger
+class target_location:ncPointTrigger
 {
 	void target_location(void);
 };

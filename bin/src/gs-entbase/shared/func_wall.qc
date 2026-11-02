@@ -33,8 +33,7 @@ This entity was introduced in Quake (1996).
 */
 
 #ifdef SERVER
-class
-func_wall:ncRenderableEntity
+class func_wall:ncRenderableEntity
 {
 public:
 	void func_wall(void);

@@ -15,8 +15,7 @@
  */
 
 
-class
-ncEditorMainFrame:vguiWindow
+class ncEditorMainFrame:vguiWindow
 {
 public:
 	void ncEditorMainFrame(void);

@@ -38,8 +38,7 @@ There are two ways of making a prop_dynamic non-solid.
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-prop_dynamic:ncSurfacePropEntity
+class prop_dynamic:ncSurfacePropEntity
 {
 public:
 	void prop_dynamic(void);

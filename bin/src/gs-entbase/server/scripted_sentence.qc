@@ -46,8 +46,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-scripted_sentence:ncPointTrigger
+class scripted_sentence:ncPointTrigger
 {
 public:
 	void scripted_sentence(void);

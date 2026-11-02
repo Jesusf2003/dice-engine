@@ -30,8 +30,7 @@ This entity was introduced in Quake II (1997).
 
 @ingroup editor
 */
-class
-func_group:info_null
+class func_group:info_null
 {
 public:
 	void func_group(void);

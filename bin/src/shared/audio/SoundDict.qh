@@ -32,8 +32,7 @@ typedef enumflags
 
 @ingroup decl
 */
-class
-ncSoundDict:ncDict
+class ncSoundDict:ncDict
 {
 public:
 	void ncSoundDict(void);

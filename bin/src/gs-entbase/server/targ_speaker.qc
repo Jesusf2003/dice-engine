@@ -37,8 +37,7 @@ to be played.
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-targ_speaker:ncPointTrigger
+class targ_speaker:ncPointTrigger
 {
 public:
 	void targ_speaker(void);

@@ -38,8 +38,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup pointentity
 */
 
-class
-trigger_auto:ncPointTrigger
+class trigger_auto:ncPointTrigger
 {
 public:
 	void trigger_auto(void);

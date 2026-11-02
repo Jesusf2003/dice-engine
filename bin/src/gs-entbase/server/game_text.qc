@@ -50,8 +50,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-game_text:ncPointTrigger
+class game_text:ncPointTrigger
 {
 public:
 	void game_text(void);

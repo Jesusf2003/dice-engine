@@ -1,5 +1,4 @@
-class
-math_counter:ncPointTrigger
+class math_counter:ncPointTrigger
 {
 	void math_counter(void);
 };

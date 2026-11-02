@@ -24,8 +24,7 @@ enumflags
 	SOUND_ENABLED
 };
 
-class
-ncSound:ncPointTrigger
+class ncSound:ncPointTrigger
 {
 public:
 	void ncSound( void );

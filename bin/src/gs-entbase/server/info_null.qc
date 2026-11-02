@@ -33,8 +33,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-info_null:ncPointTrigger
+class info_null:ncPointTrigger
 {
 public:
 	void info_null(void);

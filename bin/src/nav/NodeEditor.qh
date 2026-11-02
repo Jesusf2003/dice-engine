@@ -19,8 +19,7 @@
  *  @{
  */
 
-class
-ncNodeEditor
+class ncNodeEditor
 {
 	/** Links node wp towards w2. */
 	nonvirtual void LinkNodes(graphNode_t *, graphNode_t *);

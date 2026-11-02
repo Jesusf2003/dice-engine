@@ -61,8 +61,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_platrot:func_plat
+class func_platrot:func_plat
 {
 public:
 	void func_platrot(void);

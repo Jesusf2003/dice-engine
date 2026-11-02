@@ -28,8 +28,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-momentary_door:ncMomentary
+class momentary_door:ncMomentary
 {
 public:
 	void momentary_door(void);

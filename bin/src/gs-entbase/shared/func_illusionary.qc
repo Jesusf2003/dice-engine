@@ -32,8 +32,7 @@ This entity was introduced in Quake (1996).
 @ingroup brushentity
 */
 #ifdef SERVER
-class
-func_illusionary:ncRenderableEntity
+class func_illusionary:ncRenderableEntity
 {
 public:
 	void func_illusionary(void);

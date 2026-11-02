@@ -25,8 +25,7 @@ It's able to load different types of overviews, in addition to none at all.
 It's able to load HLTV styled overviews used in GoldSrc and Source.
 @ingroup baseclass
 */
-class
-ncRadar:ncView
+class ncRadar:ncView
 {
 public:
 	void ncRadar(void);

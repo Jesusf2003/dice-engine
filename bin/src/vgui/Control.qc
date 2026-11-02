@@ -19,8 +19,7 @@
 This is an abstract control class for various VGUI related widgets.
 @ingroup vgui
 */
-class
-vguiControl:vguiWidget
+class vguiControl:vguiWidget
 {
 public:
 	virtual void vguiControl(void);

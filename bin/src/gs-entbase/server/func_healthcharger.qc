@@ -35,8 +35,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_healthcharger:ncRenderableEntity
+class func_healthcharger:ncRenderableEntity
 {
 public:
 	void func_healthcharger(void);

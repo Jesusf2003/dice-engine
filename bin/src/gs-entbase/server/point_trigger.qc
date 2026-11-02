@@ -64,8 +64,7 @@ This entity was introduced in Obsidian Conflict (2006).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-point_trigger:ncPointTrigger
+class point_trigger:ncPointTrigger
 {
 public:
 	void point_trigger(void);

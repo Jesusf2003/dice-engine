@@ -149,8 +149,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_breakable:ncSurfacePropEntity
+class func_breakable:ncSurfacePropEntity
 {
 public:
 	void func_breakable(void);

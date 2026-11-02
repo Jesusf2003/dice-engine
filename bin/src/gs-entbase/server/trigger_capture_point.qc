@@ -15,8 +15,7 @@
 */
 
 /* Point based version of trigger_capture_point invented by us */
-class
-trigger_capture_point:ncRenderableEntity
+class trigger_capture_point:ncRenderableEntity
 {
 public:
 	void trigger_capture_point(void);

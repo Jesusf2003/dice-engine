@@ -51,8 +51,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup pointentity
 @ingroup physics
 */
-class
-prop_physics:ncPhysicsEntity
+class prop_physics:ncPhysicsEntity
 {
 public:
 	void prop_physics(void);

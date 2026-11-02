@@ -30,8 +30,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-item_item_crate:ncPhysicsEntity
+class item_item_crate:ncPhysicsEntity
 {
 public:
 	void item_item_crate(void);

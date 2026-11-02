@@ -22,8 +22,7 @@ The per-player analog to this is ncUserInfoManager.
 
 @ingroup client
 */
-class
-ncServerInfoManager
+class ncServerInfoManager
 {
 public:
 	void ncServerInfoManager(void);

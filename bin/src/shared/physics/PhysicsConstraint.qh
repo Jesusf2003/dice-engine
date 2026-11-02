@@ -32,8 +32,7 @@ type connection - this class is what you need.
 @ingroup baseclass
 @ingroup physics
 */
-class
-ncPhysicsConstraint:ncEntity
+class ncPhysicsConstraint:ncEntity
 {
 public:
 	void ncPhysicsConstraint(void);

@@ -16,8 +16,7 @@
 
 .void(string) tmpvguiPickerCB;
 
-class
-vguiListPicker:vguiWindow
+class vguiListPicker:vguiWindow
 {
 	void vguiListPicker(void);
 

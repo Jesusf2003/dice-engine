@@ -54,8 +54,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-logic_relay:ncPointTrigger
+class logic_relay:ncPointTrigger
 {
 public:
 	void logic_relay(void);

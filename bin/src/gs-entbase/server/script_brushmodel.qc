@@ -28,8 +28,7 @@ This entity was introduced in Call of Duty (2003).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-script_brushmodel:ncBrushTrigger
+class script_brushmodel:ncBrushTrigger
 {
 public:
 	void script_brushmodel(void);

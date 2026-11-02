@@ -52,8 +52,7 @@ When set, will only allow authorized clients to join the server.
 When set, will only allow verified users from a certain instances to join the server.
 
 */
-class
-ncAuthManager
+class ncAuthManager
 {
 public:
 	void ncAuthManager(void);

@@ -16,8 +16,7 @@
 
 #define MM_MULTITHREADED 1
 
-static class
-multi_manager_sub:ncPointTrigger
+static class multi_manager_sub:ncPointTrigger
 {
 public:
 	void multi_manager_sub(void);
@@ -89,8 +88,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-multi_manager:ncPointTrigger
+class multi_manager:ncPointTrigger
 {
 private:
 	multi_manager_sub m_subTriggers[16];

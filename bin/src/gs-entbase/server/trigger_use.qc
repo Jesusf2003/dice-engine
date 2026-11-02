@@ -1,5 +1,4 @@
-class
-trigger_use:ncBrushTrigger
+class trigger_use:ncBrushTrigger
 {
 	void trigger_use(void);
 

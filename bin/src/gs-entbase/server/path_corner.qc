@@ -52,8 +52,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-path_corner:ncPointTrigger
+class path_corner:ncPointTrigger
 {
 public:
 	void path_corner(void);

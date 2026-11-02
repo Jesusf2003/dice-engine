@@ -70,8 +70,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_tank:ncVehicle
+class func_tank:ncVehicle
 {
 public:
 	void func_tank(void);

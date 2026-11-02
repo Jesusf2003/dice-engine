@@ -62,8 +62,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-env_spark:ncPointTrigger
+class env_spark:ncPointTrigger
 {
 public:
 	void env_spark(void);

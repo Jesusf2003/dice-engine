@@ -39,8 +39,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-trigger_look:ncBrushTrigger
+class trigger_look:ncBrushTrigger
 {
 public:
 	void trigger_look(void);

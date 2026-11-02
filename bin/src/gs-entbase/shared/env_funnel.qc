@@ -56,8 +56,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_funnel:ncRenderableEntity
+class env_funnel:ncRenderableEntity
 {
 public:
 	void env_funnel(void);

@@ -63,8 +63,7 @@ This entity was introduced in Quake (1996).
 @ingroup sharedentity
 @ingroup brushentity
 */
-class
-trigger_push:ncBrushTrigger
+class trigger_push:ncBrushTrigger
 {
 public:
 	void trigger_push(void);

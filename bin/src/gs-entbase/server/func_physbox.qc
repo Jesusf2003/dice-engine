@@ -32,8 +32,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup brushentity
 @ingroup physics
 */
-class
-func_physbox:ncPhysicsEntity
+class func_physbox:ncPhysicsEntity
 {
 public:
 	void func_physbox(void);

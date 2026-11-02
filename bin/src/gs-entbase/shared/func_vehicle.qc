@@ -36,8 +36,7 @@ enumflags
 	FNCVEHNET_FLAGS
 };
 
-static class
-func_vehicle_wheel
+static class func_vehicle_wheel
 {
 public:
 	void func_vehicle_wheel(void);
@@ -108,8 +107,7 @@ This entity was introduced in Counter-Strike (2000).
 @ingroup sharedentity
 @ingroup brushentity
 */
-class
-func_vehicle:ncVehicle
+class func_vehicle:ncVehicle
 {
 public:
 	void func_vehicle(void);

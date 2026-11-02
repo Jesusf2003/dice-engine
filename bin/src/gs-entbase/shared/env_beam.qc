@@ -78,8 +78,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup sharedentity
 @ingroup pointentity
 */
-class
-env_beam:ncRenderableEntity
+class env_beam:ncRenderableEntity
 {
 public:
 	void env_beam(void);

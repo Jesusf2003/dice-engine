@@ -29,8 +29,7 @@ This entity was introduced in Zombie Panic! (2004).
 @ingroup brushentity
 */
 
-class
-trigger_endround:ncBrushTrigger
+class trigger_endround:ncBrushTrigger
 {
 public:
 	void trigger_endround(void);

@@ -33,8 +33,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-game_team_set:ncPointTrigger
+class game_team_set:ncPointTrigger
 {
 public:
 	void game_team_set(void);

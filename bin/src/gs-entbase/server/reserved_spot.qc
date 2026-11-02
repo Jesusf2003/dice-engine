@@ -29,8 +29,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-reserved_spot:ncEntity
+class reserved_spot:ncEntity
 {
 public:
 	void reserved_spot(void);

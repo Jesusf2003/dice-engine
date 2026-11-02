@@ -42,8 +42,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-prop_static:ncPhysicsEntity
+class prop_static:ncPhysicsEntity
 {
 public:
 	void prop_static(void);

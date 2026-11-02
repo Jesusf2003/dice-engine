@@ -34,8 +34,7 @@ This entity was introduced in Quake II (1997).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_detail:info_null
+class func_detail:info_null
 {
 public:
 	void func_detail(void);

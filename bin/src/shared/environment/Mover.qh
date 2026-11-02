@@ -42,8 +42,7 @@ at your request.
 
 @ingroup baseclass
 */
-class
-ncMoverEntity:ncSurfacePropEntity
+class ncMoverEntity:ncSurfacePropEntity
 {
 public:
 	void ncMoverEntity(void);

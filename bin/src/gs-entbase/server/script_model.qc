@@ -35,8 +35,7 @@ This entity was introduced in Call of Duty (2003).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-script_model:ncRenderableEntity
+class script_model:ncRenderableEntity
 {
 public:
 	void script_model(void);

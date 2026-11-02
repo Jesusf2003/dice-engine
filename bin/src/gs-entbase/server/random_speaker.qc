@@ -42,8 +42,7 @@ It was introduced in Gunman Chronicles (2000).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-random_speaker:ncPointTrigger
+class random_speaker:ncPointTrigger
 {
 public:
 	void random_speaker(void);

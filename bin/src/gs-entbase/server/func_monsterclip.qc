@@ -29,8 +29,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup brushentity
 */
-class
-func_monsterclip:ncEntity
+class func_monsterclip:ncEntity
 {
 public:
 	void func_monsterclip(void);

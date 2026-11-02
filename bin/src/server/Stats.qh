@@ -37,8 +37,7 @@ var bool autocvar_logging_enabled = false;
 A detailed record of a match or any game session.
 
 */
-class
-ncStats
+class ncStats
 {
 public:
 	nonvirtual void Init(void);

@@ -20,8 +20,7 @@ This class manages state of a session.
 Included but not limited to savegames, level transitions
 and potentially server transitions.
 */
-class
-ncSessionManager
+class ncSessionManager
 {
 public:
 	void ncSessionManager(void);

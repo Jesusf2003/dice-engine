@@ -79,8 +79,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-env_render:ncRenderableEntity
+class env_render:ncRenderableEntity
 {
 public:
 	void env_render(void);

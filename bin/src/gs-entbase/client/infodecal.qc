@@ -14,8 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-class
-infodecal:ncEntity
+class infodecal:ncEntity
 {
 public:
 	void infodecal(void);

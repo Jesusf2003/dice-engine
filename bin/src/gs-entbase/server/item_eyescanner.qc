@@ -43,8 +43,7 @@ This entity was introduced in Half-Life for PS2 (2001).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-item_eyescanner:ncRenderableEntity
+class item_eyescanner:ncRenderableEntity
 {
 public:
 	void item_eyescanner(void);

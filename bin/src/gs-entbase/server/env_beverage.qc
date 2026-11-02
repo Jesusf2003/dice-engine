@@ -60,8 +60,7 @@ This entity was introduced in Half-Life (1998).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-env_beverage:ncRenderableEntity
+class env_beverage:ncRenderableEntity
 {
 public:
 	void env_beverage(void);

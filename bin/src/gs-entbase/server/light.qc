@@ -70,8 +70,7 @@ This entity was introduced in Quake (1996).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-light:ncPointTrigger
+class light:ncPointTrigger
 {
 public:
 	void light(void);
@@ -346,8 +345,7 @@ light::DebugDraw(void)
 }
 
 
-class
-light_spot:light
+class light_spot:light
 {
 	void light_spot(void);
 };
@@ -358,8 +356,7 @@ light_spot::light_spot(void)
 
 }
 
-class
-light_environment:light
+class light_environment:light
 {
 public:
 	void light_environment(void);

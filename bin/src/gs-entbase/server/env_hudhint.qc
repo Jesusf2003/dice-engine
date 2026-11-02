@@ -44,8 +44,7 @@ This entity was introduced in Half-Life 2 (2004).
 @ingroup serverentity
 @ingroup pointentity
 */
-class
-env_hudhint:ncPointTrigger
+class env_hudhint:ncPointTrigger
 {
 public:
 	void env_hudhint(void);
