@@ -15,7 +15,17 @@ engine/common/base.ico
 /build/
 /bin/*.exe
 /bin/*.dll
+/bin/identity.pfx
+/bin/*.lst
 /bin/base/*.dat
 /bin/base/*.lno
 /bin/base/maps/*.dat
 /bin/base/maps/*.lno
+/bin/base/progs/*.dat
+/bin/base/progs/*.lno
+/bin/base/src/**/*.lno
+
+# Written by the engine at runtime
+/bin/conhistory.txt
+/bin/base/config.cfg
+/bin/base/data/*.log
