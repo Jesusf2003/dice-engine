@@ -6,7 +6,7 @@ defs.qh
 ../vgui/include.src
 loading.qc
 main.qh
-ui_console.qc
+../menukit/console.qc
 ui_friends.qc
 ui_newgame.qc
 ui_quitgame.qc

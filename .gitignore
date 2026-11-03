@@ -52,3 +52,7 @@ engine/common/base.ico
 /tools/vmap/build/
 # Local notes and code set aside from the SDK (e.g. docs/radar)
 /docs/
+
+# MenuKit example build output (bin/src/menukit/example, compiled only to test the kit)
+/bin/src/menukit/example/*.dat
+/bin/src/menukit/example/*.lno

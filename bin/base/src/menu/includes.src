@@ -1,6 +1,6 @@
 #includelist
-../common/include.src
-../platform/defs.qh
+../../../src/common/include.src
+../../../src/platform/defs.qh
 
 defs.qh
 bitmaps.qh
@@ -66,8 +66,8 @@ m_intro.qc
 m_main.qc
 menu.qc
 
-../platform/includes.src
+../../../src/platform/includes.src
 
-../client/font.qc
+../../../src/client/font.qc
 entry.qc
 #endlist

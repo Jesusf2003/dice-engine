@@ -71,6 +71,15 @@
 			"problemMatcher": "$gcc"
 		},
 		{
+			"label": "vmap: build map compiler (tools/vmap/bin/vmap.exe)",
+			"type": "process",
+			"command": "C:\\msys64\\usr\\bin\\bash.exe",
+			"args": ["-lc", "./build_win64.sh vmap"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"group": "build",
+			"problemMatcher": "$gcc"
+		},
+		{
 			"label": "FTEQW: makelibs (static third-party libs)",
 			"type": "process",
 			"command": "C:\\msys64\\usr\\bin\\bash.exe",

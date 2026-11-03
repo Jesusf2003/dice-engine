@@ -1,0 +1,11 @@
+#pragma target fte_5768
+//#pragma flag enable assumeint
+#pragma progs_dat  "menu.dat"
+#define MENU
+#define GAME_DIR "base"
+
+/* in a game: #pragma progs_dat "../../menu.dat" and ../../../src/menukit/includes.src */
+#includelist
+../includes.src
+menu.qc
+#endlist

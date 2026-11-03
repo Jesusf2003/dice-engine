@@ -949,7 +949,6 @@ EXCLUDE                = src/engine \
                          src/netradiant-custom \
                          src/vvmtool \
                          src/menu-vgui \
-                         src/menu-fn \
                          src/plugins \
                          src/shared/fteextensions.qc
 
@@ -970,7 +969,6 @@ EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */src/engine/* \
                          */src/worldspawn/* \
                          */src/vvmtool/* \
-                         */src/menu-fn/* \
                          */src/menu-vgui/* \
                          */src/plugins/*
 

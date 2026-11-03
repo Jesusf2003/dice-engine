@@ -1,0 +1,17 @@
+/* MenuKit: everything a VGUI game menu needs before the game's own files.
+   A game's menu/progs.src lists this first, then its own .qc files (Game_MenuInit & co). */
+#includelist
+../common/include.src
+../client/font.qh
+../platform/defs.qh
+defs.qh
+
+../vgui/include.src
+menukit.qh
+
+console.qc
+menukit.qc
+
+../platform/includes.src
+../client/font.qc
+#endlist

@@ -5,5 +5,5 @@
 #define GAME_DIR "base"
 
 #includelist
-../../../src/menu-fn/includes.src
+includes.src
 #endlist
