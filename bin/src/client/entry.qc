@@ -322,7 +322,6 @@ CSQC_UpdateView(float w, float h, float focus)
 			g_vidsize[1] = h;
 			ClientGame_InitDone();
 			MOTD_Init();
-			VGUI_ShowMOTD();
 			Sky_Update(true);
 		}
 	}

@@ -88,6 +88,10 @@ types of pathfinding in the future.
 
 @ingroup baseclass
 */
+
+/** m_pathfindingCurrentNode value once a route has been unloaded. */
+#define ROUTE_END -2
+
 class ncActor:ncSurfacePropEntity
 {
 

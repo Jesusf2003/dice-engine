@@ -16,8 +16,6 @@ Schedule.qc
 AddonDelegate.qc
 MapDelegate.qc
 SessionManager.qc
-CaptureItem.qc
-CapturePoint.qc
 Auth.qc
 ../nav/includes.src
 api.qc

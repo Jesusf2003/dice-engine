@@ -885,9 +885,9 @@ INPUT                  = src/ \
                          Documentation/LevelEditing.md \
                          Documentation/Filesystem.md \
                          Documentation/Networking.md \
-                         Documentation/Bots.md \
-                         Documentation/Bots/ \
+                         Documentation/Waypoints.md \
                          Documentation/Progs.md \
+                         Documentation/Menus.md \
                          Documentation/Classes.md \
                          Documentation/Materials.md \
                          Documentation/Materials/ \
@@ -948,7 +948,6 @@ EXCLUDE                = src/engine \
                          src/worldspawn \
                          src/netradiant-custom \
                          src/vvmtool \
-                         src/menu-vgui \
                          src/plugins \
                          src/shared/fteextensions.qc
 
@@ -969,7 +968,6 @@ EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */src/engine/* \
                          */src/worldspawn/* \
                          */src/vvmtool/* \
-                         */src/menu-vgui/* \
                          */src/plugins/*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names

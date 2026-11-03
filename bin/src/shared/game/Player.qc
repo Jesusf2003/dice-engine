@@ -1310,11 +1310,6 @@ ncPlayer::PredictPostFrame(void)
 void
 ncPlayer::ServerInputFrame(void)
 {
-	/* wait a few seconds, as we may not have been spawned yet */
-	if (is.Bot(this)) {
-		((ncBot)this).RunAI();
-	}
-
 	Physics_Run();
 }
 

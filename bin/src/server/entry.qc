@@ -252,11 +252,6 @@ PlayerPreThink(void)
 		return;
 	}
 
-	if (!STRING_SET(ourPlayer.classname) && isBot) {
-		Bot_InsertIntoGame(ourPlayer);
-		return;
-	}
-
 	if (is.Player(ourPlayer)) {
 		return;
 	}
@@ -265,10 +260,6 @@ PlayerPreThink(void)
 		//ncSpectator spec = (ncSpectator)self;
 		//spec.PreFrame();
 		return;
-	}
-
-	if (is.Bot(ourPlayer)) {
-		((ncBot)ourPlayer).BotPreFrame();
 	}
 
 
@@ -291,11 +282,6 @@ PlayerPostThink(void)
 		return;
 	}
 
-	if (!STRING_SET(ourPlayer.classname) && isBot) {
-		Bot_InsertIntoGame(ourPlayer);
-		return;
-	}
-
 	if (ourPlayer.classname == "spectator") {
 		SpectatorThink();
 		return;
@@ -303,10 +289,6 @@ PlayerPostThink(void)
 
 	if (!is.Player(ourPlayer)) {
 		return;
-	}
-
-	if (is.Bot(ourPlayer)) {
-		((ncBot)ourPlayer).BotPostFrame();
 	}
 
 	if (g_grMode) {
@@ -573,8 +555,6 @@ initents(void)
 	Mapcycle_Init();
 	Vote_Init();
 	ChangeTarget_Activate();
-
-	BotLib_Init();
 
 	/* engine hacks for dedicated servers */
 	cvars.SetFloat("s_nominaldistance", 1536.0f);

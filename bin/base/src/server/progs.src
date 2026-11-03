@@ -15,9 +15,6 @@
 ../../../src/gs-entbase/shared.src
 ../shared/include.src
 
-/* include the botlib if desired (optional) */
-../../../src/botlib/include.src
-
 /* mod specific functions */
 main.qc
 

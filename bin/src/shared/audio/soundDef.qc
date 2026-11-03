@@ -647,7 +647,6 @@ SoundDef_Play(entity target, int chan, string shader)
 	}
 	if (newSound.flags & SNDFL_ALERTS) {
 		ncMonster_AlertEnemyAlliance(target.origin, newSound.dist_max, target.m_iAlliance);
-		BotLib_Alert(target.origin, newSound.dist_max, target.team);
 	}
 #endif
 

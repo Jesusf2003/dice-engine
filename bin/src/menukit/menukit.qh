@@ -55,6 +55,8 @@ Game_MenuInit(void)
 Submenus are ordinary vguiWindow objects: create them once, hand them to
 Menu_Add(), and show them from a button with Menu_ShowCentered().
 
+The guide is @ref menus (Documentation/Menus.md); src/menukit/example/ is a working menu.
+
 */
 
 /** When a main-menu button is visible. */
@@ -88,7 +90,7 @@ bool Game_MenuConsoleCommand(string commandName, int argCount);
 
 /* building the menu ------------------------------------------------------- */
 
-/** Shows the game's title above the main-menu buttons: the "title" of liblist.gam / the manifest,
+/** Shows the game's title above the main-menu buttons: the gameinfo_title of the game manifest (<game>.fmf),
 or gfx/title.mat when there is no title text. */
 void Menu_ShowGameTitle(void);
 

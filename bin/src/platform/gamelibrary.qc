@@ -53,85 +53,8 @@ GameLibrary_IDForPackageName(string packageName)
 	return (-1i);
 }
 
-/** Looks for a single file inside a gamedir, including its pk3s and returns a valid filehandle if it is found. */
-static filestream
-GameLibrary_FindInGameDir(string filename, string gamedirname)
-{
-	searchhandle sh;
-	searchhandle gsh;
-	searchhandle psh;
-	filestream fh;
-
-	/* if we're querying a file in our mounted game, we can exit early */
-	if (gamedirname == cvar_string("fs_game")) {
-		fh = fopen(filename, FILE_READ);
-
-		if (fh >= 0) {
-			return fh;
-		}
-	}
-
-	/* first let's see if we've got a liblist.gam just floating inside the gamedir */
-	gsh = search_begin(filename, SB_FULLPACKAGEPATH | SB_FORCESEARCH | SEARCH_ALLOWDUPES, FALSE, gamedirname);
-	fh = search_fopen(gsh, 0);
-
-	/* we do not. let's search for pk3's to sift through */
-	if (fh < 0) {
-		/* let's search for every pk3 in the gamedir and search for a liblist, one at a time. */
-		psh = search_begin("*.pk3", SB_FULLPACKAGEPATH | SB_FORCESEARCH, FALSE, gamedirname);
-
-		/* loop through each pk3 in reverse (newest to old) */
-		for (int i = search_getsize(psh); i >= 0; i--) {
-			string full = search_getfilename(psh, i);
-
-			if (!full)
-				continue;
-
-			sh = search_begin(filename, SB_FULLPACKAGEPATH | SB_FORCESEARCH, FALSE, strcat(gamedirname, "/", full));
-			fh = search_fopen(sh, 0);
-			//print(sprintf("looking for %s in %s\n", filename, strcat(gamedirname, "/", full)));
-
-			/* we found one */
-			if (fh >= 0) {
-				search_end(sh);
-				break;
-			}
-			search_end(sh);
-		}
-		search_end(psh);
-	}
-
-	/* still nothing. let's search for pk4's to sift through */
-	if (fh < 0) {
-		/* let's search for every pk4 in the gamedir and search for a liblist, one at a time. */
-		psh = search_begin("*.pk4", SB_FULLPACKAGEPATH | SB_FORCESEARCH | SEARCH_ALLOWDUPES, FALSE, gamedirname);
-
-		/* loop through each pk4 in reverse (newest to old) */
-		for (int i = search_getsize(psh); i >= 0; i--) {
-			string full = search_getfilename(psh, i);
-
-			if (!full)
-				continue;
-
-			sh = search_begin(filename, SB_FULLPACKAGEPATH | SB_FORCESEARCH | SEARCH_ALLOWDUPES, FALSE, strcat(gamedirname, "/", full));
-			fh = search_fopen(sh, 0);
-
-			/* we found one */
-			if (fh >= 0) {
-				search_end(sh);
-				break;
-			}
-			search_end(sh);
-		}
-		search_end(psh);
-	}
-
-	search_end(gsh);
-	return (fh);
-}
-
 #ifndef WEBMENU
-/** Parses a key/value pair from liblist.gam files */
+/** Parses one game info key/value pair: the <key> of a manifest's "-set gameinfo_<key> <value>" line. */
 static void
 GameLibrary_LibListParse(int targetID, string strKey, string strValue)
 {
@@ -170,20 +93,19 @@ GameLibrary_LibListParse(int targetID, string strKey, string strValue)
 		switch (strtolower(strValue)) {
 		case "multiplayer_only":
 		case "multiplayer only":
+		case "multiplayer":
+		case "multi":
+		case "mp":
 			games[targetID].type = "Multiplayer";
 			break;
 		case "singleplayer_only":
 		case "singleplayer only":
+		case "singleplayer":
+		case "single":
+		case "sp":
 			games[targetID].type = "Singleplayer";
 			break;
-		/* this... kind of sucks, but some games (gearbox) never updated
-		 * their liblist to reflect that they do multiplayer */
-		case "sp":
-		case "single":
-		case "singleplayer":
-		case "mp":
-		case "multi":
-		case "multiplayer":
+		case "both":
 		default:
 			games[targetID].type = "Both";
 		}
@@ -248,112 +170,15 @@ GameLibrary_LibListParse(int targetID, string strKey, string strValue)
 	}
 }
 
-/** Check if a gameinfo.txt for the gamedir contains gameinfo, parse it if present. Returns true on success. */
+/** Check if a manifest for the gamedir contains gameinfo, parse it if present. Returns true on success.
+engineDirIndex is the engine's gamedir index, as getgamedirinfo() counts them. */
 static bool
-GameLibrary_CheckGameInfo(int targetID, string gamedirname)
-{
-	string temp;
-	filestream fh;
-	int ret = 0;
-
-	fh = GameLibrary_FindInGameDir("gameinfo.txt", gamedirname);
-
-	if (fh < 0)
-		fh = GameLibrary_FindInGameDir("GameInfo.txt", gamedirname);
-
-	/* we have found a liblist.gam */
-	if (fh >= 0) {
-		string gamedirchain = "";
-		int braced = 0;
-
-		while ((temp = fgets(fh))) {
-			string token;
-			tokenize_console(temp);
-			token = strtolower(argv(0));
-
-			if (!token)
-				continue;
-
-			if (token == "{")
-				braced++;
-
-			if (token == "}")
-				braced--;
-
-			if (braced == 1) {
-				/* GameInfo */
-				switch (token) {
-				case "game":
-					games[targetID].game = argv(1);
-					break;
-				case "type":
-					GameLibrary_LibListParse(targetID, token, argv(1));
-					break;
-				case "title":
-					games[targetID].title = argv(1);
-					break;
-				case "title2":
-					games[targetID].subtitle = argv(1);
-					break;
-				case "nomodels":
-					games[targetID].nomodels = (int)stof(argv(1));
-					break;
-				case "developer_url":
-					games[targetID].url_info = argv(1);
-					break;
-				}
-			} else if (braced == 2) {
-				/* FileSystem */
-				switch (token) {
-				case "steamappid":
-					break;
-				case "toolsappid":
-					break;
-				}
-			} else if (braced == 3) {
-				/* SearchPaths */
-				switch (token) {
-				case "game":
-					if (argv(1) == "|gameinfo_path|.")
-						gamedirchain = strcat(gamedirchain, games[targetID].gamedir, " ");
-					else
-						gamedirchain = strcat(gamedirchain, argv(1), " ");
-					break;
-				}
-			}
-		}
-
-		/* in gameinfo.txt files, we list game load-order in reverse */
-		if (gamedirchain) {
-			string maindir = games[targetID].gamedir;
-			float c = tokenize(gamedirchain);
-
-			for (float i = c-1; i >= 0; i--) {
-				if (argv(i) == maindir)
-					continue;
-
-				if (i == 0)
-					games[targetID].gamedir = strcat(games[targetID].gamedir, argv(i));
-				else
-					games[targetID].gamedir = strcat(games[targetID].gamedir, argv(i), ";");
-			}
-		}
-
-		fclose(fh);
-		ret = 1;
-	}
-
-	return (ret);
-}
-
-/** Check if a manifest for the gamedir contains gameinfo, parse it if present. Returns true on success. */
-static bool
-GameLibrary_CheckManifest(int targetID, string gamedirname)
+GameLibrary_CheckManifest(int targetID, string gamedirname, float engineDirIndex)
 {
 	int ret = 0;
 	float count;
 
-	string gamedescription = getgamedirinfo(targetID, 2);
+	string gamedescription = getgamedirinfo(engineDirIndex, 2);
 
 	/* no manifest, or no cvar strings inside */
 	if (gamedescription == "") {
@@ -374,30 +199,6 @@ GameLibrary_CheckManifest(int targetID, string gamedirname)
 			GameLibrary_LibListParse(targetID, second, argv(i+1));
 			ret = 1;
 		}
-	}
-
-	return (ret);
-}
-
-/** Check if a liblist exists, and parse it if present. Returns true on success. */
-static bool
-GameLibrary_CheckLibList(int targetID, string gamedirname)
-{
-	string temp;
-	filestream fh;
-	int ret = 0;
-
-	/* first let's see if we've got a liblist.gam just floating inside the gamedir */
-	fh = GameLibrary_FindInGameDir("liblist.gam", gamedirname);
-
-	/* we have found a liblist.gam */
-	if (fh >= 0) {
-		while ((temp = fgets(fh))) {
-			tokenize(temp);
-			GameLibrary_LibListParse(targetID, argv(0), argv(1));
-		}
-		fclose(fh);
-		ret = 1;
 	}
 
 	return (ret);
@@ -523,15 +324,9 @@ GameLibrary_InitCustom(void)
 
 		GameLibrary_SetDefaults(targetID, gamedirname);
 
-		if (GameLibrary_CheckManifest(targetID, gamedirname) == true) {
+		if (GameLibrary_CheckManifest(targetID, gamedirname, targetID) == true) {
 			ncLog("[MENU] Found manifest for %s", gamedirname);
 			games[targetID].info_type = GAMEINFO_MANIFEST;
-		} else if (GameLibrary_CheckGameInfo(targetID, gamedirname) == true) {
-			ncLog("[MENU] Found gameinfo for %s", gamedirname);
-			games[targetID].info_type = GAMEINFO_GITXT;
-		} else if (GameLibrary_CheckLibList(targetID, gamedirname) == true) {
-			ncLog("[MENU] Found liblist for %s", gamedirname);
-			games[targetID].info_type = GAMEINFO_LIBLIST;
 		} else {
 			ncLog("[MENU] Found nothing for %s", gamedirname);
 			games[targetID].info_type = GAMEINFO_NONE;
@@ -591,6 +386,22 @@ GameLibrary_InitCustom(void)
 }
 #endif
 
+/* games[0] is always the running game, but the engine lists gamedirs in its own order and
+   getgamedirinfo(-1) describes the engine's built-in manifest, not <game>.fmf: find ours by name. */
+static float
+GameLibrary_EngineDirIndex(string gamedirname)
+{
+	string dirName;
+
+	for (float i = 0; (dirName = getgamedirinfo(i, 0)) != ""; i++) {
+		if (dirName == gamedirname) {
+			return (i);
+		}
+	}
+
+	return (-1);
+}
+
 void
 GameLibrary_Init(void)
 {
@@ -609,15 +420,9 @@ GameLibrary_Init(void)
 
 	/* only run this when not in web-client mode */
 #ifndef WEBMENU
-	if (GameLibrary_CheckManifest(targetID, gamedirname) == 1) {
+	if (GameLibrary_CheckManifest(targetID, gamedirname, GameLibrary_EngineDirIndex(gamedirname)) == 1) {
 		ncLog("[MENU] Found manifest for %s", gamedirname);
 		games[targetID].info_type = GAMEINFO_MANIFEST;
-	} else if (GameLibrary_CheckGameInfo(targetID, gamedirname) == 1) {
-		ncLog("[MENU] Found gameinfo for %s", gamedirname);
-		games[targetID].info_type = GAMEINFO_GITXT;
-	} else if (GameLibrary_CheckLibList(targetID, gamedirname) == 1) {
-		ncLog("[MENU] Found liblist for %s", gamedirname);
-		games[targetID].info_type = GAMEINFO_LIBLIST;
 	} else {
 		ncLog("[MENU] Found nothing for %s", gamedirname);
 		games[targetID].info_type = GAMEINFO_NONE;
@@ -754,14 +559,7 @@ GameLibrary_Activate(int gameID)
 
 	if (games[gameID].info_type == GAMEINFO_MANIFEST)
 		localcmd(sprintf("gamedir %s %s.fmf\nfs_changegame %s -\n", games[gameID].gamedir, games[gameID].gamedir, games[gameID].gamedir));
-	else if (games[gameID].info_type == GAMEINFO_LIBLIST) {
-		/* some games/mods inherit other directories */
-		if (games[gameID].fallback_dir) {
-			localcmd(sprintf("gamedir \"%s;%s;%s\"\n", games[gameID].base_dir, games[gameID].fallback_dir, games[gameID].gamedir));
-		} else {
-			localcmd(sprintf("gamedir \"%s;%s\"\n", games[gameID].base_dir, games[gameID].gamedir));
-		}
-	} else
+	else
 		localcmd(sprintf("gamedir \"%s;%s\"\n", games[gameID].base_dir, games[gameID].gamedir));
 
 	localcmd("stopmusic\nsnd_restart\nwait\nvid_reload\n");

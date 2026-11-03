@@ -91,7 +91,7 @@ Will play a music track that loops.
 void Music_ParseLoop(string parm);
 
 /** Called once when the menu is initialized.
-Will start playing whatever track is defined in the manifest or liblist file. */
+Will start playing whatever track is defined in the game's manifest. */
 void Music_MenuStart(void);
 
 /** @} */ // end of music

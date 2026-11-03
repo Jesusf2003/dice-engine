@@ -56,16 +56,6 @@ CMD_TraceMaterial(void)
 }
 
 static void
-CMD_AddBot(void)
-{
-	string botProfile = strtolower(argv(1));
-	float teamValue = stof(argv(2));
-	float spawnDelay = stof(argv(3));
-	string newName = argv(4);
-	Bot_AddBot_f(botProfile, teamValue, spawnDelay, newName);
-}
-
-static void
 CMD_KillClass(void)
 {
 	string targetClass;
@@ -318,21 +308,6 @@ Cmd_ParseServerCommand(void)
 	case "addon":
 		CMD_Addon_f();
 		break;
-	case "addBot":
-		CMD_AddBot();
-		break;
-	case "killAllBots":
-		Bot_KillAllBots();
-		break;
-	case "kickAllBots":
-		Bot_KickAllBots();
-		break;
-	case "resetAllBotsGoals":
-		Bot_ResetAllBotsGoals();
-		break;
-	case "listBotProfiles":
-		Bot_ListBotProfiles_f();
-		break;
 	case "killClass":
 		CMD_KillClass();
 		break;
@@ -366,11 +341,9 @@ Cmd_ParseServerCommand(void)
 	case "propSpawn":
 		CMD_PropSpawn();
 		break;
-#ifdef BOT_INCLUDED
 	case "way":
 		ncNodeEditor::Cmd();
 		break;
-#endif
 	case "listEntityDef":
 		EntityDef_DebugList();
 		break;

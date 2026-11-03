@@ -532,15 +532,10 @@ Cmd_Parse(string sCMD)
 		break;
 
 	/* client aliases for server commands */
-	case "addBot":
-	case "kickAllBots":
-	case "killAllBots":
-	case "resetAllBotsGoals":
 	case "killClass":
 	case "killMovables":
 	case "trigger":
 	case "input":
-	case "listBotProfiles":
 	case "listMapTweaks":
 	case "listTargets":
 	case "teleport":
@@ -597,23 +592,8 @@ Cmd_Parse(string sCMD)
 		break;
 
 	/* can be overriden as well */
-	case "showClassSelectionMenu":
-		VGUI_ShowClassSelectionMenu(userinfo.GetInteger(pSeat->m_ePlayer, "*team"));
-		break;
-	case "showTeamSelectionMenu":
-		VGUI_ShowTeamSelectionMenu();
-		break;
-	case "showMOTD":
-		VGUI_ShowMOTD();
-		break;
 	case "showModelSpawner":
 		VGUI_ModelSpawner();
-		break;
-	case "showPlayerList":
-		VGUI_PlayerList();
-		break;
-	case "showServerInfo":
-		VGUI_ShowServerInfo();
 		break;
 	case "reloadClientLocale":
 		Locale_Reload();
@@ -637,21 +617,14 @@ void
 Cmd_Init(void)
 {
 	InitStart();
-	registercommand("showClassSelectionMenu");
-	registercommand("showTeamSelectionMenu");
-	registercommand("showMOTD");
 	registercommand("showModelSpawner");
-	registercommand("showPlayerList");
-	registercommand("showServerInfo");
 	registercommand("showEditor");
 	registercommand("showSunEditor");
 
 	/* developer/debug commands */
-	registercommand("killAllBots");
 	registercommand("killClass");
 	registercommand("killMovables");
 	registercommand("listAmmo");
-	registercommand("listBotProfiles");
 	registercommand("listClientEntityDef");
 	registercommand("listClientSoundDef");
 	registercommand("listEntityData");
@@ -673,11 +646,8 @@ Cmd_Init(void)
 	registercommand("traceMaterial");
 
 	/* server commands */
-	registercommand("addBot");
-	registercommand("kickAllBots");
 	registercommand("addon");
 	registercommand("input");
-	registercommand("resetAllBotsGoals");
 	registercommand("respawnEntities");
 	registercommand("spawnDef");
 	registercommand("teleport");

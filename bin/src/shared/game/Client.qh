@@ -29,7 +29,7 @@ and spectating clients alike.
 
 @ingroup baseclass
 */
-class ncClient:ncBot
+class ncClient:ncActor
 {
 public:
 	void ncClient(void);

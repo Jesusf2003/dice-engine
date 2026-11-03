@@ -127,7 +127,6 @@ string __fullspawndata;
 #include "input/XRSpace.qh"
 #include "input/XRInput.qh"
 #include "input/XRManager.qh"
-#include "../botlib/Bot.qh"
 #include "game/Client.qh"
 #include "game/Spectator.qh"
 #include "physics/pmove.qh"
@@ -526,7 +525,7 @@ textfile_to_string(string filename)
 	return fileContents;
 }
 
-/* moved from src/botlib/route.qc */
+/* jump arc helper, also used by trigger_push */
 /* Get's a velocity vector with which we can successfully jump from one place to another */
 vector
 Route_GetJumpVelocity(vector vecFrom, vector vecTo, float flGravMod)

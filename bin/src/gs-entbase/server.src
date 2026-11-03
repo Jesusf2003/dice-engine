@@ -65,12 +65,9 @@ server/multisource.qc
 server/game_counter.qc
 server/game_counter_set.qc
 server/game_end.qc
-server/game_team_master.qc
 server/game_player_equip.qc
 server/game_player_hurt.qc
-server/game_player_team.qc
 server/game_score.qc
-server/game_team_set.qc
 server/game_text.qc
 server/game_zone_player.qc
 server/gibshooter.qc
@@ -150,7 +147,4 @@ server/trigger_random.qc
 server/trigger_relay.qc
 server/trigger_teleport.qc
 server/trigger_use.qc
-server/trigger_capture_area.qc
-server/trigger_capture_point.qc
-server/team_control_point.qc
 #endlist

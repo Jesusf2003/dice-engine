@@ -314,26 +314,6 @@ ncNodeEditor::HelperSpawns()
 	}
 }
 
-void
-ncNodeEditor::GoToPoint(entity pl)
-{
-	vector vecSrc;
-	makevectors(pl.v_angle);
-	vecSrc = pl.origin + pl.view_ofs;
-	traceline(vecSrc, vecSrc + (v_forward * 4096), FALSE, pl);
-	print(sprintf("Telling all bots to go to %v\n", trace_endpos));
-
-	for (entity a = world; (a = next.Player(a));) {
-		if (clienttype(a) != CLIENTTYPE_REAL) {
-			ncBot targ;
-			targ = (ncBot)a;
-			targ.RouteClear();
-			targ.RouteToPosition(pl.origin);
-			print(sprintf("Told bot to go to %v\n", trace_endpos));
-		}
-	}
-}
-
 bool
 ncNodeEditor::SaveFile(string filename)
 {
@@ -627,9 +607,6 @@ ncNodeEditor::Cmd(void)
 	}
 
 	switch (argv(1)) {
-	case "goto":
-		ncNodeEditor::GoToPoint(self);
-		break;
 	case "autolink":
 		ncNodeEditor::AutoLink(ncNodeEditor::FindClosestNode(self.origin));
 		break;

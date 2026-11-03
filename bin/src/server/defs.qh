@@ -41,8 +41,6 @@
 #include "Schedule.qh"
 #include "SessionManager.qh"
 
-#include "CapturePoint.qh"
-#include "CaptureItem.qh"
 #include "Auth.qh"
 
 /* helper macros */

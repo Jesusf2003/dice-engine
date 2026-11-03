@@ -17,22 +17,28 @@ You can dispatch [console](@ref console) commands to be executed once the client
 
 ## Mod/Game Setup
 
-For mods to show up in the "Custom Game" menu, Nuclide has to either find a `liblist.gam` file, a [FTE-specific](https://www.fteqw.org/) manifest
-file, or , or a [Source Engine](https://web.archive.org/web/20110724220714/http://source.valvesoftware.com/) styled `GameInfo.txt` inside the respective mod directory.
-
-It'll scan [resource archives](@ref archives), as well as loose files in the mod directory,
-however it will *not search inside any sub-directories*.
-
-A liblist.gam file can look something like this:
+A game describes itself (title, start map, singleplayer/multiplayer, ...) in its [FTE](https://www.fteqw.org/)
+manifest, `<game>.fmf` next to the game directory, with one `-set gameinfo_<key> <value>` line per setting.
+`base.fmf` looks like this:
 
 ```
-  game "My Cool Mod"
-  version "1.0"
-  startmap "e1m1"
-  trainingmap "traininglevel"
+FTEMANIFEST 1
+GAME quake
+GAMEDIR base
+
+-set gameinfo_game "Nuclide II: Mayhem"
+-set gameinfo_title "Mayhem"
+-set gameinfo_type "singleplayer_only"
+-set gameinfo_startmap "starting_demo"
+-set gameinfo_trainingmap "dev"
+-set gameinfo_menumap "background01"
 ```
 
-You can find the types of key/value pairs a game can use to identify itself in GameLibrary_LibListParse()
-under `src/platform/gamelibrary.qc`.
+`gameinfo_type` takes `singleplayer` (or `singleplayer_only`), `multiplayer` (or `multiplayer_only`)
+or `both`, which is also the default.
+You can find all the keys in GameLibrary_LibListParse() under `src/platform/gamelibrary.qc`.
+
+A game directory without a manifest, or a manifest without `gameinfo_` lines, gets placeholder values
+(both singleplayer and multiplayer, no title). GoldSrc `liblist.gam` and Source `GameInfo.txt` files are not read.
 
 Those settings alone can alter quite a bit of the menu options and branding/presentation of your game.

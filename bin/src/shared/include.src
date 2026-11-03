@@ -54,5 +54,4 @@ system/api.qc
 input/XRSpace.qc
 input/XRInput.qc
 input/XRManager.qc
-../botlib/Bot.qc
 #endlist

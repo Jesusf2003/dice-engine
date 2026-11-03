@@ -1196,7 +1196,7 @@ ncActor::RouteClear(void)
 		return;
 	}
 
-	m_pathfindingCurrentNode = BOTROUTE_END;
+	m_pathfindingCurrentNode = ROUTE_END;
 	m_pathfindingNodeCount = 0i;
 
 	if (m_pathfindingGraph) {

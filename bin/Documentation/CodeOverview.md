@@ -18,6 +18,10 @@ When we build these with the **fteqcc** compiler, we will get three files:
 In the source code tree of Nuclide itself, you'll find all the core entry functions that
 the engine calls in a file called `entry.qc` which exists in each sub-module its directory.
 
+The menu is the exception: the SDK has no menu of its own. Each game builds `menu.dat` from its
+`src/menu/`, either on top of MenuKit (`src/menukit/`) or with its own entry points like `base` does.
+See @ref menus.
+
 However, you probably don't want to modify the Nuclide `./src/...` tree directly (unless you got a good reason) and want to focus on your own tree.
 
 A minimal basis you can copy and paste can be found under `./base/` which implements a very minimal game. You can walk around, jump and even shoot a projectile or two.

@@ -1,9 +1,0 @@
-#define BOT_INCLUDED
-
-#includelist
-defs.qh
-profiles.qc
-chat.qc
-combat.qc
-cmd.qc
-#endlist
