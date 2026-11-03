@@ -22,7 +22,7 @@ svonly 0
 // whether this game has a client-side progs
 cldll 1
 // if we're singleplayer, multiplayer or both
-type "Both"
+type "Singleplayer"
 // minimum game-revision required to play
 minversion 0
 // if we should show player model selection in the multiplayer options
