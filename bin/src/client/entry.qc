@@ -47,6 +47,17 @@ CSQC_UpdateSeat(void)
 	g_view = g_viewSeats[s];
 }
 
+/* Games with a scoreboard (multiplayer) implement these; the defaults draw nothing. */
+__weak void
+Scores_Init(void)
+{
+}
+
+__weak void
+Scores_Draw(void)
+{
+}
+
 /** Entry function that is required by the engine.
 Called once when the csprogs.dat file is loaded upon loading our client.
 Also called when map changes happen.
@@ -238,7 +249,9 @@ CSQC_Update2D(float w, float h, bool focus)
 	ncPlayer cl = (ncPlayer)pSeat->m_ePlayer;
 	self = cl;
 
-	if (Util_GetMaxPlayers() > 1 && !VGUI_Active() && (Client_InIntermission() || (!cl.IsFakeSpectator() && cl.IsDead()))) {
+	bool isSingleplayer = (serverinfo.GetString("mode") == "singleplayer");
+
+	if (Util_GetMaxPlayers() > 1 && !isSingleplayer && !VGUI_Active() && (Client_InIntermission() || (!cl.IsFakeSpectator() && cl.IsDead()))) {
 		HUD_DrawIntermission();
 		Textmenu_Draw();
 		Scores_Draw();

@@ -29,8 +29,7 @@ public:
 	virtual bool Input(float, float, float, float);
 };
 
-void
-vguiView::vguiView(void)
+void vguiView::vguiView(void)
 {
 }
 

@@ -75,7 +75,7 @@ Font_Load(string strFile, font_s &fntNew)
 				break;
 			case "size_bitmap":
 				if (autocvar(font_bitmapOnly, 0) == 1) {
-					float segments = tokenize(argv(1));
+					// float segments = tokenize(argv(1));
 					
 					if (segments == 2) {
 						fntNew.iScaleX = (int)stof(argv(0));

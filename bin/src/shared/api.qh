@@ -670,8 +670,7 @@ setorigin_safe(entity target, vector testorg)
 	setorigin(target, testorg);
 }
 
-__variant
-linkToSharedProgs(string funcName)
+__variant linkToSharedProgs(string funcName)
 {
 	static void empty(void)
 	{
@@ -688,8 +687,7 @@ linkToSharedProgs(string funcName)
 	}
 }
 
-void
-_shared_main(void)
+void _shared_main(void)
 {
 	ammo.NameForNum = linkToSharedProgs("SHPF_ammo_NameForNum");
 	ammo.NumForName = linkToSharedProgs("SHPF_ammo_NumForName");

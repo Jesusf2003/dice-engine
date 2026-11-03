@@ -173,21 +173,29 @@ btn_quit_cancel(void)
 }
 
 /* Init */
+/* singleplayer_only games drop the Multiplayer button; the buttons (and help labels) above it
+   move down one row so the column stays anchored at Quit */
+bool main_showMultiplayer;
+int main_rowShift;
+
 void
 menu_main_init(void)
 {
+	main_showMultiplayer = (GameLibrary_GetInfo(GAMEINFO_TYPE) != "Singleplayer" || GameLibrary_GetInfo(GAMEINFO_GAMEDIR) == "valve");
+	main_rowShift = main_showMultiplayer ? 0 : 28;
+
 	/* Main Menu (Disconnected) */
 	fn_main = spawn(CWidget);
 	main_btnConsole = spawn(CMainButton);
 	main_btnConsole.SetImage(BTN_CONSOLE);
 	main_btnConsole.SetExecute(btn_console);
-	main_btnConsole.SetPos(70,180);
+	main_btnConsole.SetPos(70,180 + main_rowShift);
 	Widget_Add(fn_main, main_btnConsole);
 
 	/* New Game */
 	main_btnNewGame = spawn(CMainButton);
 	main_btnNewGame.SetImage(BTN_NEWGAME);
-	main_btnNewGame.SetPos(70,208);
+	main_btnNewGame.SetPos(70,208 + main_rowShift);
 	/* new game not available in multiplayer_only */
 	if (GameLibrary_GetInfo(GAMEINFO_TYPE) != "Multiplayer")
 		main_btnNewGame.SetExecute(btn_newgame_start);
@@ -196,7 +204,7 @@ menu_main_init(void)
 	/* Training */
 	main_btnTraining = spawn(CMainButton);
 	main_btnTraining.SetImage(BTN_TRAINING);
-	main_btnTraining.SetPos(70,236);
+	main_btnTraining.SetPos(70,236 + main_rowShift);
 	/* some mods actively try to hide the option */
 	if (GameLibrary_GetInfo(GAMEINFO_TRAININGMAP) != "")
 		main_btnTraining.SetExecute(btn_training);
@@ -206,13 +214,13 @@ menu_main_init(void)
 	main_btnConfiguration = spawn(CMainButton);
 	main_btnConfiguration.SetImage(BTN_CONFIG);
 	main_btnConfiguration.SetExecute(btn_configuration_start);
-	main_btnConfiguration.SetPos(70,264);
+	main_btnConfiguration.SetPos(70,264 + main_rowShift);
 	Widget_Add(fn_main, main_btnConfiguration);
 
 	/* Load Game */
 	main_btnLoadGame = spawn(CMainButton);
 	main_btnLoadGame.SetImage(BTN_LOADGAME);
-	main_btnLoadGame.SetPos(70,292);
+	main_btnLoadGame.SetPos(70,292 + main_rowShift);
 	/* disable in multiplayer_only */
 	if (GameLibrary_GetInfo(GAMEINFO_TYPE) != "Multiplayer")
 		main_btnLoadGame.SetExecute(btn_loadgame_start);
@@ -222,10 +230,9 @@ menu_main_init(void)
 	main_btnMultiplayer = spawn(CMainButton);
 	main_btnMultiplayer.SetImage(BTN_MULTIPLAYER);
 	main_btnMultiplayer.SetPos(70,320);
-	/* disable when it's singleplayer_only */
-	if (GameLibrary_GetInfo(GAMEINFO_TYPE) != "Singleplayer" || GameLibrary_GetInfo(GAMEINFO_GAMEDIR) == "valve")
-		main_btnMultiplayer.SetExecute(btn_multiplayer_start);
-	Widget_Add(fn_main, main_btnMultiplayer);
+	main_btnMultiplayer.SetExecute(btn_multiplayer_start);
+	if (main_showMultiplayer)
+		Widget_Add(fn_main, main_btnMultiplayer);
 
 	/* Custom game */
 	main_btnCustomGame = spawn(CMainButton);
@@ -275,20 +282,20 @@ menu_main_init(void)
 	main_btn2Console = spawn(CMainButton);
 	main_btn2Console.SetImage(BTN_CONSOLE);
 	main_btn2Console.SetExecute(btn_console);
-	main_btn2Console.SetPos(70,180);
+	main_btn2Console.SetPos(70,180 + main_rowShift);
 	Widget_Add(fn_main2, main_btn2Console);
 
 	/* Resume game */
 	main_btn2Resume = spawn(CMainButton);
 	main_btn2Resume.SetImage(BTN_RESUMEGAME);
 	main_btn2Resume.SetExecute(btn_resume);
-	main_btn2Resume.SetPos(70,208);
+	main_btn2Resume.SetPos(70,208 + main_rowShift);
 	Widget_Add(fn_main2, main_btn2Resume);
 
 	/* New Game */
 	main_btn2NewGame = spawn(CMainButton);
 	main_btn2NewGame.SetImage(BTN_NEWGAME);
-	main_btn2NewGame.SetPos(70,236);
+	main_btn2NewGame.SetPos(70,236 + main_rowShift);
 	/* disable in multiplayer_only */
 	if (GameLibrary_GetInfo(GAMEINFO_TYPE) != "Multiplayer")
 		main_btn2NewGame.SetExecute(btn_newgame_start);
@@ -299,20 +306,20 @@ menu_main_init(void)
 	main_btn2Training.SetImage(BTN_TRAINING);
 	if (GameLibrary_GetInfo(GAMEINFO_TRAININGMAP) != "")
 		main_btn2Training.SetExecute(btn_training);
-	main_btn2Training.SetPos(70,264);
+	main_btn2Training.SetPos(70,264 + main_rowShift);
 	Widget_Add(fn_main2, main_btn2Training);
 
 	/* Configuration */
 	main_btn2Configuration = spawn(CMainButton);
 	main_btn2Configuration.SetImage(BTN_CONFIG);
 	main_btn2Configuration.SetExecute(btn_configuration_start);
-	main_btn2Configuration.SetPos(70,292);
+	main_btn2Configuration.SetPos(70,292 + main_rowShift);
 	Widget_Add(fn_main2, main_btn2Configuration);
 
 	/* Save/Load */
 	main_btn2LoadGame = spawn(CMainButton);
 	main_btn2LoadGame.SetImage(BTN_SAVELOAD);
-	main_btn2LoadGame.SetPos(70,320);
+	main_btn2LoadGame.SetPos(70,320 + main_rowShift);
 	/* disable in multiplayer_only */
 	if (GameLibrary_GetInfo(GAMEINFO_TYPE) != "Multiplayer")
 		main_btn2LoadGame.SetExecute(btn_loadgame_start);
@@ -322,9 +329,9 @@ menu_main_init(void)
 	main_btn2Multiplayer = spawn(CMainButton);
 	main_btn2Multiplayer.SetImage(BTN_MULTIPLAYER);
 	main_btn2Multiplayer.SetPos(70,348);
-	if (GameLibrary_GetInfo(GAMEINFO_TYPE) != "Singleplayer" || GameLibrary_GetInfo(GAMEINFO_GAMEDIR) == "valve")
-		main_btn2Multiplayer.SetExecute(btn_multiplayer_start);
-	Widget_Add(fn_main2, main_btn2Multiplayer);
+	main_btn2Multiplayer.SetExecute(btn_multiplayer_start);
+	if (main_showMultiplayer)
+		Widget_Add(fn_main2, main_btn2Multiplayer);
 
 	/* Custom game */
 	main_btn2CustomGame = spawn(CMainButton);
@@ -354,17 +361,18 @@ menu_main_draw(void)
 {
 	if (clientstate() == 2 && !g_background) {
 		Widget_Draw(fn_main2);
-		WLabel_AtHeight(235, 216, m_reslbl[IDS_MAIN_RETURNHELP], HELPTXT_SIZE,
+		WLabel_AtHeight(235, 216 + main_rowShift, m_reslbl[IDS_MAIN_RETURNHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
-		WLabel_AtHeight(235, 244, m_reslbl[IDS_MAIN_NEWGAMEHELP], HELPTXT_SIZE,
+		WLabel_AtHeight(235, 244 + main_rowShift, m_reslbl[IDS_MAIN_NEWGAMEHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
-		WLabel_AtHeight(235, 272, m_reslbl[IDS_MAIN_TRAININGHELP], HELPTXT_SIZE,
+		WLabel_AtHeight(235, 272 + main_rowShift, m_reslbl[IDS_MAIN_TRAININGHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
-		WLabel_AtHeight(235, 300, m_reslbl[IDS_MAIN_CONFIGUREHELP], HELPTXT_SIZE,
+		WLabel_AtHeight(235, 300 + main_rowShift, m_reslbl[IDS_MAIN_CONFIGUREHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
-		WLabel_AtHeight(235, 328, m_reslbl[IDS_MAIN_LOADSAVEHELP], HELPTXT_SIZE,
+		WLabel_AtHeight(235, 328 + main_rowShift, m_reslbl[IDS_MAIN_LOADSAVEHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
-		WLabel_AtHeight(235, 356, m_reslbl[IDS_MAIN_MULTIPLAYERHELP], HELPTXT_SIZE,
+		if (main_showMultiplayer)
+			WLabel_AtHeight(235, 356, m_reslbl[IDS_MAIN_MULTIPLAYERHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
 		WLabel_AtHeight(235, 384, m_reslbl[IDS_MAIN_CUSTOMHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
@@ -403,15 +411,16 @@ menu_main_draw(void)
 		}
 #endif
 		Widget_Draw(fn_main);
-		WLabel_AtHeight(235, 216, m_reslbl[IDS_MAIN_NEWGAMEHELP], HELPTXT_SIZE,
+		WLabel_AtHeight(235, 216 + main_rowShift, m_reslbl[IDS_MAIN_NEWGAMEHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
-		WLabel_AtHeight(235, 244, m_reslbl[IDS_MAIN_TRAININGHELP], HELPTXT_SIZE,
+		WLabel_AtHeight(235, 244 + main_rowShift, m_reslbl[IDS_MAIN_TRAININGHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
-		WLabel_AtHeight(235, 272, m_reslbl[IDS_MAIN_CONFIGUREHELP], HELPTXT_SIZE,
+		WLabel_AtHeight(235, 272 + main_rowShift, m_reslbl[IDS_MAIN_CONFIGUREHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
-		WLabel_AtHeight(235, 300, m_reslbl[IDS_MAIN_LOADHELP], HELPTXT_SIZE,
+		WLabel_AtHeight(235, 300 + main_rowShift, m_reslbl[IDS_MAIN_LOADHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
-		WLabel_AtHeight(235, 328, m_reslbl[IDS_MAIN_MULTIPLAYERHELP], HELPTXT_SIZE,
+		if (main_showMultiplayer)
+			WLabel_AtHeight(235, 328, m_reslbl[IDS_MAIN_MULTIPLAYERHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);
 		WLabel_AtHeight(235, 356, m_reslbl[IDS_MAIN_CUSTOMHELP], HELPTXT_SIZE,
 						col_help,1.0f, 0, font_label);

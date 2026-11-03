@@ -37,60 +37,51 @@ private:
 	vguiScrollBar m_distanceSlider;
 };
 
-void
-ncSunEdit::ncSunEdit(void)
+void ncSunEdit::ncSunEdit(void)
 {
 
 }
 
-void
-ncSunEdit::RedColorChanged(void)
+void ncSunEdit::RedColorChanged(void)
 {
 	float normalizedRedValue = (float)m_redColorSlider.GetValue();
 	g_sun.SetRedColor(normalizedRedValue);
 }
 
-void
-ncSunEdit::GreenColorChanged(void)
+void ncSunEdit::GreenColorChanged(void)
 {
 	float normalizedGreenValue = (float)m_greenColorSlider.GetValue();
 	g_sun.SetGreenColor(normalizedGreenValue);
 }
 
-void
-ncSunEdit::BlueColorChanged(void)
+void ncSunEdit::BlueColorChanged(void)
 {
 	float normalizedBlueValue = (float)m_blueColorSlider.GetValue();
 	g_sun.SetBlueColor(normalizedBlueValue);
 }
 
-void
-ncSunEdit::PitchChanged(void)
+void ncSunEdit::PitchChanged(void)
 {
 	g_sun.SetPitch((float)m_pitchSlider.GetValue() - 180.0f);
 }
 
-void
-ncSunEdit::YawChanged(void)
+void ncSunEdit::YawChanged(void)
 {
 	g_sun.SetYaw((float)m_yawSlider.GetValue() - 180.0f);
 }
 
-void
-ncSunEdit::RollChanged(void)
+void ncSunEdit::RollChanged(void)
 {
 	g_sun.SetRoll((float)m_rollSlider.GetValue() - 180.0f);
 }
 
-void
-ncSunEdit::DistanceChanged(void)
+void ncSunEdit::DistanceChanged(void)
 {
 	g_sun.SetShadowDistance((float)m_distanceSlider.GetValue());
 }
 
 
-void
-ncSunEdit::Spawned(void)
+void ncSunEdit::Spawned(void)
 {
 	super::Spawned();
 
@@ -159,8 +150,7 @@ ncSunEdit::Spawned(void)
 	Reposition();
 }
 
-void
-ncSunEdit::Reposition(void)
+void ncSunEdit::Reposition(void)
 {
 	m_redColorSlider.SetPos([2,16]);
 	m_greenColorSlider.SetPos(m_redColorSlider.GetPos() + [32 + 2, 0]);
@@ -174,8 +164,7 @@ ncSunEdit::Reposition(void)
 }
 
 /* Called by `showSunEditor` command */
-void
-VGUI_ShowSunEditor(void)
+void VGUI_ShowSunEditor(void)
 {
 	static bool initialized;
 	static ncSunEdit winEditor;

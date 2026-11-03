@@ -25,7 +25,7 @@ void UI_Options_Show ( void )
 	static vguiButton btnApply;
 	static vguiButton btnOK;
 
-	static vguiButton tabMultiplayer;
+	// static vguiButton tabMultiplayer;
 	static vguiButton tabMouse;
 	static vguiButton tabKeyboard;
 	static vguiButton tabAudio;
@@ -139,17 +139,17 @@ void UI_Options_Show ( void )
 		winServers.SetSize( '512 406' );
 		winServers.SetIcon( "gfx/icon16/cog" );
 
-		tabMultiplayer = spawn( vguiButton );
-		tabMultiplayer.SetTitle( "Multiplayer" );
-		tabMultiplayer.SetIcon( "gfx/icon16/vcard" );
-		tabMultiplayer.SetPos( [8,32] );
-		tabMultiplayer.SetFunc( Multiplayer_Show );
+		// tabMultiplayer = spawn( vguiButton );
+		// tabMultiplayer.SetTitle( "Multiplayer" );
+		// tabMultiplayer.SetIcon( "gfx/icon16/vcard" );
+		// tabMultiplayer.SetPos( [8,32] );
+		// tabMultiplayer.SetFunc( Multiplayer_Show );
 
-		tabKeyboard = spawn( vguiButton );
-		tabKeyboard.SetTitle( "Keyboard" );
-		tabKeyboard.SetIcon( "gfx/icon16/keyboard" );
-		tabKeyboard.SetPos( tabMultiplayer.GetPos() + [tabMultiplayer.GetWidth() + 8, 0] );
-		tabKeyboard.SetFunc( Keyboard_Show );
+		// tabKeyboard = spawn( vguiButton );
+		// tabKeyboard.SetTitle( "Keyboard" );
+		// tabKeyboard.SetIcon( "gfx/icon16/keyboard" );
+		// tabKeyboard.SetPos( tabMultiplayer.GetPos() + [tabMultiplayer.GetWidth() + 8, 0] );
+		// tabKeyboard.SetFunc( Keyboard_Show );
 
 		tabMouse = spawn( vguiButton );
 		tabMouse.SetTitle( "Mouse" );
@@ -267,7 +267,7 @@ void UI_Options_Show ( void )
 		winServers.Add( btnOK );
 		winServers.Add( btnCancel );
 		winServers.Add( btnApply );
-		winServers.Add( tabMultiplayer );
+		// winServers.Add( tabMultiplayer );
 		winServers.Add( tabKeyboard );
 		winServers.Add( tabMouse );
 		winServers.Add( tabVideo );
