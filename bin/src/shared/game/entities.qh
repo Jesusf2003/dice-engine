@@ -52,39 +52,12 @@ typedef enum
 	ENT_RAGDOLL, /**< of type ncRagdoll */
 	ENT_SPECTATOR,	/**< of type ncSpectator */
 	ENT_PORTAL,		/**< of type ncPortal */
+	ENT_CASCADELIGHT, /**< of type ncCascadeLight */
 	ENT_AMBIENTSOUND,	/**< of type ambient_generic */
-	ENT_BEAM,	/**< of type env_beam */
-	ENT_FUNNEL, /**< of type env_funnel */
-	ENT_SMOKER, /**< of type env_smoker */
-	ENT_DLIGHT,	/**< of type light_dynamic */
-	ENT_PROJECTEDTEXTURE, /**< of type env_projectedtexture */
-	ENT_SPOTLIGHT, /**< of type point_spotlight */
-	ENT_FOG,			/**< of type env_fog */
-	ENT_STEAM,	/**< of type env_steam */
-	ENT_RAIN,	/**< of type env_rain */
-	ENT_FOGCONTROLLER, /**< of type env_fog_controller */
-	ENT_CASCADELIGHT, /**< of type env_cascade_light */
-	ENT_LASER,	/**< of type env_laser */
-	ENT_PARTSYSTEM,	/**< of type info_particle_system */
-	ENT_SPRITE,	/**< of type env_sprite */
-	ENT_GLOW, /**< of type env_glow */
 	ENT_SPRAY,	/**< of type ncSpraylogo */
 	ENT_DECAL,	/**< of type ncDecal */
-	ENT_OLDCAMERA,	/**< of type trigger_camera */
-	ENT_MONITOR,	/**< of type func_monitor */
 	ENT_VEHICLE,	/**< Reserved. */
 	ENT_TRACKTRAIN, /**< of type func_tracktrain */
-	ENT_VEH_BRUSH,	/**< of type func_vehicle */
-	ENT_VEH_TANKMORTAR,	/**< of type func_tankmortar */
-	ENT_VEH_4WHEEL,	/**< of type prop_vehicle_driveable */
-	ENT_PROPROPE,	/**< of type prop_rope */
-	ENT_PHYSROPE,	/**< of type phys_rope */
-	ENT_BUBBLES,	/**< of type env_bubbles */
-	ENT_CONVEYOR,	/**< of type func_conveyor */
-	ENT_WAYPOINT,	/**< of type info_waypoint */
-	ENT_INSTRUCTOR, /**< of type env_instructor_hint */
-	ENT_HUDCOUNTER,	/**< of type env_hudcounter */
-	ENT_PUSH,		/**< of type trigger_push */
 	ENT_SOUNDSCAPE, /**< of type ncSoundScape */
 	ENT_SEPARATOR,	/**< This is a separator. This separator is used by you to add game-specific networked entities. When declaring your own entity-update types, you want the first value to equal ENT_SEPARATOR at all times to ensure you'll not be overriding existing slots. */
 } entupdate_t;

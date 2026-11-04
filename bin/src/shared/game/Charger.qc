@@ -199,9 +199,12 @@ ncCharger::Spawned(void)
 {
 	super::Spawned();
 
-	precache_sound(m_sndFirst);
-	precache_sound(m_sndCharging);
-	precache_sound(m_sndDone);
+	if (m_sndFirst)
+		precache_sound(m_sndFirst);
+	if (m_sndCharging)
+		precache_sound(m_sndCharging);
+	if (m_sndDone)
+		precache_sound(m_sndDone);
 }
 
 void
@@ -307,7 +310,7 @@ ncCharger::OnPlayerUse(void)
 		}
 
 		if (resets) {
-			ScheduleThink(ResetHealth, 30.0f);
+			ScheduleThink(ResetHealth, m_resetDelay);
 		}
 
 		health -= 1;

@@ -239,7 +239,7 @@ ncNodeEditor::LinkFlag(int linkFlag)
 			for (int b = 0i; b < g_nodeGraph[g_way1].m_neighborCount; b++) {
 				if (g_nodeGraph[g_way1].m_neighborList[b].m_nodeID == g_way2) {
 					g_nodeGraph[g_way1].m_neighborList[b].m_travelFlags |= linkFlag;
-					env_message_single(self, "^2Crouch-linked the two points!\n");
+					env_message_single(self, sprintf("^2Set flags %i on the link!\n", linkFlag));
 				}
 			}
 		} else {
@@ -353,6 +353,8 @@ ncNodeEditor::Flush(void)
 	}
 
 	memfree(g_nodeGraph);
+	/* the next CreateNode reallocates from here: don't hand it the freed block */
+	g_nodeGraph = __NULL__;
 	g_nodeCount = 0i;
 }
 
@@ -665,6 +667,7 @@ ncNodeEditor::Cmd(void)
 		for (int i = 0i; i < g_nodeCount; i++) {
 			g_nodeGraph[i].m_origin[0] *= -1;
 		}
+		break;
 	case "flipy":
 		for (int i = 0i; i < g_nodeCount; i++) {
 			g_nodeGraph[i].m_origin[1] *= -1;
@@ -727,38 +730,5 @@ ncNodeEditor::Cmd(void)
 #define NODE_RECT_ALPHA 1.0f
 #define NODE_LINE_ALPHA 0.25f
 
-/* draws debug graphics of our node tree */
-var bool autocvar_r_renderEntityInfo = false;
-var bool autocvar_nav_visualize = false;
-void
-SV_AddDebugPolygons(void)
-{
-	if (autocvar_nav_visualize) {
-		ncNodeEditor::DrawDebugInfo();
-	}
-
-	if (autocvar_r_renderEntityInfo) {
-		makevectors(self.v_angle);
-
-		for (entity s = world; (s = findfloat(s, ::identity, 1));) {
-			ncEntity drawMe = (ncEntity)s;
-			drawMe.DebugDraw();
-		}
-	}
-
-	if (cvar("developer") != 1)
-		return;
-
-	if (!g_nodeCount) {
-		ncNodeEditor::LoadCurrentMapNavMesh();
-	}
-
-#if 1
-	for (entity s = world; (s = find(s, ::classname, "func_tracktrain"));) {
-		func_tracktrain train = (func_tracktrain)s;
-		train.RenderDebugInfo();
-	}
-#endif
-}
 #endif
 

@@ -1,0 +1,93 @@
+/*
+ * Copyright (c) 2023 Vera Visions LLC.
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF MIND, USE, DATA OR PROFITS, WHETHER
+ * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+ * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*/
+
+enumflags
+{
+	ENVCASLIGHT_CHANGED_ACTIVE,
+	ENVCASLIGHT_CHANGED_ANGLE_X,
+	ENVCASLIGHT_CHANGED_ANGLE_Y,
+	ENVCASLIGHT_CHANGED_ANGLE_Z,
+	ENVCASLIGHT_CHANGED_COLOR_X,
+	ENVCASLIGHT_CHANGED_COLOR_Y,
+	ENVCASLIGHT_CHANGED_COLOR_Z,
+	ENVCASLIGHT_CHANGED_DISTANCE,
+};
+
+/** @ingroup baseclass
+Shadowmapped sun: a directional light with cascaded shadow maps, toggled and tuned at
+runtime. A game gives it a map name through an entityDef (e.g. `env_cascade_light`);
+the `showSunEditor` tool previews one on the client.
+
+# KEYS
+- "targetname" : Name
+- "color" : Color of the sun light. Three space separated 0-255 based values.
+- "maxshadowdistance" : Maximum shadow distance from the camera.
+- "uselightenvangles" : When set to 1, the angles are taken from the light_environment in the map.
+- "StartDisabled" : Entity will have to be enabled in order to work when set to 1.
+
+# INPUTS
+- "SetAngles" : Sets the light angle.
+- "LightColor" : Sets the light color. Three space separated 0-255 based values.
+- "Enable" : Enable the entity.
+- "Disable" : Disable the entity.
+- "Toggle" : Toggles between enabled/disabled states.
+*/
+class ncCascadeLight:ncPointTrigger
+{
+public:
+	void ncCascadeLight(void);
+
+#ifdef SERVER
+	virtual float SendEntity(entity,float);
+	virtual void EvaluateEntity(void);
+	virtual void Trigger(entity, triggermode_t);
+	virtual void Respawn(void);
+	virtual void Save(float);
+	virtual void Restore(string,string);
+	virtual void SpawnKey(string,string);
+	virtual void Input(entity, string, string);
+#endif
+
+#ifdef CLIENT
+	virtual void OnRemoveEntity(void);
+	virtual void ReceiveEntity(float,float);
+	virtual void ReloadVideoResources(void);
+	nonvirtual void LightChanged(float);
+#endif
+
+	nonvirtual void SetRedColor(float byteColor);
+	nonvirtual void SetGreenColor(float byteColor);
+	nonvirtual void SetBlueColor(float byteColor);
+	nonvirtual void SetShadowDistance(float shadowDistance);
+
+	nonvirtual void SetPitch(float eulerValue);
+	nonvirtual void SetYaw(float eulerValue);
+	nonvirtual void SetRoll(float eulerValue);
+
+private:
+	NETWORKED_BOOL(m_bLightActive)
+	NETWORKED_VECTOR(m_vecLightColor)
+	NETWORKED_FLOAT(m_flShadowDistance)
+
+#ifdef CLIENT
+	float m_lightHandle;
+#endif
+
+#ifdef SERVER
+	bool m_bUseEnvAngles;
+	bool m_bUseEnvColors;
+#endif
+};

@@ -1,0 +1,34 @@
+/** @file
+Networked entity types of this game. The SDK's own types end at ENT_SEPARATOR
+(src/shared/game/entities.qh); the game's start there. The client reads them in
+ClientGame_EntityUpdate (src/client/main.qc).
+*/
+typedef enum
+{
+	ENT_DLIGHT = ENT_SEPARATOR,	/**< of type light_dynamic */
+	ENT_BEAM,	/**< of type env_beam */
+	ENT_SMOKER, /**< of type env_smoker */
+	ENT_PROJECTEDTEXTURE, /**< of type env_projectedtexture */
+	ENT_FOG,			/**< of type env_fog */
+	ENT_STEAM,	/**< of type env_steam */
+	ENT_RAIN,	/**< of type env_rain */
+	ENT_FOGCONTROLLER, /**< of type env_fog_controller */
+	ENT_LASER,	/**< of type env_laser */
+	ENT_PARTSYSTEM,	/**< of type info_particle_system */
+	ENT_SPRITE,	/**< of type env_sprite */
+	ENT_OLDCAMERA,	/**< of type trigger_camera */
+	ENT_MONITOR,	/**< of type func_monitor */
+	ENT_VEH_BRUSH,	/**< of type func_vehicle */
+	ENT_VEH_4WHEEL,	/**< of type prop_vehicle_driveable */
+	ENT_PROPROPE,	/**< of type prop_rope */
+	ENT_PHYSROPE,	/**< of type phys_rope */
+	ENT_BUBBLES,	/**< of type env_bubbles */
+	ENT_CONVEYOR,	/**< of type func_conveyor */
+	ENT_WAYPOINT,	/**< of type info_waypoint */
+	ENT_INSTRUCTOR, /**< of type env_instructor_hint */
+	ENT_HUDCOUNTER,	/**< of type env_hudcounter */
+	ENT_PUSH,		/**< of type trigger_push */
+	ENT_SPOTLIGHT, /**< of type point_spotlight */
+	ENT_GLOW, /**< of type env_glow */
+	ENT_GAME_SEPARATOR	/**< first free slot */
+} gameEntityUpdate_t;

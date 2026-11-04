@@ -1,3 +1,4 @@
  #includelist
 flags.qh
+entities.qh
 #endlist

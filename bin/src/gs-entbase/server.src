@@ -7,10 +7,6 @@ server/info_null.qc
 server/path_corner.qc
 server/path_track.qc
 server/button_target.qc
-server/cycler.qc
-server/cycler_sprite.qc
-server/cycler_weapon.qc
-server/cycler_wreckage.qc
 server/env_beverage.qc
 server/env_cubemap.qc
 server/env_explosion.qc
@@ -41,7 +37,6 @@ server/func_door_rotating.qc
 server/func_dustmotes.qc
 server/func_group.qc
 server/func_guntarget.qc
-server/func_healthcharger.qc
 server/func_monsterclip.qc
 server/func_mortar_field.qc
 server/func_pendulum.qc
@@ -49,17 +44,13 @@ server/func_physbox.qc
 server/func_plat.qc
 server/func_platrot.qc
 server/func_pushable.qc
-server/func_recharge.qc
 server/func_rot_button.qc
 server/func_rotating.qc
-server/func_tank.qc
-server/func_tankcontrols.qc
 server/func_trackchange.qc
 server/func_trackautochange.qc
 server/func_train.qc
 //server/func_tracktrain.qc
 server/func_traincontrols.qc
-server/func_vehiclecontrols.qc
 server/func_wall_toggle.qc
 server/multisource.qc
 server/game_counter.qc
@@ -104,7 +95,6 @@ server/phys_keepupright.qc
 server/phys_slideconstraint.qc
 server/player_loadsaved.qc
 server/player_weaponstrip.qc
-server/point_camera.qc
 server/point_servercommand.qc
 server/point_trigger.qc
 server/prop_door_rotating.qc

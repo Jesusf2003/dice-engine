@@ -48,21 +48,6 @@ Cmd_ParseClientCommand(ncClient sender, string cmd, int commandArguments)
 		EntityDef_SpawnClassname("player");
 		PutClientInServer();
 		break;
-	case "setpos":
-		printf("%i %S\n", commandArguments, cmd);
-		if (cvar("sv_cheats") == 1) {
-			if (commandArguments == 2) { /* setpos "0 0 0" */
-				setorigin(sender, stov(argv(1)));
-			} else if (commandArguments == 3) {  /* setpos "0 0 0" "0 0 0" */
-				setorigin(sender, stov(argv(1)));
-			} else if (commandArguments == 4) { /* setpos 0 0 0 */
-				setorigin(sender, [stof(argv(1)), stof(argv(2)), stof(argv(3))]);
-			} else if (commandArguments == 7) { /* setpos 0 0 0 0 0 0 */
-				setorigin(sender, [stof(argv(1)), stof(argv(2)), stof(argv(3))]);
-			}
-		}
-
-		break;
 	case "timeleft":
 		string timestring;
 		float timeleft;
@@ -70,25 +55,13 @@ Cmd_ParseClientCommand(ncClient sender, string cmd, int commandArguments)
 		timestring = Util_TimeToString(timeleft);
 		bprint(PRINT_CHAT, sprintf("we have %s minutes remaining", timestring));
 		break;
-	case "listInventory":
-		ncActor_ListInventory(sender);
-		break;
-	case "giveInventoryItem":
-		(ncActor)sender.GiveItem(argv(1));
-		break;
-	case "removeInventoryItem":
-		(ncActor)sender.RemoveItem(argv(1));
-		break;
-	case "removeAllInventoryItems":
-		(ncActor)sender.RemoveAllItems(false);
-		break;
-	case "listAmmo":
-		Ammo_DebugList();
-		break;
 	case "joinTeam":
 		g_grMode.PlayerRequestTeam((ncPlayer)sender, (int)stoi(argv(1)));
 		break;
 	default:
-		clientcommand(sender, cmd);
+		/* developer commands, when the game builds in src/tools */
+		if (Tools_ClientCommand(sender, cmd, commandArguments) == false) {
+			clientcommand(sender, cmd);
+		}
 	}
 }

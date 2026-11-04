@@ -886,6 +886,7 @@ INPUT                  = src/ \
                          Documentation/Filesystem.md \
                          Documentation/Networking.md \
                          Documentation/Waypoints.md \
+                         Documentation/DeveloperTools.md \
                          Documentation/Progs.md \
                          Documentation/Menus.md \
                          Documentation/Classes.md \

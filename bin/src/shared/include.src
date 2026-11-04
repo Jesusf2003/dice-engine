@@ -9,6 +9,7 @@ system/RenderableEntity.qc
 environment/SurfacePropEntity.qc
 environment/BreakableBrush.qc
 environment/Mover.qc
+environment/CascadeLight.qc
 physics/PhysicsConstraint.qc
 physics/PhysicsEntity.qc
 triggers/BrushTrigger.qc

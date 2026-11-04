@@ -1,0 +1,10 @@
+/* Developer tools, client side. A game adds this list to its client progs.src
+   (after src/client/include.src and src/shared/include.src); leaving it out drops
+   the tools, and the SDK falls back to the stubs in src/client/tools.qc. */
+#includelist
+client/vgui_modelspawner.qc
+client/Editor.qc
+client/EditorSun.qc
+client/way.qc
+client/commands.qc
+#endlist

@@ -1,0 +1,35 @@
+// Wall chargers: brushes that refill the player while held "use" on them.
+// The behaviour is the SDK's ncCharger; these only give it a charge type, a
+// capacity (cfg/skill.cfg), a reset time and sounds.
+
+entityDef func_healthcharger
+{
+	"editor_color"		"0 .5 .8"
+	"editor_usage"		"Brush that refills the player's health while used. Recharges 60 seconds after its last use."
+
+	"spawnclass"		"ncCharger"
+	"chargeType"		"health"
+	"charge"			"skill:healthcharger"
+	"resets"			"1"
+	"resetsOnEmpty"		"0"
+	"resetDelay"		"60"
+	"snd_first"			"items/r_item1.wav"
+	"snd_charging"		"items/health1.wav"
+	"snd_done"			"items/itembk2.wav"
+}
+
+entityDef func_recharge
+{
+	"editor_color"		"0 .5 .8"
+	"editor_usage"		"Brush that refills the player's armor while used. Recharges 30 seconds after its last use."
+
+	"spawnclass"		"ncCharger"
+	"chargeType"		"armor"
+	"charge"			"skill:suitcharger"
+	"resets"			"1"
+	"resetsOnEmpty"		"0"
+	"resetDelay"		"30"
+	"snd_first"			"items/armor1.wav"
+	"snd_charging"		"items/suit2.wav"
+	"snd_done"			"items/itembk2.wav"
+}

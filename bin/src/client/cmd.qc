@@ -14,124 +14,8 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-float(vector org, float radius, vector lightcolours, optional float style, optional string cubemapname, optional float pflags) dynamiclight_spawnstatic2 = #0:dynamiclight_spawnstatic;
-
 void Commandmenu_Open(void);
 void Commandmenu_Close(void);
-
-static void
-CMD_testLight(void)
-{
-	float p;
-	string cubeTexture = argv(1);
-
-	if (STRING_SET(cubeTexture)) {
-		p = dynamiclight_spawnstatic2(g_view.GetCameraOrigin(), 512, [1,1,1], 0, cubeTexture);
-		dynamiclight_set(p, LFIELD_ANGLES, g_view.GetCameraAngle());
-		dynamiclight_set(p, LFIELD_FLAGS, LFLAG_NORMALMODE | LFLAG_REALTIMEMODE | LFLAG_SHADOWMAP);
-		dynamiclight_set(p, LFIELD_STYLE, 64);
-	} else {
-		p = dynamiclight_spawnstatic2(g_view.GetCameraOrigin(), 512, [1,1,1], 0);
-		dynamiclight_set(p, LFIELD_STYLE, 2);
-	}
-
-
-}
-
-static void
-CMD_testSpotLight(void)
-{
-	float p;
-	string cubeTexture = argv(1);
-
-	if (STRING_SET(cubeTexture)) {
-		point_spotlight spot = spawn(point_spotlight);
-		spot.SetOrigin(g_view.GetCameraOrigin());
-		spot.SetAngles(g_view.GetCameraAngle());
-		spot.m_iState = 1;
-		spot.SetBeamLength(500.0f);
-		spot.SetBeamWidth(256.0f);
-		spot.SetRenderColor([255,255,255]);
-		spot.SetGlowMaterial("textures/sfx/spot_flare");
-		spot.SetBeamMaterial("textures/sfx/spot_cone");
-		spot.drawmask = MASK_ENGINE;
-		spot.m_nuclideFlags |= VFL_VIDREMOVE;
-		spot.SetLightStyle(64);
-
-		env_glow glow = spawn(env_glow);
-		glow.SetOrigin(g_view.GetCameraOrigin());
-		glow.SetAngles(g_view.GetCameraAngle());
-		glow.m_strMaterial = "textures/sfx/flare1";
-		glow.drawmask = MASK_ENGINE;
-		glow.SetRenderMode(RM_GLOW);
-		glow.ReloadVideoResources();
-		glow.m_nuclideFlags |= VFL_VIDREMOVE;
-	} else {
-		p = dynamiclight_spawnstatic2(g_view.GetCameraOrigin(), 512, [1,1,1], 0);
-		dynamiclight_set(p, LFIELD_STYLE, 2);
-	}
-
-
-}
-
-static void
-CMD_testPointLight(void)
-{
-	makevectors(g_view.GetCameraAngle());
-	traceline(g_view.GetCameraOrigin(), g_view.GetCameraOrigin() + (v_forward * 4096.0f), MOVE_NORMAL, pSeat->m_ePlayer);
-	dynamiclight_spawnstatic2(trace_endpos + (v_forward * -16.0f), 1024, [1,1,1]);
-}
-
-static void
-CMD_dev_modeltest(void)
-{
-	string modelName = argv(1);
-
-	if (STRING_SET(modelName)) {
-		entity mt = spawn();
-		mt.drawmask = MASK_ENGINE;
-		setmodel(mt, argv(1));
-		setsize(mt, [0,0,0], [0,0,0]);
-		setorigin(mt, g_view.GetCameraOrigin());
-		mt.angles = g_view.GetCameraAngle();
-		mt.angles[0] = mt.angles[2] = 0;
-	}
-}
-
-static void
-CMD_dev_sunpos(void)
-{
-	vector sunpos, sunang;
-	vector lepos, leang;
-
-	makevectors(g_view.GetCameraAngle());
-	sunpos = v_forward * -1;
-	sunang = vectoangles(sunpos);
-
-	makevectors(g_view.GetCameraAngle());
-	lepos = v_forward * -1;
-	leang = vectoangles(lepos);
-	leang[1] -= 180;
-	leang[0] *= -1;
-
-	localcmd(sprintf("r_shadows_throwdirection %v\n", sunpos));
-	print(sprintf("env_sun: pitch: %d; angle: %d\n", -sunang[0], sunang[1]));
-	print(sprintf("light_environment: sunangle: %d; pitch: %d\n", leang[1], leang[0]));
-}
-
-static void
-CMD_dev_measure(void)
-{
-	static vector measurepos;
-
-	if (lengthSquared(measurepos) > 0.0f) {
-		measurepos = g_view.GetCameraOrigin();
-		CSQC_Parse_CenterPrint(sprintf( "First marker set at\n%v", measurepos));
-	} else {
-		CSQC_Parse_CenterPrint(sprintf("Distance: %d\n", vlen(measurepos - g_view.GetCameraOrigin())));
-		measurepos = [0,0,0];
-	}
-}
 
 static void
 CMD_vote(void)
@@ -143,45 +27,6 @@ CMD_vote(void)
 	}
 }
 
-static void
-CMD_getpos(void)
-{
-	printf("setpos %v;setang -%v\n", g_view.GetCameraOrigin(), g_view.GetCameraAngle());
-}
-
-static void
-CMD_setang(void)
-{
-    g_view.SetCameraAngle(stov(argv(1)));
-    g_view.SetClientAngle(stov(argv(1)));
-}
-
-static void
-CMD_titles_test(void)
-{
-	GameMessage_Setup(argv(1), 0);
-}
-
-static void
-CMD_way_menu(void)
-{
-	Way_Autoload();
-	Textmenu_Call("WAY_MENU");
-}
-
-static void
-CMD_view_geomtest(void)
-{
-	printf("geomset %s %s\n", argv(1), argv(2));
-	//Weapons_SetGeomset(sprintf("geomset %s %s\n", argv(1), argv(2)));
-}
-
-static void
-CMD_player_geomtest(void)
-{
-	setcustomskin(pSeat->m_ePlayer, "", sprintf("geomset %s %s\n", argv(1), argv(2)));
-}
-
 void
 CMD_Cleardecals(void)
 {
@@ -189,103 +34,6 @@ CMD_Cleardecals(void)
 		ncDecal dcl = (ncDecal)e;
 		dcl.m_strShader = "";
 	}
-}
-
-/* Wishlist: list size and potential vmem usage */
-static void
-CMD_ListModels(void)
-{
-	string tmp;
-	int i = 0i;
-	int actual_count = 0i;
-
-	for (i = -4096; i < 4096; i++) {
-		tmp = modelnameforindex(i);
-
-		if (strlen(tmp) > 1) {
-			printf("%i %s\n", i, tmp);
-			actual_count++;
-		}
-	}
-
-	printf("\t%i total models loaded\n", actual_count);
-}
-
-/* Wishlist: list size and samplerate/bitdepth */
-static void
-CMD_ListSounds(void)
-{
-	string tmp;
-	int i = 0i;
-	int actual_count = 0i;
-	float length;
-	float total_length = 0.0f;
-
-	for (i = 0; i < 4096; i++) {
-		tmp = soundnameforindex(i);
-		length = soundlength(tmp);
-
-		if (strlen(tmp) > 1) {
-			printf("%i %s (%f seconds)\n", i, tmp, length);
-			actual_count++;
-			total_length += length;
-		}
-	}
-	printf("\t%i total samples loaded\n", actual_count);
-	printf("\t%f seconds worth of samples\n", total_length);
-}
-
-static void
-CMD_ListParticles(void)
-{
-	string tmp;
-	int i = 0i;
-	int actual_count = 0i;
-
-	for (i = -4096; i < 4096; i++) {
-		tmp = particleeffectquery(i, 0);
-
-		if (strlen(tmp) > 1) {
-			printf("%i %s\n", i, tmp);
-			actual_count++;
-		}
-	}
-	printf("\t%i total particles loaded\n", actual_count);
-}
-
-static void
-CMD_ListTitles(void)
-{
-	int i = 0i;
-
-	for (i = 0; i < g_titles_count; i++) {
-		printf("%s, (x: %d, y: %d)\n", 
-			g_titles[i].m_strName, g_titles[i].m_flPosX, g_titles[i].m_flPosY);
-		printf("\teffect: %i, fade-in: %f, fade-out: %f\n", 
-			g_titles[i].m_iEffect, g_titles[i].m_flFadeIn, g_titles[i].m_flFadeOut);
-		printf("\thold-time: %f, fx-time: %f\n", 
-			g_titles[i].m_flHoldTime, g_titles[i].m_flFXTime);
-		printf("\tcolor 1: %v, color 2: %v\n", 
-			g_titles[i].m_vecColor1, g_titles[i].m_vecColor2);
-	}
-	printf("\t%i total titles loaded\n", g_titles_count);
-}
-
-static void
-CMD_ListModelFramegroups(void)
-{
-	string modelName = argv(1);
-	float modelIndex = getmodelindex(modelName);
-	string temp = "";
-
-	printf("// model: %S\n", modelName);
-
-	print("typedef enum {\n");
-	for (int i = 0; i < modelframecount(modelIndex); i++) {
-		temp = frametoname(modelIndex, i);
-		printf("\t%s = %i,\n", strtoupper(temp), i);
-	}
-	print("} framegroups_e;\n");
 }
 
 void
@@ -338,53 +86,8 @@ Cmd_Parse(string sCMD)
 		Textmenu_Input(9);
 		break;
 
-	case "listFramegroups":
-		CMD_ListModelFramegroups();
-		break;
-	case "listTitles":
-		CMD_ListTitles();
-		break;
-	case "listModels":
-		CMD_ListModels();
-		break;
-	case "listSounds":
-		CMD_ListSounds();
-		break;
-	case "listParticles":
-		CMD_ListParticles();
-		break;
-	case "listClientSoundDef":
-		SoundDef_DebugList();
-		break;
-	case "listServerSoundDef":
-		localcmd("sv listSoundDef\n");
-		break;
-	case "clearDecals":
-		CMD_Cleardecals();
-		break;
-	case "testLight":
-		CMD_testLight();
-		break;
-	case "testPointLight":
-		CMD_testPointLight();
-		break;
-	case "dev_modeltest":
-		CMD_dev_modeltest();
-		break;
-	case "dev_sunpos":
-		CMD_dev_sunpos();
-		break;
-	case "dev_measure":
-		CMD_dev_measure();
-		break;
 	case "vote":
 		CMD_vote();
-		break;
-	case "getpos":
-		CMD_getpos();
-		break;
-	case "setang":
-		CMD_setang();
 		break;
 	case "callvote":
 		sendevent("CallVote", "s", substring(sCMD, 9, strlen(sCMD)-9));
@@ -394,12 +97,6 @@ Cmd_Parse(string sCMD)
 		break;
 	case "-zoomin":
 		pSeat->m_iZoomed = false;
-		break;
-	case "buildcubemaps":
-		CMap_Build();
-		break;
-	case "titles_test":
-		CMD_titles_test();
 		break;
 	case "+attack2":
 		pSeat->m_iInputAttack2 = true;
@@ -490,17 +187,8 @@ Cmd_Parse(string sCMD)
 	case "-showscores":
 		pSeat->m_iScoresVisible = FALSE;
 		break;
-	case "way_menu":
-		CMD_way_menu();
-		break;
 	case "addChatLine":
 		CSQC_Parse_Print(argv(1), PRINT_CHAT);
-		break;
-	case "view_geomtest":
-		CMD_view_geomtest();
-		break;
-	case "player_geomtest":
-		CMD_player_geomtest();
 		break;
 	case "motd":
 		print(MOTD_GetTextBody());
@@ -531,50 +219,15 @@ Cmd_Parse(string sCMD)
 		pSeat->m_iInputReload = false;
 		break;
 
-	/* client aliases for server commands */
-	case "killClass":
-	case "killMovables":
-	case "trigger":
-	case "input":
-	case "listMapTweaks":
-	case "listTargets":
-	case "teleport":
-	case "teleportToClass":
-	case "respawnEntities":
-	case "spawnDef":
-	case "nodeAdd":
-	case "nodeDel":
-	case "nodeFlags":
-	case "nodeLink":
-	case "nodeRadius":
-	case "nodeOffset":
-	case "nodeUnlink":
-	case "traceMaterial":
-	case "listEntitySpawnData":
-	case "listEntitiesByClass":
-	case "listEntityData":
-	case "listEntitiesByTarget":
+	/* client alias for a server command */
 	case "addon":
 		localcmd(sprintf("sv %s\n", sCMD));
 		break;
-	/* client aliases for client commands */
-	case "setpos":
-	case "listInventory":
-	case "giveInventoryItem":
-	case "removeInventoryItem":
-	case "removeAllInventoryItems":
-	case "listAmmo":
+	/* client alias for a client command */
 	case "joinTeam":
 		localcmd(sprintf("cmd %s\n", sCMD));
 		break;
 
-	case "listClientEntityDef":
-		EntityDef_DebugList();
-		break;
-	case "listEntityDef":
-	case "listServerEntityDef":
-		localcmd("sv listEntityDef\n");
-		break;
 
 	case "bobup":
 		break;
@@ -587,27 +240,14 @@ Cmd_Parse(string sCMD)
 	case "-commandmenu":
 		Commandmenu_Close();
 		break;
-	case "ragdollCreate":
-		ncRagdoll_Create(argv(1));
-		break;
 
 	/* can be overriden as well */
-	case "showModelSpawner":
-		VGUI_ModelSpawner();
-		break;
-	case "reloadClientLocale":
-		Locale_Reload();
-		break;
-	case "showEditor":
-		VGUI_ShowEditor();
-		break;
-	case "showSunEditor":
-		VGUI_ShowSunEditor();
-		break;
-	case "listUserInfo":
-		g_userInfo.DebugPrint();
-		break;
 	default:
+		/* developer commands, when the game builds in src/tools */
+		if (Tools_ConsoleCommand(sCMD) == true) {
+			return (true);
+		}
+
 		return HUD_ConsoleCommand(sCMD);
 	}
 	return (true);
@@ -617,68 +257,9 @@ void
 Cmd_Init(void)
 {
 	InitStart();
-	registercommand("showModelSpawner");
-	registercommand("showEditor");
-	registercommand("showSunEditor");
 
-	/* developer/debug commands */
-	registercommand("killClass");
-	registercommand("killMovables");
-	registercommand("listAmmo");
-	registercommand("listClientEntityDef");
-	registercommand("listClientSoundDef");
-	registercommand("listEntityData");
-	registercommand("listEntityDef");
-	registercommand("listEntitiesByClass");
-	registercommand("listEntitySpawnData");
-	registercommand("listFramegroups");
-	registercommand("listInventory");
-	registercommand("listMapTweaks");
-	registercommand("listModels");
-	registercommand("listParticles");
-	registercommand("listServerEntityDef");
-	registercommand("listServerSoundDef");
-	registercommand("listEntitiesByTarget");
-	registercommand("listSounds");
-	registercommand("listTargets");
-	registercommand("listTitles");
-	registercommand("ragdollCreate");
-	registercommand("traceMaterial");
-
-	/* server commands */
+	/* server admin */
 	registercommand("addon");
-	registercommand("input");
-	registercommand("respawnEntities");
-	registercommand("spawnDef");
-	registercommand("teleport");
-	registercommand("teleportToClass");
-	registercommand("trigger");
-
-	/* nav editing */
-	registercommand("nodeAdd");
-	registercommand("nodeDel");
-	registercommand("nodeFlags");
-	registercommand("nodeLink");
-	registercommand("nodeRadius");
-	registercommand("nodeOffset");
-	registercommand("nodeUnlink");
-
-	registercommand("clearDecals");
-	registercommand("testLight");
-	registercommand("testPointLight");
-	registercommand("getpos");
-	registercommand("setpos");
-	registercommand("setang");
-	registercommand("dev_sentence");
-	registercommand("titles_test");
-	registercommand("buildcubemaps");
-	registercommand("dev_sunpos");
-	registercommand("dev_measure");
-	registercommand("view_geomtest");
-	registercommand("player_geomtest");
-	registercommand("way_menu");
-	registercommand("dev_explode");
-	registercommand("dev_modeltest");
 
 	/* basic actions */
 	registercommand("+attack");
@@ -707,10 +288,6 @@ Cmd_Init(void)
 	registercommand("-leanright");
 	registercommand("weapnext");
 	registercommand("weapprev");
-
-	registercommand("giveInventoryItem");
-	registercommand("removeInventoryItem");
-	registercommand("removeAllInventoryItems");
 
 	/* voting */
 	registercommand("vote");
@@ -758,9 +335,7 @@ Cmd_Init(void)
 	registercommand("-menu_left");
 	registercommand("+menu_right");
 	registercommand("-menu_right");
-	registercommand("reloadClientLocale");
 
-	registercommand("listUserInfo");
 
 	InitEnd();
 }

@@ -89,7 +89,7 @@ int
 ClientGame_ConsoleCommand(void)
 {
 	switch(argv(0)) {
-		default:
+	default:
 		return (0);
 	}
 	return (1);
@@ -112,6 +112,81 @@ int
 ClientGame_EntityUpdate(float id, float new)
 {
 	switch (id) {
+	case ENT_DLIGHT:
+		NSENTITY_READENTITY(light_dynamic, new)
+		break;
+	case ENT_BEAM:
+		NSENTITY_READENTITY(env_beam, new)
+		break;
+	case ENT_SMOKER:
+		NSENTITY_READENTITY(env_smoker, new)
+		break;
+	case ENT_PROJECTEDTEXTURE:
+		NSENTITY_READENTITY(env_projectedtexture, new)
+		break;
+	case ENT_FOG:
+		NSENTITY_READENTITY(env_fog, new)
+		break;
+	case ENT_STEAM:
+		NSENTITY_READENTITY(env_steam, new)
+		break;
+	case ENT_RAIN:
+		NSENTITY_READENTITY(env_rain, new)
+		break;
+	case ENT_FOGCONTROLLER:
+		NSENTITY_READENTITY(env_fog_controller, new)
+		break;
+	case ENT_LASER:
+		NSENTITY_READENTITY(env_laser, new)
+		break;
+	case ENT_PARTSYSTEM:
+		NSENTITY_READENTITY(info_particle_system, new)
+		break;
+	case ENT_SPRITE:
+		NSENTITY_READENTITY(env_sprite, new)
+		break;
+	case ENT_OLDCAMERA:
+		NSENTITY_READENTITY(trigger_camera, new)
+		break;
+	case ENT_MONITOR:
+		NSENTITY_READENTITY(func_monitor, new)
+		break;
+	case ENT_VEH_BRUSH:
+		NSENTITY_READENTITY(func_vehicle, new)
+		break;
+	case ENT_VEH_4WHEEL:
+		NSENTITY_READENTITY(prop_vehicle_driveable, new)
+		break;
+	case ENT_PROPROPE:
+		NSENTITY_READENTITY(prop_rope, new)
+		break;
+	case ENT_PHYSROPE:
+		NSENTITY_READENTITY(phys_rope, new)
+		break;
+	case ENT_BUBBLES:
+		NSENTITY_READENTITY(env_bubbles, new)
+		break;
+	case ENT_CONVEYOR:
+		NSENTITY_READENTITY(func_conveyor, new)
+		break;
+	case ENT_WAYPOINT:
+		NSENTITY_READENTITY(info_waypoint, new)
+		break;
+	case ENT_INSTRUCTOR:
+		NSENTITY_READENTITY(env_instructor_hint, new)
+		break;
+	case ENT_HUDCOUNTER:
+		NSENTITY_READENTITY(env_hudcounter, new)
+		break;
+	case ENT_PUSH:
+		NSENTITY_READENTITY(trigger_push, new)
+		break;
+	case ENT_SPOTLIGHT:
+		NSENTITY_READENTITY(point_spotlight, new)
+		break;
+	case ENT_GLOW:
+		NSENTITY_READENTITY(env_glow, new)
+		break;
 	default:
 		return (0);
 	}

@@ -14,94 +14,8 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-enumflags
-{
-	ENVCASLIGHT_CHANGED_ACTIVE,
-	ENVCASLIGHT_CHANGED_ANGLE_X,
-	ENVCASLIGHT_CHANGED_ANGLE_Y,
-	ENVCASLIGHT_CHANGED_ANGLE_Z,
-	ENVCASLIGHT_CHANGED_COLOR_X,
-	ENVCASLIGHT_CHANGED_COLOR_Y,
-	ENVCASLIGHT_CHANGED_COLOR_Z,
-	ENVCASLIGHT_CHANGED_DISTANCE,
-};
-
-/*! \brief Shared-Entity: Outdoor Shadow & Lighting Controller */
-/*!QUAKED env_cascade_light (1 .5 0) (-8 -8 -8) (8 8 8)
-# OVERVIEW
-Shadowmapped outdoor lighting entity.
-
-![Shadows cast by an env_cascade_light](@ref env_cascade_light.png)
-
-# KEYS
-- "targetname" : Name
-- "color" : Color of the sun light. Three space separated 0-255 based values.
-- "maxshadowdistance" : Maximum shadow distance from the camera.
-- "uselightenvangles" : When set to 1, the angles are taken from the light_environment in the map.
-- "StartDisabled" : Entity will have to be enabled in order to work when set to 1.
-
-# INPUTS
-- "SetAngles" : Sets the light angle.
-- "LightColor" : Sets the light color. Three space separated 0-255 based values.
-- "Enable" : Enable the entity.
-- "Disable" : Disable the entity.
-- "Toggle" : Toggles between enabled/disabled states.
-
-# TRIVIA
-This entity was introduced in Counter-Strike: Global Offensive (2012).
-
-@ingroup sharedentity
-@ingroup pointentity
-*/
-class env_cascade_light:ncPointTrigger
-{
-public:
-	void env_cascade_light(void);
-
-#ifdef SERVER
-	virtual float SendEntity(entity,float);
-	virtual void EvaluateEntity(void);
-	virtual void Trigger(entity, triggermode_t);
-	virtual void Respawn(void);
-	virtual void Save(float);
-	virtual void Restore(string,string);
-	virtual void SpawnKey(string,string);
-	virtual void Input(entity, string, string);
-#endif
-
-#ifdef CLIENT
-	virtual void OnRemoveEntity(void);
-	virtual void ReceiveEntity(float,float);
-	virtual void ReloadVideoResources(void);
-	nonvirtual void LightChanged(float);
-#endif
-
-	nonvirtual void SetRedColor(float byteColor);
-	nonvirtual void SetGreenColor(float byteColor);
-	nonvirtual void SetBlueColor(float byteColor);
-	nonvirtual void SetShadowDistance(float shadowDistance);
-
-	nonvirtual void SetPitch(float eulerValue);
-	nonvirtual void SetYaw(float eulerValue);
-	nonvirtual void SetRoll(float eulerValue);
-
-private:
-	NETWORKED_BOOL(m_bLightActive)
-	NETWORKED_VECTOR(m_vecLightColor)
-	NETWORKED_FLOAT(m_flShadowDistance)
-
-#ifdef CLIENT
-	float m_lightHandle;
-#endif
-
-#ifdef SERVER
-	bool m_bUseEnvAngles;
-	bool m_bUseEnvColors;
-#endif
-};
-
 void
-env_cascade_light::env_cascade_light(void)
+ncCascadeLight::ncCascadeLight(void)
 {
 	m_vecLightColor = [1.0, 1.0, 1.0];
 	m_bLightActive = true;
@@ -121,7 +35,7 @@ env_cascade_light::env_cascade_light(void)
 
 
 void
-env_cascade_light::SetRedColor(float byteColor)
+ncCascadeLight::SetRedColor(float byteColor)
 {
 	m_vecLightColor[0] = byteColor;
 
@@ -131,7 +45,7 @@ env_cascade_light::SetRedColor(float byteColor)
 }
 
 void
-env_cascade_light::SetGreenColor(float byteColor)
+ncCascadeLight::SetGreenColor(float byteColor)
 {
 	m_vecLightColor[1] = byteColor;
 
@@ -141,7 +55,7 @@ env_cascade_light::SetGreenColor(float byteColor)
 }
 
 void
-env_cascade_light::SetBlueColor(float byteColor)
+ncCascadeLight::SetBlueColor(float byteColor)
 {
 	m_vecLightColor[2] = byteColor;
 
@@ -152,7 +66,7 @@ env_cascade_light::SetBlueColor(float byteColor)
 
 
 void
-env_cascade_light::SetPitch(float eulerValue)
+ncCascadeLight::SetPitch(float eulerValue)
 {
 	angles[0] = eulerValue;
 
@@ -162,7 +76,7 @@ env_cascade_light::SetPitch(float eulerValue)
 }
 
 void
-env_cascade_light::SetYaw(float eulerValue)
+ncCascadeLight::SetYaw(float eulerValue)
 {
 	angles[1] = eulerValue;
 
@@ -172,7 +86,7 @@ env_cascade_light::SetYaw(float eulerValue)
 }
   
 void
-env_cascade_light::SetRoll(float eulerValue)
+ncCascadeLight::SetRoll(float eulerValue)
 {
 	angles[2] = eulerValue;
 
@@ -182,7 +96,7 @@ env_cascade_light::SetRoll(float eulerValue)
 }
 	   
 void
-env_cascade_light::SetShadowDistance(float shadowDistance)
+ncCascadeLight::SetShadowDistance(float shadowDistance)
 {
 	m_flShadowDistance = shadowDistance;
 
@@ -193,7 +107,7 @@ env_cascade_light::SetShadowDistance(float shadowDistance)
 
 #ifdef SERVER
 void
-env_cascade_light::SpawnKey(string keyName, string setValue)
+ncCascadeLight::SpawnKey(string keyName, string setValue)
 {
 	switch (keyName) {
 	case "color":
@@ -217,14 +131,14 @@ env_cascade_light::SpawnKey(string keyName, string setValue)
 }
 
 void
-env_cascade_light::Respawn(void)
+ncCascadeLight::Respawn(void)
 {
 	InitPointTrigger();
 	pvsflags = PVSF_IGNOREPVS;
 }
 
 void
-env_cascade_light::Save(float handle)
+ncCascadeLight::Save(float handle)
 {
 	super::Save(handle);
 	SaveBool(handle, "m_bLightActive", m_bLightActive);
@@ -234,7 +148,7 @@ env_cascade_light::Save(float handle)
 }
 
 void
-env_cascade_light::Restore(string keyName, string setValue)
+ncCascadeLight::Restore(string keyName, string setValue)
 {
 	switch (keyName) {
 	case "m_bLightActive":
@@ -255,7 +169,7 @@ env_cascade_light::Restore(string keyName, string setValue)
 }
 
 void
-env_cascade_light::Input(entity activatingEntity, string keyName, string setValue)
+ncCascadeLight::Input(entity activatingEntity, string keyName, string setValue)
 {
 	switch (keyName) {
 	case "Enable":
@@ -279,7 +193,7 @@ env_cascade_light::Input(entity activatingEntity, string keyName, string setValu
 }
 
 void
-env_cascade_light::Trigger(entity activatingEntity, triggermode_t triggerState)
+ncCascadeLight::Trigger(entity activatingEntity, triggermode_t triggerState)
 {
 	switch (triggerState) {
 	case TRIG_OFF:
@@ -294,14 +208,14 @@ env_cascade_light::Trigger(entity activatingEntity, triggermode_t triggerState)
 }
 
 void
-env_cascade_light::EvaluateEntity(void)
+ncCascadeLight::EvaluateEntity(void)
 {
 	if (m_bUseEnvAngles == true) {
 		light envLight = (light)find(world, ::classname, "light_environment");
 
 		/* this isn't going to do what we want. remove it altogether. */
 		if (!envLight) {
-			ncError("env_cascade_light unable to find light_environment.\n");
+			ncError("ncCascadeLight unable to find light_environment.\n");
 			Destroy();
 			return;
 		}
@@ -329,7 +243,7 @@ env_cascade_light::EvaluateEntity(void)
 }
 
 float
-env_cascade_light::SendEntity(entity ePVEnt, float flChanged)
+ncCascadeLight::SendEntity(entity ePVEnt, float flChanged)
 {
 	if (m_bLightActive == false)
 		return (0);
@@ -353,7 +267,7 @@ env_cascade_light::SendEntity(entity ePVEnt, float flChanged)
 
 #ifdef CLIENT
 void
-env_cascade_light::OnRemoveEntity(void)
+ncCascadeLight::OnRemoveEntity(void)
 {
 	/* this tells the engine to re-use this for a later light */
 	dynamiclight_set(m_lightHandle, LFIELD_RADIUS, 0);
@@ -361,7 +275,7 @@ env_cascade_light::OnRemoveEntity(void)
 }
 
 void
-env_cascade_light::LightChanged(float flFlags)
+ncCascadeLight::LightChanged(float flFlags)
 {
 	bool updateAngle = false;
 	bool updateColor = false;
@@ -389,7 +303,7 @@ env_cascade_light::LightChanged(float flFlags)
 }
 
 void
-env_cascade_light::ReceiveEntity(float flNew, float flChanged)
+ncCascadeLight::ReceiveEntity(float flNew, float flChanged)
 {
 	READENTITY_BYTE(m_bLightActive, ENVCASLIGHT_CHANGED_ACTIVE)
 	READENTITY_COORD(angles[0], ENVCASLIGHT_CHANGED_ANGLE_X)
@@ -408,7 +322,7 @@ env_cascade_light::ReceiveEntity(float flNew, float flChanged)
 }
 
 void
-env_cascade_light::ReloadVideoResources(void)
+ncCascadeLight::ReloadVideoResources(void)
 {
 	OnRemoveEntity();
 	m_lightHandle = dynamiclight_spawnstatic(origin, m_flShadowDistance, m_vecLightColor / 255);

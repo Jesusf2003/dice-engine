@@ -91,7 +91,7 @@ void VGUI_ModelSpawner ( void )
 		localcmd(sprintf("sv propSpawn %S\n", eModel.model));
 	}
 	static void VGUI_ModelViewer_SpawnDoll( void ) {
-		localcmd(sprintf("sv dollSpawn %S\n", eModel.model));
+		ncRagdoll_Create(eModel.model);
 	}
 	static void VGUI_ModelViewer_SetFrame( int iFrame ) {
 		float maxFrame = modelframecount(eModel.modelindex) - 1;

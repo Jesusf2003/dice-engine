@@ -22,6 +22,14 @@ The menu is the exception: the SDK has no menu of its own. Each game builds `men
 `src/menu/`, either on top of MenuKit (`src/menukit/`) or with its own entry points like `base` does.
 See @ref menus.
 
+The developer tools are an optional module in `src/tools/`: the sun editor, in-game editor, model
+viewer and waypoint menu, the server's debug drawing, and the developer console commands
+(`list*`, `spawnDef`, `trigger`, `teleport`, `getpos`/`setpos`, `giveInventoryItem`, `dev_*`, ...).
+A game builds them in by adding `../../../src/tools/client.src` and `../../../src/tools/server.src`
+at the end of its client and server `progs.src`. Without them it still compiles and plays; those
+commands just don't exist. The core reaches the module only through the `__weak` hooks in
+`src/client/tools.qc` and `src/server/tools.qc`. See @ref devtools for every tool and command.
+
 However, you probably don't want to modify the Nuclide `./src/...` tree directly (unless you got a good reason) and want to focus on your own tree.
 
 A minimal basis you can copy and paste can be found under `./base/` which implements a very minimal game. You can walk around, jump and even shoot a projectile or two.

@@ -23,10 +23,7 @@ damage.qc
 chat.qc
 textmenu.qc
 vgui.qc
-vgui_modelspawner.qc
-Editor.qc
-EditorSun.qc
-way.qc
+tools.qc
 detailtex.qc
 shake.qc
 cmd.qc

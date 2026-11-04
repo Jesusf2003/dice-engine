@@ -109,6 +109,7 @@ string __fullspawndata;
 #include "physics/PhysicsEntity.qh"
 #include "triggers/BrushTrigger.qh"
 #include "triggers/PointTrigger.qh"
+#include "environment/CascadeLight.qh"
 #include "game/Item.qh"
 #include "game/Dispenser.qh"
 #include "game/Weapon.qh"

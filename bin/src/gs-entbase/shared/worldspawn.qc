@@ -159,16 +159,6 @@ ncWorldSpawn::Spawned(void)
 	serverinfo.SetBool("gametitle", m_bGameTitle);
 	serverinfo.SetBool("startdark", m_bStartDark);
 	serverinfo.SetBool("litwater", m_bLitWater);
-
-
-#if 0
-	env_cascade_light sunLight = spawn(env_cascade_light);
-	sunLight.Respawn();
-	sunLight.SetOrigin(GetOrigin());
-	sunLight.m_bUseEnvAngles = true;
-	sunLight.m_bUseEnvColors = true;
-	sunLight.m_flShadowDistance = 1024;
-#endif
 }
 
 void

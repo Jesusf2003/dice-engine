@@ -14,6 +14,8 @@
 ../../../src/gs-entbase/server.src
 ../../../src/gs-entbase/shared.src
 ../shared/include.src
+../entities/server.src
+../entities/shared.src
 
 /* mod specific functions */
 main.qc
@@ -21,4 +23,7 @@ main.qc
 /* global server/shared code */
 ../../../src/server/include.src
 ../../../src/shared/include.src
+
+/* SDK developer tools (optional) */
+../../../src/tools/server.src
 #endlist

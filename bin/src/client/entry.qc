@@ -98,7 +98,7 @@ CSQC_Init(float apilevel, string enginename, float engineversion)
 	Titles_Init();
 	Sentences_Init();
 	Decals_Init();
-	Way_Init();
+	Tools_Init();
 	Materials_Init();
 	Commandmenu_Init();
 	Activities_Init();

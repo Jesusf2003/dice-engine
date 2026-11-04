@@ -37,18 +37,6 @@ Entity_EntityUpdate(float type, float new)
 	case ENT_SURFPROP:
 		NSENTITY_READENTITY(ncSurfacePropEntity, new)
 		break;
-	case ENT_BEAM:
-		NSENTITY_READENTITY(env_beam, new)
-		break;
-	case ENT_FUNNEL:
-		NSENTITY_READENTITY(env_funnel, new)
-		break;
-	case ENT_SMOKER:
-		NSENTITY_READENTITY(env_smoker, new)
-		break;
-	case ENT_LASER:
-		NSENTITY_READENTITY(env_laser, new)
-		break;
 	case ENT_PHYSICS:
 		NSENTITY_READENTITY(ncPhysicsEntity, new)
 		break;
@@ -73,15 +61,6 @@ Entity_EntityUpdate(float type, float new)
 	case ENT_PORTAL:
 		NSENTITY_READENTITY(ncPortal, new)
 		break;
-	case ENT_VEH_BRUSH:
-		NSENTITY_READENTITY(func_vehicle, new)
-		break;
-	case ENT_VEH_TANKMORTAR:
-		NSENTITY_READENTITY(func_tankmortar, new)
-		break;
-	case ENT_VEH_4WHEEL:
-		NSENTITY_READENTITY(prop_vehicle_driveable, new)
-		break;
 	case ENT_PLAYER:
 		ncPlayer pl = (ncPlayer)self;
 
@@ -103,77 +82,17 @@ Entity_EntityUpdate(float type, float new)
 	case ENT_SPECTATOR:
 		Spectator_ReadEntity(new);
 		break;
-	case ENT_SPRITE:
-		NSENTITY_READENTITY(env_sprite, new)
-		break;
-	case ENT_GLOW:
-		NSENTITY_READENTITY(env_glow, new)
-		break;
 	case ENT_SPRAY:
 		Spray_Parse();
 		break;
 	case ENT_DECAL:
 		Decal_Parse();
 		break;
+	case ENT_CASCADELIGHT:
+		NSENTITY_READENTITY(ncCascadeLight, new)
+		break;
 	case ENT_AMBIENTSOUND:
 		NSENTITY_READENTITY(ambient_generic, new)
-		break;
-	case ENT_OLDCAMERA:
-		NSENTITY_READENTITY(trigger_camera, new)
-		break;
-	case ENT_MONITOR:
-		NSENTITY_READENTITY(func_monitor, new)
-		break;
-	case ENT_DLIGHT:
-		NSENTITY_READENTITY(light_dynamic, new)
-		break;
-	case ENT_PROJECTEDTEXTURE:
-		NSENTITY_READENTITY(env_projectedtexture, new)
-		break;
-	case ENT_SPOTLIGHT:
-		NSENTITY_READENTITY(point_spotlight, new)
-		break;
-	case ENT_FOG:
-		NSENTITY_READENTITY(env_fog, new)
-		break;
-	case ENT_STEAM:
-		NSENTITY_READENTITY(env_steam, new)
-		break;
-	case ENT_RAIN:
-		NSENTITY_READENTITY(env_rain, new)
-		break;
-	case ENT_FOGCONTROLLER:
-		NSENTITY_READENTITY(env_fog_controller, new)
-		break;
-	case ENT_CASCADELIGHT:
-		NSENTITY_READENTITY(env_cascade_light, new)
-		break;
-	case ENT_PARTSYSTEM:
-		NSENTITY_READENTITY(info_particle_system, new)
-		break;
-	case ENT_PROPROPE:
-		NSENTITY_READENTITY(prop_rope, new)
-		break;
-	case ENT_PHYSROPE:
-		NSENTITY_READENTITY(phys_rope, new)
-		break;
-	case ENT_BUBBLES:
-		NSENTITY_READENTITY(env_bubbles, new)
-		break;
-	case ENT_CONVEYOR:
-		NSENTITY_READENTITY(func_conveyor, new)
-		break;
-	case ENT_WAYPOINT:
-		NSENTITY_READENTITY(info_waypoint, new)
-		break;
-	case ENT_HUDCOUNTER:
-		NSENTITY_READENTITY(env_hudcounter, new)
-		break;
-	case ENT_INSTRUCTOR:
-		NSENTITY_READENTITY(env_instructor_hint, new)
-		break;
-	case ENT_PUSH:
-		NSENTITY_READENTITY(trigger_push, new)
 		break;
 	case ENT_ITEM:
 		NSENTITY_READENTITY(ncItem, new)

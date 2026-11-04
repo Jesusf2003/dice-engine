@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2022 Vera Visions LLC.
+ * Copyright (c) 2025 Vera Visions LLC
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -12,28 +12,20 @@
  * WHATSOEVER RESULTING FROM LOSS OF MIND, USE, DATA OR PROFITS, WHETHER
  * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-*/
+ */
 
-/*! \brief Server-Entity: Debug Sprite Cycler */
-/*!QUAKED cycler_sprite (1 0 0) (-8 -8 -8) (8 8 8)
-# OVERVIEW
-Decorative sprite cycler. For development purposes mainly.
+/* Hooks into the developer tools module (src/tools/client.src). A game that builds
+   the module in gets its commands and menus; without it these do nothing. */
 
-# KEYS
-- "targetname" : Name
-- "target" : Target when triggered.
-- "killtarget" : Target to kill when triggered.
-- "angles" : Sets the pitch, yaw and roll angles of the model.
-- "model" : Model file that will be displayed by the entity.
-- "framerate" : TODO: Frame rate of the sprite, in frames per second.
-
-# TRIVIA
-This entity was introduced in Half-Life (1998).
-
-@ingroup serverentity
-@ingroup pointentity
-*/
-class cycler_sprite:ncRenderableEntity
+/** Registers the tools' console commands and text menus. Called from CSQC_Init. */
+__weak void
+Tools_Init(void)
 {
+}
 
-};
+/** Handles a tool console command. Returns true when it was one. */
+__weak bool
+Tools_ConsoleCommand(string commandString)
+{
+	return (false);
+}

@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-env_cascade_light g_sun;
+ncCascadeLight g_sun;
 
 class ncSunEdit:vguiWindow
 {
@@ -171,7 +171,7 @@ void VGUI_ShowSunEditor(void)
 
 	if (!initialized) {
 		initialized = true;
-		g_sun = spawn(env_cascade_light);
+		g_sun = spawn(ncCascadeLight);
 		g_sun.SetOrigin([0,0,2048]);
 		g_sun.ReloadVideoResources();
 

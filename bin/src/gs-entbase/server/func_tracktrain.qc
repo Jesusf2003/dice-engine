@@ -128,6 +128,7 @@ public:
 	virtual void Input(entity, string, string);
 	virtual void EvaluateEntity(void);
 	virtual float SendEntity(entity, float);
+	virtual void DebugDraw(void);
 #endif
 
 	virtual void PlayerInput(void);
@@ -269,6 +270,14 @@ func_tracktrain::GetTrackNodeBack(void)
 	}
 
 	return __NULL__;
+}
+
+/* r_renderEntityInfo: the bounding box, plus the track ahead and behind */
+void
+func_tracktrain::DebugDraw(void)
+{
+	super::DebugDraw();
+	RenderDebugInfo();
 }
 
 void

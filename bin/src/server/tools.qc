@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Vera Visions LLC.
+ * Copyright (c) 2025 Vera Visions LLC
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -12,24 +12,21 @@
  * WHATSOEVER RESULTING FROM LOSS OF MIND, USE, DATA OR PROFITS, WHETHER
  * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-*/
+ */
 
-/*! \brief TODO: Server-Entity: Weapon Viewmodel Tester */
-/*!QUAKED cycler_weapon (1 .5 0) (-8 -8 -8) (8 8 8)
-# OVERVIEW
-A development entity. When picked up, will display the viewmodel on the activating player.
+/* Hooks into the developer tools module (src/tools/server.src). Without the
+   module the commands they would handle are unknown. */
 
-# KEYS
-- "targetname" : Name
-- "model" : Model to display on the player.
-
-# TRIVIA
-This entity was introduced in Half-Life (1998).
-
-@ingroup serverentity
-@ingroup pointentity
-*/
-class cycler_weapon:ncPointTrigger
+/** Handles a tool server console command (`sv ...`). Returns true when it was one. */
+__weak bool
+Tools_ServerCommand(void)
 {
+	return (false);
+}
 
-};
+/** Handles a tool command a client sent (`cmd ...`). Returns true when it was one. */
+__weak bool
+Tools_ClientCommand(ncClient sender, string commandString, int commandArguments)
+{
+	return (false);
+}

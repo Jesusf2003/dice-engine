@@ -6,21 +6,7 @@
 
 [button_target](@ref button_target)
 
-[cycler](@ref cycler)
-
-[cycler_sprite](@ref cycler_sprite)
-
-[cycler_weapon](@ref cycler_weapon)
-
-[cycler_wreckage](@ref cycler_wreckage)
-
-[env_beam](@ref env_beam)
-
 [env_beverage](@ref env_beverage)
-
-[env_bubbles](@ref env_bubbles)
-
-[env_cascade_light](@ref env_cascade_light)
 
 [env_cubemap](@ref env_cubemap)
 
@@ -30,23 +16,9 @@
 
 [env_fire](@ref env_fire)
 
-[env_fog](@ref env_fog)
-
-[env_fog_controller](@ref env_fog_controller)
-
-[env_funnel](@ref env_funnel)
-
 [env_global](@ref env_global)
 
-[env_glow](@ref env_glow)
-
-[env_hudcounter](@ref env_hudcounter)
-
 [env_hudhint](@ref env_hudhint)
-
-[env_instructor_hint](@ref env_instructor_hint)
-
-[env_laser](@ref env_laser)
 
 [env_message](@ref env_message)
 
@@ -58,29 +30,17 @@
 
 [env_physexplosion](@ref env_physexplosion)
 
-[env_projectedtexture](@ref env_projectedtexture)
-
-[env_rain](@ref env_rain)
-
 [env_render](@ref env_render)
 
 [env_shake](@ref env_shake)
 
-[env_shockwave](@ref env_shockwave)
-
 [env_shooter](@ref env_shooter)
-
-[env_smoker](@ref env_smoker)
 
 [env_sound](@ref env_sound)
 
 [env_soundscape](@ref env_soundscape)
 
 [env_spark](@ref env_spark)
-
-[env_sprite](@ref env_sprite)
-
-[env_steam](@ref env_steam)
 
 [env_sun](@ref env_sun)
 
@@ -93,8 +53,6 @@
 [func_brush](@ref func_brush)
 
 [func_button](@ref func_button)
-
-[func_conveyor](@ref func_conveyor)
 
 [func_detail](@ref func_detail)
 
@@ -114,15 +72,11 @@
 
 [func_guntarget](@ref func_guntarget)
 
-[func_healthcharger](@ref func_healthcharger)
-
 [func_illusionary](@ref func_illusionary)
 
 [func_ladder](@ref func_ladder)
 
 [func_lod](@ref func_lod)
-
-[func_monitor](@ref func_monitor)
 
 [func_monsterclip](@ref func_monsterclip)
 
@@ -138,19 +92,11 @@
 
 [func_pushable](@ref func_pushable)
 
-[func_recharge](@ref func_recharge)
-
 [func_rot_button](@ref func_rot_button)
 
 [func_rotating](@ref func_rotating)
 
 [func_smokevolume](@ref func_smokevolume)
-
-[func_tank](@ref func_tank)
-
-[func_tankcontrols](@ref func_tankcontrols)
-
-[func_tankmortar](@ref func_tankmortar)
 
 [func_trackchange](@ref func_trackchange)
 
@@ -161,10 +107,6 @@
 [func_traincontrols](@ref func_traincontrols)
 
 [func_useableladder](@ref func_useableladder)
-
-[func_vehicle](@ref func_vehicle)
-
-[func_vehiclecontrols](@ref func_vehiclecontrols)
 
 [func_wall](@ref func_wall)
 
@@ -208,8 +150,6 @@
 
 [info_null](@ref info_null)
 
-[info_particle_system](@ref info_particle_system)
-
 [info_player_coop](@ref info_player_coop)
 
 [info_player_deathmatch](@ref info_player_deathmatch)
@@ -217,8 +157,6 @@
 [info_player_start](@ref info_player_start)
 
 [info_teleport_destination](@ref info_teleport_destination)
-
-[info_waypoint](@ref info_waypoint)
 
 [infodecal](@ref infodecal)
 
@@ -237,8 +175,6 @@
 [item_recharge](@ref item_recharge)
 
 [light](@ref light)
-
-[light_dynamic](@ref light_dynamic)
 
 [light_environment](@ref light_environment)
 
@@ -286,35 +222,23 @@
 
 [phys_keepupright](@ref phys_keepupright)
 
-[phys_rope](@ref phys_rope)
-
 [phys_slideconstraint](@ref phys_slideconstraint)
 
 [player_loadsaved](@ref player_loadsaved)
 
 [player_weaponstrip](@ref player_weaponstrip)
 
-[point_camera](@ref point_camera)
-
 [point_message](@ref point_message)
 
 [point_servercommand](@ref point_servercommand)
 
-[point_spotlight](@ref point_spotlight)
-
 [point_trigger](@ref point_trigger)
-
-[point_viewcontrol](@ref point_viewcontrol)
 
 [prop_dynamic](@ref prop_dynamic)
 
 [prop_physics](@ref prop_physics)
 
-[prop_rope](@ref prop_rope)
-
 [prop_static](@ref prop_static)
-
-[prop_vehicle_driveable](@ref prop_vehicle_driveable)
 
 [random_speaker](@ref random_speaker)
 
@@ -350,8 +274,6 @@
 
 [trigger_autosave](@ref trigger_autosave)
 
-[trigger_camera](@ref trigger_camera)
-
 [trigger_cdaudio](@ref trigger_cdaudio)
 
 [trigger_changelevel](@ref trigger_changelevel)
@@ -377,8 +299,6 @@
 [trigger_once](@ref trigger_once)
 
 [trigger_playerfreeze](@ref trigger_playerfreeze)
-
-[trigger_push](@ref trigger_push)
 
 [trigger_relay](@ref trigger_relay)
 

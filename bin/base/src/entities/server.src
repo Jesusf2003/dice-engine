@@ -1,0 +1,5 @@
+/* the game's entities: server-only code */
+#includelist
+server/func_vehiclecontrols.qc
+server/point_camera.qc
+#endlist
