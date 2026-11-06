@@ -349,7 +349,7 @@ Tools_ConsoleCommand(string sCMD)
 		CMD_setang();
 		break;
 	case "buildcubemaps":
-		CMap_Build();
+		Cubemaps_Build();
 		break;
 	case "titles_test":
 		CMD_titles_test();

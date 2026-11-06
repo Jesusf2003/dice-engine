@@ -207,12 +207,6 @@ ncPlayer::CanProne(void)
 }
 
 bool
-ncPlayer::CanLean(void)
-{
-	return (true);
-}
-
-bool
 ncPlayer::CanCrouch(void)
 {
 	return m_pmoveVars.pm_crouchheight > 0 ? (true) : false;
@@ -844,54 +838,20 @@ ncPlayer::OnRemoveEntity(void)
 	super::OnRemoveEntity();
 }
 
-vector
-ncPlayer::CalculateLean(vector viewAngle)
-{
-	vector shift = anglesToRight(viewAngle);
-	vector output;
-	vector srcPos;
-	float heightChange;
-	ncPlayer pl = (ncPlayer)pSeat->m_ePlayer;
-
-	if (pSeat->m_iLeanDir > 0i) {
-		pSeat->m_flLeaning += frametime * 5;
-	} else if (pSeat->m_iLeanDir < 0i) {
-		pSeat->m_flLeaning -= frametime * 5;
-	} else {
-		pSeat->m_flLeaning = lerp(pSeat->m_flLeaning, 0.0, frametime * 10);
-	}
-
-	if (pSeat->m_flLeaning > 1.0) {
-		pSeat->m_flLeaning = 1.0f;
-	}
-
-	if (pSeat->m_flLeaning < -1.0) {
-		pSeat->m_flLeaning = -1.0f;
-	}
-
-	heightChange = cos(pSeat->m_flLeaning) * 4;
-	srcPos = pl.GetEyePos();
-	output = shift * (pSeat->m_flLeaning * 15.0);
-	tracebox(srcPos, [-8,-8,-8], [8,8,8], srcPos + output, MOVE_NORMAL, pl);
-
-	return output * trace_fraction + (shift * -1.0) + [0, 0, heightChange];
-}
-
 void
 ncPlayer::UpdateAliveCam(void)
 {
-	vector cam_pos = GetEyePos();
+	/* the camera sits 4 units above the eye position */
+	vector cam_pos = GetEyePos() + [0, 0, 4];
 
 #if defined(VALVE) || defined(CSTRIKE) || defined(GEARBOX) || defined(TFC) || defined(REWOLF)
 	//view_angles = Camera_RunBob(view_angles);
 	//view_angles = Camera_StrafeRoll(view_angles);
-	cam_pos += CalculateLean(view_angles);
 	g_view.SetCameraAngle(view_angles);
 	g_view.SetCameraOrigin(cam_pos );
 #else
 	view_angles = Camera_RunBob(view_angles);
 	view_angles = Camera_StrafeRoll(view_angles);
-	cam_pos += CalculateLean(view_angles);
 	g_view.SetCameraAngle(view_angles);
 	g_view.SetCameraOrigin(cam_pos + Camera_AddCamBob(view_angles));
 #endif

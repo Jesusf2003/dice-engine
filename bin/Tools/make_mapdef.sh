@@ -167,8 +167,9 @@ ent_for_mod()
 BASE_ENT="./Tools/base_entities.def"
 echo '' > "$BASE_ENT"
 
-echo "Scanning for definitions inside the general entity codebase."
-find ./src/gs-entbase/ -type f \( -iname \*.qc \) | while read EDEF_N; do
+# the SDK only ships worldspawn (engine-required), every other entity is the game's
+echo "Scanning for definitions inside the SDK."
+find ./src/shared/environment/ -type f -iname WorldSpawn.qc | while read EDEF_N; do
 	echo "... $EDEF_N"
 	sed -n '/\/*!QUAKED/,/*\//p' $EDEF_N >> "$BASE_ENT"
 	# fix doxygen markup

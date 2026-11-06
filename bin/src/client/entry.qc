@@ -259,7 +259,6 @@ CSQC_Update2D(float w, float h, bool focus)
 		Print_Draw();
 	} else if (Util_IsFocused() == true) {
 		GameText_Draw();
-		PointMessage_Draw();
 
 		if (Client_InIntermission() == true) {
 			HUD_DrawIntermission();
@@ -380,17 +379,17 @@ CSQC_UpdateView(float w, float h, float focus)
 		setproperty(VF_SIZE_Y, 768);
 		setproperty(VF_AFOV, autocvar_overview_fov * (1.0/autocvar_overview_zoom));
 		CSQC_RenderScene();
-	} else if (g_iCubeProcess == TRUE) {
+	} else if (g_cubemapBuilding == true) {
 		setproperty(VF_DRAWENGINESBAR, (float)0);
 		setproperty(VF_DRAWCROSSHAIR, (float)0);
 		setproperty(VF_DRAWWORLD, (float)1);
 		setproperty(VF_MIN, [0,0]);
 		setproperty(VF_VIEWENTITY, player_localentnum);
-		setproperty(VF_ORIGIN, g_vecCubePos);
+		setproperty(VF_ORIGIN, g_cubemapPos);
 		setproperty(VF_ANGLES, vecViewAngles);
 		setproperty(VF_CL_VIEWANGLES, vecViewAngles);
-		setproperty(VF_SIZE_X, g_dCubeSize);
-		setproperty(VF_SIZE_Y, g_dCubeSize);
+		setproperty(VF_SIZE_X, g_cubemapSize);
+		setproperty(VF_SIZE_Y, g_cubemapSize);
 		setproperty(VF_AFOV, 90.0f);
 		CSQC_RenderScene();
 	} else {
@@ -438,7 +437,6 @@ CSQC_UpdateView(float w, float h, float focus)
 			Commandmenu_Draw();
 
 			EFX_UpdateListener(g_view);
-			DSP_UpdateSoundscape(g_view);
 			clframetime = 0.0f;
 			frametime = 0.0f;
 		}

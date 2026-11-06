@@ -17,10 +17,6 @@ defs.qh
 /* for VGUI elements, we want to include this (optional) */
 ../../../src/vgui/include.src
 
-/* include the entity codebase */
-../../../src/gs-entbase/client.src
-../../../src/gs-entbase/shared.src
-
 /* mod specific functions */
 ../shared/include.src
 ../entities/client.src

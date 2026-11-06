@@ -11,8 +11,6 @@
 ../../../src/common/include.src
 ../../../src/shared/defs.qh
 ../../../src/server/defs.qh
-../../../src/gs-entbase/server.src
-../../../src/gs-entbase/shared.src
 ../shared/include.src
 ../entities/server.src
 ../entities/shared.src

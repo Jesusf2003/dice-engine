@@ -104,8 +104,6 @@ public:
 	virtual bool CanProne(void);
 	/** Overridable: Returns whether the client can crouch, with the commands +crouch and gocrouch */
 	virtual bool CanCrouch(void);
-	/** Overridable: Returns whether the client can lean, with the commands +leanleft and +leanright */
-	virtual bool CanLean(void);
 
 	/** Overridable: Returns the desired maximum forward movement speed. */
 	virtual float GetForwardSpeed(void);
@@ -125,8 +123,6 @@ public:
 	nonvirtual bool IsStanding(void);
 	/** Returns `true` when the entity is running. */
 	nonvirtual bool IsSprinting(void);
-	/** Returns `true` when the entity is leaning */
-	nonvirtual bool IsLeaning(void);
 
 	/* ammo handling */
 	/** Returns whether the specified type is maxed out. */

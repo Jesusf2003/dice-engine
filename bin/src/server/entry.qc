@@ -349,7 +349,7 @@ SV_RunClientCommand(void)
 		return;
 	}
 
-	trigger_auto_trigger();
+	Level_PlayerReady();
 
 	if (g_menuBackgroundMapMode == true) {
 		return;

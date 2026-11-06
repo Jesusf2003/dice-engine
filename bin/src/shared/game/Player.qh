@@ -174,8 +174,6 @@ public:
 	virtual bool CanProne(void);
 	/** Overridable: Returns whether the client can crouch, with the commands +crouch and gocrouch */
 	virtual bool CanCrouch(void);
-	/** Overridable: Returns whether the client can lean, with the commands +leanleft and +leanright */
-	virtual bool CanLean(void);
 	
 	/** Empty & shared between Client and Server. This is run on every player, every frame, to update their animation cycle. */
 	virtual void UpdatePlayerAnimation(float);
@@ -191,7 +189,6 @@ public:
 	virtual void PredictPostFrame(void);
 	virtual void ClientInputFrame(void);
 
-	virtual vector CalculateLean(vector);
 	virtual void UpdateAliveCam(void);
 
 	/** Empty. Updates the bone controller responsible for mouth movement. */

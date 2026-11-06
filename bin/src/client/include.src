@@ -27,6 +27,13 @@ tools.qc
 detailtex.qc
 shake.qc
 cmd.qc
+BeamCylinder.qc
+MuzzleFlash.qc
+WorldText.qc
+LensFlare.qc
+SkyRoom.qc
+RenderTarget.qc
+Cubemaps.qc
 event.qc
 commandmenu.qc
 entry.qc

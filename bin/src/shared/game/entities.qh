@@ -45,7 +45,6 @@ typedef enum
 	ENT_PHYSICS,	/**< of type ncPhysicsEntity */
 	ENT_MONSTER,	/**< of type ncMonster */
 	ENT_TALKMONSTER,	/**< of type ncTalkMonster */
-	ENT_SPEAKER, /**< of type speaker */
 	ENT_PLAYER,	/**< of type ncPlayer */
 	ENT_ITEM, /**< of type ncItem */
 	ENT_WEAPON, /**< of type ncWeapon */
@@ -53,11 +52,9 @@ typedef enum
 	ENT_SPECTATOR,	/**< of type ncSpectator */
 	ENT_PORTAL,		/**< of type ncPortal */
 	ENT_CASCADELIGHT, /**< of type ncCascadeLight */
-	ENT_AMBIENTSOUND,	/**< of type ambient_generic */
 	ENT_SPRAY,	/**< of type ncSpraylogo */
 	ENT_DECAL,	/**< of type ncDecal */
 	ENT_VEHICLE,	/**< Reserved. */
-	ENT_TRACKTRAIN, /**< of type func_tracktrain */
 	ENT_SOUNDSCAPE, /**< of type ncSoundScape */
 	ENT_SEPARATOR,	/**< This is a separator. This separator is used by you to add game-specific networked entities. When declaring your own entity-update types, you want the first value to equal ENT_SEPARATOR at all times to ensure you'll not be overriding existing slots. */
 } entupdate_t;

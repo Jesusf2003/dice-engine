@@ -211,7 +211,8 @@ void
 ncCascadeLight::EvaluateEntity(void)
 {
 	if (m_bUseEnvAngles == true) {
-		light envLight = (light)find(world, ::classname, "light_environment");
+		/* light_environment is a game entity: only rely on ncEntity and its spawn keys */
+		ncEntity envLight = (ncEntity)find(world, ::classname, "light_environment");
 
 		/* this isn't going to do what we want. remove it altogether. */
 		if (!envLight) {
@@ -221,7 +222,16 @@ ncCascadeLight::EvaluateEntity(void)
 		}
 
 		if (m_bUseEnvColors) {
-			m_vecLightColor = envLight.GetLightColor();
+			/* same keys light_environment reads: "color" is 0-1, "_light"/"color255" are 0-255 */
+			if (STRING_SET(envLight.GetSpawnString("color"))) {
+				m_vecLightColor = envLight.GetSpawnVector("color");
+			} else if (STRING_SET(envLight.GetSpawnString("_light"))) {
+				m_vecLightColor = envLight.GetSpawnVector("_light") / 255;
+			} else if (STRING_SET(envLight.GetSpawnString("color255"))) {
+				m_vecLightColor = envLight.GetSpawnVector("color255") / 255;
+			} else {
+				m_vecLightColor = [1, 1, 1];
+			}
 		}
 
 		makevectors(envLight.GetAngles());

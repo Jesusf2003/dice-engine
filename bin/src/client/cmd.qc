@@ -144,18 +144,6 @@ Cmd_Parse(string sCMD)
 	case "-sprint":
 		pSeat->m_iSprinting = false;
 		break;
-	case "+leanleft":
-		pSeat->m_iLeanDir = -1;
-		break;
-	case "-leanleft":
-		pSeat->m_iLeanDir = 0;
-		break;
-	case "+leanright":
-		pSeat->m_iLeanDir = 1;
-		break;
-	case "-leanright":
-		pSeat->m_iLeanDir = 0;
-		break;
 	case "goprone":
 		pSeat->m_dForceStance = STANCE_PRONE;
 		break;
@@ -282,10 +270,6 @@ Cmd_Init(void)
 	registercommand("-gostand");
 	registercommand("+sprint");
 	registercommand("-sprint");
-	registercommand("+leanleft");
-	registercommand("-leanleft");
-	registercommand("+leanright");
-	registercommand("-leanright");
 	registercommand("weapnext");
 	registercommand("weapprev");
 

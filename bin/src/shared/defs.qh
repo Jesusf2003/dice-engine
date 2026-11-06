@@ -86,9 +86,13 @@ string __fullspawndata;
 #include "environment/effects.qh"
 
 #ifdef CLIENT
-#include "../gs-entbase/client/defs.qh"
-#else
-#include "../gs-entbase/server/defs.qh"
+/* TODO: Find a better way to figure out what's a ncEntity at heart */
+.bool isCSQC;
+
+/* things we don't have in CSQC normally and oughta be global */
+.string target;
+.string targetname;
+.float spawnflags;
 #endif
 
 #include "environment/Decal.qh"
@@ -110,6 +114,7 @@ string __fullspawndata;
 #include "triggers/BrushTrigger.qh"
 #include "triggers/PointTrigger.qh"
 #include "environment/CascadeLight.qh"
+#include "environment/WorldSpawn.qh"
 #include "game/Item.qh"
 #include "game/Dispenser.qh"
 #include "game/Weapon.qh"
@@ -245,6 +250,19 @@ pseudorandom()
 	seed += (float)input_sequence % 70.0f;
 
 	/* like the engine its random(), never return 0, never return 1 */
+	return bound(0.01, (seed) / 100.0f, 0.99f);
+}
+
+/** Deterministic noise from an input value, in ]0,1[ like random(). Same input, same output. */
+float
+pseudorand(float input)
+{
+	float seed = (float)input % 5.0f;
+	seed += (float)input % 8.0f;
+	seed += (float)input % 4.0f;
+	seed += (float)input % 13.0f;
+	seed += (float)input % 70.0f;
+
 	return bound(0.01, (seed) / 100.0f, 0.99f);
 }
 

@@ -1381,7 +1381,7 @@ ncMonster::ScriptedSequenceEnded(void)
 	}
 
 	if (m_ssLast) {
-		scripted_sequence seq = (scripted_sequence)m_ssLast;
+		ncTrigger seq = (ncTrigger)m_ssLast;
 		seq.m_triggerValue = TRUE;
 	}
 

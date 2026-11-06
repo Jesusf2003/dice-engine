@@ -883,15 +883,11 @@ ncProjectile::_Explode(entity explodedOn)
 		}
 
 		portalAngle = vectoangles(m_lastPlaneNormal, coPlanar);
-#if 0
-		prop_portal_spawn(trace_endpos, portalAngle, owner, m_defPlaneImpact == "portal_red" ? true : false);
-#else
 		ncEntity rocket = EntityDef_NewClassname(m_defPlaneImpact);
 		rocket.SetOrigin(trace_endpos);
 		rocket.SetAngles(portalAngle);
 		rocket.owner = this;
 		rocket.Spawn();
-#endif
 	}
 
 	HasExploded();
@@ -1439,7 +1435,7 @@ ncProjectile::postdraw(void)
 	}
 
 	if (m_flLightRadius > 0.0) {
-		env_sun_lensflare(origin, 1.0f, m_vecLightColor, false);
+		LensFlare_Draw(origin, 1.0f, m_vecLightColor, false);
 	}
 }
 

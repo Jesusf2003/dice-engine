@@ -1,0 +1,10 @@
+/** @file
+Networked events (SVC_CGAMEPACKET headers) of this game. The SDK's own events
+end at EV_SEPARATOR (src/common/c_events.qh); the game's start there. The client
+reads them in ClientGame_EventParse (src/client/main.qc).
+*/
+enum
+{
+	EV_SPRITE = EV_SEPARATOR,	/**< one-shot env_sprite */
+	EV_GAME_SEPARATOR
+};

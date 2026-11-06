@@ -290,12 +290,6 @@ ncActor::IsSprinting(void)
 }
 
 bool
-ncActor::IsLeaning(void)
-{
-	return (false);
-}
-
-bool
 ncActor::CanSprint(void)
 {
 	return (false);
@@ -303,12 +297,6 @@ ncActor::CanSprint(void)
 
 bool
 ncActor::CanProne(void)
-{
-	return (false);
-}
-
-bool
-ncActor::CanLean(void)
 {
 	return (false);
 }

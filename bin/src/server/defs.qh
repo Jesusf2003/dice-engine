@@ -31,6 +31,7 @@
 #include "../nav/Hint.qh"
 
 #include "spawn.qh"
+#include "Level.qh"
 #include "AddonDelegate.qh"
 #include "MapDelegate.qh"
 #include "plugins.qh"
@@ -196,6 +197,29 @@ WriteEntityEvent(float to, entity targetEntity, float eventType)
 	WriteByte(to, EV_ENTITYEVENT);
 	WriteEntity(to, targetEntity);
 	WriteFloat(to, eventType);
+}
+
+/** Shows a message on one player's screen (with a talk sound), like a single-target env_message.
+A message starting with '#' is a titles.txt entry name. */
+void
+env_message_single(entity target, string msg)
+{
+	if (!msg)
+		return;
+
+	WriteByte(MSG_MULTICAST, SVC_CGAMEPACKET);
+	WriteByte(MSG_MULTICAST, EV_MESSAGE);
+
+	if (substring(msg, 0, 1) != "#")
+		WriteString(MSG_MULTICAST, msg);
+	else
+		WriteString(MSG_MULTICAST, substring(msg, 1, -1));
+
+	WriteString(MSG_MULTICAST, "misc/talk.wav");
+	WriteFloat(MSG_MULTICAST, 1.0);
+	WriteByte(MSG_MULTICAST, ATTN_NORM);
+	msg_entity = target;
+	multicast([0,0,0], MULTICAST_ONE_R);
 }
 
 /** @defgroup serverentity Entities that are server-side

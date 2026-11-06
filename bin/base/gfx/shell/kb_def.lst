@@ -8,8 +8,6 @@
 "CTRL" "+duck"
 "ALT" "+prone"
 "F" "+use"
-"Q" "+leanleft"
-"E" "+leanright"
 "SHIFT" "+sprint"
 "C" "+moveup"
 "X" "+movedown"

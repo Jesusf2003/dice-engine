@@ -13,6 +13,7 @@
 #   plugins  - builds the plugins listed in bin/$GAME/PLUGINS or $NATIVE_PLUGINS
 #   makelibs - builds the static third-party libs (zlib, png, jpeg, ogg, vorbis, opus, speex, freetype)
 #   vmap     - builds the map compiler into tools/vmap/bin/vmap.exe (plus the DLLs it needs)
+#   vmap-intellisense - only writes tools/vmap/compile_commands.json (VS Code include paths for vmap)
 #   clean    - removes engine objects (keeps the third-party libs)
 # Environment: GAME (default base), JOBS (default: nproc), NATIVE_PLUGINS.
 
@@ -138,8 +139,33 @@ copy_dlls() {
 	done
 }
 
+# Writes tools/vmap/compile_commands.json for VS Code IntelliSense (.vscode/c_cpp_properties.json),
+# with the same flags as vmap's Makefiles: src/ and common/ are built from src/ with the pkg-config
+# flags of glib, libxml2 and minizip; each libs/<lib>/ from its own folder.
+vmap_compile_commands() {
+	local cc pkgflags out="$VMAP/compile_commands.json" sep="" f dir flags
+	cc="$(cygpath -m "$(command -v gcc)")"
+	pkgflags="$(PKG_CONFIG_PATH="$VMAP/deps/ucrt64/lib/pkgconfig:/ucrt64/lib/pkgconfig" \
+		pkg-config --cflags glib-2.0 libxml-2.0 minizip)"
+	echo "[" > "$out"
+	for f in "$VMAP"/src/*.c "$VMAP"/common/*.c "$VMAP"/libs/*/*.c; do
+		case "$f" in
+			"$VMAP"/libs/*) dir="$(dirname "$f")"; flags="-I../../include -I../../libs" ;;
+			*) dir="$VMAP/src"; flags="$pkgflags -I../include -I../common -I../libs" ;;
+		esac
+		# only what the Makefiles build (src/ and common/ keep unbuilt q3map2 leftovers)
+		grep -qw "$(basename "$f" .c)\.o" "$dir/Makefile" || continue
+		printf '%s{"directory": "%s", "file": "%s", "command": "%s %s -c %s"}\n' "$sep" \
+			"$(cygpath -m "$dir")" "$(cygpath -m "$f")" "$cc" "$flags" "$(cygpath -m "$f")" >> "$out"
+		sep=","
+	done
+	echo "]" >> "$out"
+	echo "vmap: tools/vmap/compile_commands.json"
+}
+
 do_vmap() {
 	vmap_deps
+	vmap_compile_commands
 	# l_net uses Winsock on Windows, which the upstream Makefile does not link.
 	# Windows' default 1 MB stack overflows in PatchMapDrawSurfs (Linux gives 8 MB), so ask for 16 MB.
 	# The link rule only depends on the objects, so drop the old exe to make LDFLAGS changes take effect.
@@ -163,6 +189,7 @@ for t in "$@"; do
 	echo "=== $t (GAME=$GAME) ==="
 	case "$t" in
 		fteqcc|game|engine|fteqw|plugins|makelibs|vmap|clean) "do_$t" ;;
+		vmap-intellisense) vmap_deps; vmap_compile_commands ;;
 		*) echo "unknown target: $t" >&2; exit 1 ;;
 	esac
 done

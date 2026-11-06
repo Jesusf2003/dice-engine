@@ -43,13 +43,14 @@ engine/common/base.ico
 /bin/base/scripts/entities.def
 
 # vmap (build_win64.sh vmap): MSYS2 packages it links against, objects, and the
-# installed exe + DLLs in tools/vmap/bin
+# installed exe + DLLs in tools/vmap/bin, IntelliSense database (absolute paths)
 /tools/vmap/deps/
 /tools/vmap/**/*.o
 /tools/vmap/**/*.a
 /tools/vmap/vmap.exe
 /tools/vmap/bin/
 /tools/vmap/build/
+/tools/vmap/compile_commands.json
 # Local notes and code set aside from the SDK (e.g. docs/radar)
 /docs/
 

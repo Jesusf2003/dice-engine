@@ -146,17 +146,17 @@ Nodes_BuildFromEnts(void)
 void
 NodeHints_Init(void)
 {
-	info_hint pinchPoint;
+	ncHint pinchPoint;
 
 	for (int i = 0; i < g_nodeCount; i++) {
 		/* is this a pinch point? */
 		if (g_nodeGraph[i].m_neighborCount == 2) {
-			pinchPoint = spawn(info_hint);
+			pinchPoint = spawn(ncHint);
 			pinchPoint.Spawn();
 			pinchPoint.m_hintType = "pinchPoint";
 			setorigin(pinchPoint, g_nodeGraph[i].m_origin);
 		} else if (g_nodeGraph[i].m_neighborCount > 4) {
-			pinchPoint = spawn(info_hint);
+			pinchPoint = spawn(ncHint);
 			pinchPoint.Spawn();
 			pinchPoint.m_hintType = "disadvantaged";
 			setorigin(pinchPoint, g_nodeGraph[i].m_origin);

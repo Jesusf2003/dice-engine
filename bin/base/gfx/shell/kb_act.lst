@@ -8,8 +8,6 @@
 "+duck"					"Duck"
 "+duck"					"Prone"
 "+use"					"Interact/Use"
-"+duck"					"Lean left"
-"+duck"					"Lean right"
 "+sprint"			    "Sprint"	
 "+moveup"				"Swim up"
 "+movedown"				"Swim down"

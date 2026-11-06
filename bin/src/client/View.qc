@@ -497,14 +497,14 @@ ncView::UpdateView(void)
 	if (m_bDrawEntities)
 		addentities(MASK_GLOWS);
 
-	SkyCamera_Setup(origin);
+	SkyRoom_UpdateCamera(origin);
 
 	if (cl)
 		ncXRManager::UpdateView(m_viewTarget);
 
 	/* render our frame */
 	RenderView();
-	RenderTarget_Monitor_Update();
+	RenderTarget_UpdateMonitor();
 
 	/* all 2D operations happen after this point */
 	for (entity b = world; (b = findfloat(b, ::isCSQC, 1));) {

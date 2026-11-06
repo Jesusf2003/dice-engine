@@ -105,7 +105,7 @@ ClientGame_PreDraw(void)
 void
 ClientGame_PostDraw(void)
 {
-
+	DSP_UpdateSoundscape(g_view);
 }
 
 int
@@ -115,26 +115,8 @@ ClientGame_EntityUpdate(float id, float new)
 	case ENT_DLIGHT:
 		NSENTITY_READENTITY(light_dynamic, new)
 		break;
-	case ENT_BEAM:
-		NSENTITY_READENTITY(env_beam, new)
-		break;
-	case ENT_SMOKER:
-		NSENTITY_READENTITY(env_smoker, new)
-		break;
 	case ENT_PROJECTEDTEXTURE:
 		NSENTITY_READENTITY(env_projectedtexture, new)
-		break;
-	case ENT_FOG:
-		NSENTITY_READENTITY(env_fog, new)
-		break;
-	case ENT_STEAM:
-		NSENTITY_READENTITY(env_steam, new)
-		break;
-	case ENT_RAIN:
-		NSENTITY_READENTITY(env_rain, new)
-		break;
-	case ENT_FOGCONTROLLER:
-		NSENTITY_READENTITY(env_fog_controller, new)
 		break;
 	case ENT_LASER:
 		NSENTITY_READENTITY(env_laser, new)
@@ -151,32 +133,11 @@ ClientGame_EntityUpdate(float id, float new)
 	case ENT_MONITOR:
 		NSENTITY_READENTITY(func_monitor, new)
 		break;
-	case ENT_VEH_BRUSH:
-		NSENTITY_READENTITY(func_vehicle, new)
-		break;
-	case ENT_VEH_4WHEEL:
-		NSENTITY_READENTITY(prop_vehicle_driveable, new)
-		break;
-	case ENT_PROPROPE:
-		NSENTITY_READENTITY(prop_rope, new)
-		break;
 	case ENT_PHYSROPE:
 		NSENTITY_READENTITY(phys_rope, new)
 		break;
-	case ENT_BUBBLES:
-		NSENTITY_READENTITY(env_bubbles, new)
-		break;
-	case ENT_CONVEYOR:
-		NSENTITY_READENTITY(func_conveyor, new)
-		break;
 	case ENT_WAYPOINT:
 		NSENTITY_READENTITY(info_waypoint, new)
-		break;
-	case ENT_INSTRUCTOR:
-		NSENTITY_READENTITY(env_instructor_hint, new)
-		break;
-	case ENT_HUDCOUNTER:
-		NSENTITY_READENTITY(env_hudcounter, new)
 		break;
 	case ENT_PUSH:
 		NSENTITY_READENTITY(trigger_push, new)
@@ -184,8 +145,12 @@ ClientGame_EntityUpdate(float id, float new)
 	case ENT_SPOTLIGHT:
 		NSENTITY_READENTITY(point_spotlight, new)
 		break;
-	case ENT_GLOW:
-		NSENTITY_READENTITY(env_glow, new)
+	case ENT_SPEAKER:
+		NSENTITY_READENTITY(speaker, new)
+		self.customphysics = Empty;
+		break;
+	case ENT_AMBIENTSOUND:
+		NSENTITY_READENTITY(ambient_generic, new)
 		break;
 	default:
 		return (0);
@@ -198,6 +163,9 @@ int
 ClientGame_EventParse(float fHeader)
 {
 	switch (fHeader) {
+	case EV_SPRITE:
+		EnvSprite_ParseEvent();
+		break;
 	default:
 		return (0);
 	}

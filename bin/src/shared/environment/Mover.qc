@@ -344,7 +344,7 @@ ncMoverEntity::_PortalOpen(void)
 		return;
 	}
 
-	for (func_areaportal portalChain = __NULL__; (portalChain = (func_areaportal)find(portalChain, ::classname, "func_areaportal"));) {
+	for (ncEntity portalChain = __NULL__; (portalChain = (ncEntity)find(portalChain, ::classname, "func_areaportal"));) {
 		portalChain.Trigger(this, TRIG_ON);
 	}
 #endif
@@ -367,7 +367,7 @@ ncMoverEntity::_PortalClose(void)
 		return;
 	}
 
-	for (func_areaportal portalChain = __NULL__; (portalChain = (func_areaportal)find(portalChain, ::classname, "func_areaportal"));) {
+	for (ncEntity portalChain = __NULL__; (portalChain = (ncEntity)find(portalChain, ::classname, "func_areaportal"));) {
 		portalChain.Trigger(this, TRIG_OFF);
 	}
 #endif

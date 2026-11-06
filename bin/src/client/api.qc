@@ -189,12 +189,6 @@ CLPF_player_IsStanding(string itemName)
 }
 
 bool
-CLPF_player_IsLeaning(string itemName)
-{
-	return ((ncPlayer)pSeat->m_ePlayer).IsLeaning();
-}
-
-bool
 CLPF_player_GetGameFlags(void)
 {
 	return (pSeat->m_ePlayer.gflags);

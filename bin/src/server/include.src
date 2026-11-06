@@ -4,6 +4,7 @@ plugins.qc
 Stats.qc
 skill.qc
 spawn.qc
+Level.qc
 GameRules.qc
 vote.qc
 lament.qc

@@ -354,10 +354,6 @@ typedef struct
 
 	@return whether the current player is standing upright. */
 	bool IsStanding(void);
-	/** Check if the current player is leaning in any direction.
-
-	@return whether the current player is leaning. */
-	bool IsLeaning(void);
 	/** Check if the current player is actively sprinting.
 
 	@return whether the current player is sprinting. */
@@ -611,7 +607,6 @@ _client_main(void)
 	player.GetTeam = linkToClientProgs("CLPF_player_GetTeam");
 	player.HasItem = linkToClientProgs("CLPF_player_HasItem");
 	player.IsStanding = linkToClientProgs("CLPF_player_IsStanding");
-	player.IsLeaning = linkToClientProgs("CLPF_player_IsLeaning");
 	player.IsSprinting = linkToClientProgs("CLPF_player_IsSprinting");
 	player.IsCrouched = linkToClientProgs("CLPF_player_IsCrouching");
 	player.IsProne = linkToClientProgs("CLPF_player_IsProne");

@@ -14,36 +14,6 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifdef CLIENT
-int g_iRenderTargetActive;
-float g_flRenderTargetFOV;
-vector g_iRenderTargetSize;
-vector g_vecRenderTargetPos;
-vector g_vecRenderTargetAngles;
-
-void
-RenderTarget_Monitor_Update(void)
-{
-	if (g_iRenderTargetActive == false) {
-		return;
-	}
-
-	clearscene();
-
-	/* TODO: This is ideally where fog parms should be set... :/ */
-	addentities(MASK_ENGINE);
-
-	setproperty(VF_RT_DESTCOLOUR, "base", (float)1, g_iRenderTargetSize);
-	setproperty(VF_SIZE, g_iRenderTargetSize);
-	setproperty(VF_DRAWENGINESBAR, (float)0);
-	setproperty(VF_ORIGIN, g_vecRenderTargetPos);
-	setproperty(VF_ANGLES, g_vecRenderTargetAngles);
-	setproperty(VF_AFOV, g_flRenderTargetFOV);
-	renderscene();
-	setproperty(VF_RT_DESTCOLOUR, "");
-}
-#endif
-
 enumflags
 {
 	MONITORFL_CHANGED_BASE,
@@ -140,16 +110,7 @@ func_monitor::ReceiveEntity(float flNew, float flChanged)
 	setorigin(this, origin);
 	setsize(this, mins, maxs);
 
-	g_iRenderTargetActive = m_bState;
-
-	if (!m_bState) {
-		return;
-	}
-
-	g_flRenderTargetFOV = m_flFOV;
-	g_iRenderTargetSize = [320, 240];
-	g_vecRenderTargetPos = m_vecCamOrigin;
-	g_vecRenderTargetAngles = m_vecCamAngles;
+	RenderTarget_SetMonitor(m_bState, m_vecCamOrigin, m_vecCamAngles, m_flFOV, [320, 240]);
 }
 #endif
 

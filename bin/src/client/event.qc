@@ -289,9 +289,6 @@ Event_Parse(float type)
 	case EV_FADE:
 		Fade_Parse();
 		break;
-	case EV_SPRITE:
-		EnvSprite_ParseEvent();
-		break;
 	case EV_TEXT:
 		GameText_ParseString();
 		break;

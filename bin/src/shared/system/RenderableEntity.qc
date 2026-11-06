@@ -768,7 +768,7 @@ ncRenderableEntity::postdraw(void)
 	if not (autocvar(r_showRenderInfo, 0))
 		return;
 
-	if not (PointMessage_Visible(WorldSpaceCenter(), g_view.GetCameraOrigin(), g_view.GetCameraAngle()))
+	if not (WorldText_Visible(WorldSpaceCenter(), g_view.GetCameraOrigin(), g_view.GetCameraAngle()))
 		return;
 
 	string renderMode = "";
@@ -874,7 +874,7 @@ ncRenderableEntity::postdraw(void)
 	string renderString = sprintf("RC: %v\nRA: %f\nRM: %s\nRFX: %s",
 		m_renderColor, m_renderAmount, renderMode, renderFX);
 
-	PointMessage_FieldAtPos(WorldSpaceCenter(), renderString, 128);
+	WorldText_DrawField(WorldSpaceCenter(), renderString, 128);
 }
 #endif
 

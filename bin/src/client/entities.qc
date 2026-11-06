@@ -48,13 +48,6 @@ Entity_EntityUpdate(float type, float new)
 		NSENTITY_READENTITY(ncTalkMonster, new)
 		self.customphysics = Empty;
 		break;
-	case ENT_SPEAKER:
-		NSENTITY_READENTITY(speaker, new)
-		self.customphysics = Empty;
-		break;
-	case ENT_TRACKTRAIN:
-		NSENTITY_READENTITY(func_tracktrain, new)
-		break;
 	case ENT_VEHICLE:
 		NSENTITY_READENTITY(ncVehicle, new)
 		break;
@@ -90,9 +83,6 @@ Entity_EntityUpdate(float type, float new)
 		break;
 	case ENT_CASCADELIGHT:
 		NSENTITY_READENTITY(ncCascadeLight, new)
-		break;
-	case ENT_AMBIENTSOUND:
-		NSENTITY_READENTITY(ambient_generic, new)
 		break;
 	case ENT_ITEM:
 		NSENTITY_READENTITY(ncItem, new)

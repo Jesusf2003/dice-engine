@@ -4,6 +4,7 @@
 			"name": "FTEQW (MinGW-w64 UCRT64)",
 			"compilerPath": "C:/msys64/ucrt64/bin/gcc.exe",
 			"intelliSenseMode": "windows-gcc-x64",
+			"compileCommands": "${workspaceFolder}/tools/vmap/compile_commands.json",
 			"cStandard": "gnu11",
 			"cppStandard": "gnu++17",
 			"includePath": [

@@ -154,6 +154,14 @@ typedef enum
 	MTRIG_SEEPLAYER_RELAXED,	/**< 12, we see a player and we're currently attacking anything */
 } triggerCondition_t;
 
+/** Spawnflags of a scripted sequence entity, copied into ncMonster::m_iSequenceFlags
+while the monster performs it. */
+#define SSFL_REPEATABLE 4	/**< can trigger the sequence more than once, otherwise it's removed when done */
+#define SSFL_LEAVECORPSE 8	/**< when done, the actor is frozen */
+#define SSFL_NOINTERRUPT 32	/**< ignores damage until the sequence is complete */
+#define SSFL_OVERRIDEAI 64	/**< the actor doesn't think/play sounds while in it */
+#define SSFL_NOSCRIPTMOVE 128	/**< when done, the monster is placed back where the action animation started */
+
 /* FIXME: I'd like to move this into ncMonster, but our current IsFriend()
  * check is currently only checking on a .takedamage basis. */
 .int m_iAlliance;

@@ -387,7 +387,7 @@ ncPhysicsEntity::postdraw(void)
 	if not (autocvar_r_showPhysicsInfo)
 		return;
 
-	if not (PointMessage_Visible(WorldSpaceCenter(), g_view.GetCameraOrigin(), g_view.GetCameraAngle()))
+	if not (WorldText_Visible(WorldSpaceCenter(), g_view.GetCameraOrigin(), g_view.GetCameraAngle()))
 		return;
 
 	float massVolume = (size[0] * size[1] * size[2]);
@@ -396,7 +396,7 @@ ncPhysicsEntity::postdraw(void)
 	string renderString = sprintf("Health: %d\nMass: %.2f kg (%.2f ODE)\nEnergy: %d kj\nInertia: %d\nVolume: %.2f",
 		health, GetMass(), mass, GetEnergy() * (1.0 / 1024), GetInertia(), massVolume);
 
-	PointMessage_FieldAtPos(WorldSpaceCenter(), renderString, 256);
+	WorldText_DrawField(WorldSpaceCenter(), renderString, 256);
 }
 #endif
 

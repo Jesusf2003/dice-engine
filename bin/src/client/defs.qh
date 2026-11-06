@@ -31,6 +31,11 @@
 #include "UserInfo.qh"
 #include "UserInfoManager.qh"
 #include "ServerInfo.qh"
+#include "WorldText.qh"
+#include "LensFlare.qh"
+#include "SkyRoom.qh"
+#include "RenderTarget.qh"
+#include "Cubemaps.qh"
 
 var bool g_net_debug = false;
 var bool g_cheats = false;
@@ -412,8 +417,6 @@ struct
 	bool m_bInterfaceFocused;
 	bool m_bSpecInput;
 
-	int m_iLeanDir;
-	float m_flLeaning;
 	int m_iSprinting;
 
 	int m_iSelectedWeapon;
