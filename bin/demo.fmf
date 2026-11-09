@@ -1,0 +1,8 @@
+FTEMANIFEST 1
+// Manifest of the demo game: a minimal FTEQW game template (bin/demo, see demo/README.md).
+// Launch from bin/: run.bat -map room   (fteqw.exe +game demo +map room)
+GAME demo
+NAME "Demo"
+PROTOCOLNAME "Demo"
+BASEGAME demo
+DISABLEHOMEDIR 1

@@ -17,7 +17,7 @@ XML_LDFLAGS=$(shell pkg-config --libs libxml-2.0)
 MINIZIP_CFLAGS=$(shell pkg-config --cflags minizip)
 MINIZIP_LDFLAGS=$(shell pkg-config --libs minizip)
 
-VMAP_CFLAGS=$(CFLAGS) $(GLIB_CFLAGS) $(XML_CFLAGS) $(MINIZIP_CFLAGS) -I../include  -I../common -I../libs
+VMAP_CFLAGS=$(CFLAGS) $(GLIB_CFLAGS) $(XML_CFLAGS) $(MINIZIP_CFLAGS) -I. -I../include -I../common -I../libs
 VMAP_LDFLAGS=$(LDFLAGS) -lm -lpthread -L../lib $(GLIB_LDFLAGS) $(XML_LDFLAGS) $(MINIZIP_LDFLAGS)
 
 DO_CC=$(CC) $(VMAP_CFLAGS) -o $@ -c $<
@@ -36,9 +36,9 @@ VMAP_OBJS = \
 	../common/matlib.o \
 	../common/threads.o \
 	../common/vfs.o \
-	brush.o \
-	brush_primit.o \
-	bsp.o \
+	bsp/brush.o \
+	bsp/brush_primit.o \
+	bsp/bsp.o \
 	bsp_analyze.o \
 	bsp_info.o \
 	bsp_scale.o \
@@ -49,38 +49,38 @@ VMAP_OBJS = \
 	convert_bsp.o \
 	convert_map.o \
 	convert_obj.o \
-	decals.o \
+	bsp/decals.o \
 	exportents.o \
-	facebsp.o \
+	bsp/facebsp.o \
 	fixaas.o \
-	fog.o \
+	bsp/fog.o \
 	help.o \
 	image.o \
-	leakfile.o \
-	light.o \
-	light_bounce.o \
-	light_trace.o \
-	light_ydnar.o \
-	lightmaps_ydnar.o \
+	bsp/leakfile.o \
+	light/light.o \
+	light/light_bounce.o \
+	light/light_trace.o \
+	light/light_ydnar.o \
+	light/lightmaps_ydnar.o \
 	main.o \
-	map.o \
-	mesh.o \
-	model.o \
-	patch.o \
+	bsp/map.o \
+	bsp/mesh.o \
+	bsp/model.o \
+	bsp/patch.o \
 	path_init.o \
-	portals.o \
-	prtfile.o \
+	bsp/portals.o \
+	bsp/prtfile.o \
 	shaders.o \
-	surface.o \
-	surface_extra.o \
-	surface_foliage.o \
-	surface_fur.o \
-	surface_meta.o \
-	tjunction.o \
-	tree.o \
-	vis.o \
-	visflow.o \
-	writebsp.o
+	bsp/surface.o \
+	bsp/surface_extra.o \
+	bsp/surface_foliage.o \
+	bsp/surface_fur.o \
+	bsp/surface_meta.o \
+	bsp/tjunction.o \
+	bsp/tree.o \
+	vis/vis.o \
+	vis/visflow.o \
+	bsp/writebsp.o
 
 # binary target
 ../vmap: $(VMAP_OBJS)
@@ -88,7 +88,7 @@ VMAP_OBJS = \
 
 clean:
 	-rm -f ./../common/*.o
-	-rm -f ./*.o
+	-rm -f ./*.o ./bsp/*.o ./light/*.o ./vis/*.o
 	-rm -f ../vmap
 
 # object files
@@ -102,9 +102,9 @@ clean:
 ../common/matlib.o: ../common/matlib.c ../common/matlib.h
 ../common/threads.o: ../common/threads.c
 ../common/vfs.o: ../common/vfs.c ../common/vfs.h
-brush.o: brush.c 
-brush_primit.o: brush_primit.c
-bsp.o: bsp.c
+bsp/brush.o: bsp/brush.c 
+bsp/brush_primit.o: bsp/brush_primit.c
+bsp/bsp.o: bsp/bsp.c
 bsp_analyze.o: bsp_analyze.c
 bsp_info.o: bsp_info.c
 bsp_scale.o: bsp_scale.c
@@ -115,35 +115,35 @@ convert_ase.o: convert_ase.c
 convert_bsp.o: convert_bsp.c
 convert_map.o: convert_map.c
 convert_obj.o: convert_obj.c
-decals.o: decals.c
+bsp/decals.o: bsp/decals.c
 exportents.o: exportents.c
-facebsp.o: facebsp.c
+bsp/facebsp.o: bsp/facebsp.c
 fixaas.o: fixaas.c
-fog.o: fog.c
+bsp/fog.o: bsp/fog.c
 help.o: help.c
 image.o: image.c
-leakfile.o: leakfile.c
-light.o: light.c
-light_bounce.o: light_bounce.c
-light_trace.o: light_trace.c
-light_ydnar.o: light_ydnar.c
-lightmaps_ydnar.o: lightmaps_ydnar.c
+bsp/leakfile.o: bsp/leakfile.c
+light/light.o: light/light.c
+light/light_bounce.o: light/light_bounce.c
+light/light_trace.o: light/light_trace.c
+light/light_ydnar.o: light/light_ydnar.c
+light/lightmaps_ydnar.o: light/lightmaps_ydnar.c
 main.o: main.c
-map.o: map.c
-mesh.o: mesh.c
-model.o: model.c
-patch.o: patch.c
+bsp/map.o: bsp/map.c
+bsp/mesh.o: bsp/mesh.c
+bsp/model.o: bsp/model.c
+bsp/patch.o: bsp/patch.c
 path_init.o: path_init.c
-portals.o: portals.c
-prtfile.o: prtfile.c
+bsp/portals.o: bsp/portals.c
+bsp/prtfile.o: bsp/prtfile.c
 shaders.o: shaders.c
-surface.o: surface.c
-surface_extra.o: surface_extra.c
-surface_foliage.o: surface_foliage.c
-surface_fur.o: surface_fur.c
-surface_meta.o: surface_meta.c
-tjunction.o: tjunction.c
-tree.o: tree.c
-vis.o: vis.c
-visflow.o: visflow.c
-writebsp.o: writebsp.c
+bsp/surface.o: bsp/surface.c
+bsp/surface_extra.o: bsp/surface_extra.c
+bsp/surface_foliage.o: bsp/surface_foliage.c
+bsp/surface_fur.o: bsp/surface_fur.c
+bsp/surface_meta.o: bsp/surface_meta.c
+bsp/tjunction.o: bsp/tjunction.c
+bsp/tree.o: bsp/tree.c
+vis/vis.o: vis/vis.c
+vis/visflow.o: vis/visflow.c
+bsp/writebsp.o: bsp/writebsp.c

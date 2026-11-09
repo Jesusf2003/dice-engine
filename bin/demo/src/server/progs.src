@@ -1,0 +1,11 @@
+/* Server game logic (SSQC) -> demo/progs.dat */
+#pragma target fte
+#pragma progs_dat "../../progs.dat"
+
+#includelist
+../fteextensions.qc
+defs.qh
+sv_main.qc
+sv_player.qc
+sv_entities.qc
+#endlist

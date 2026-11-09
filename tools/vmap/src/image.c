@@ -26,12 +26,8 @@
 
    ------------------------------------------------------------------------------- */
 
-
-
 /* marker */
 #define IMAGE_C
-
-
 
 /* dependencies */
 #include "vmap.h"
@@ -43,8 +39,6 @@
 #define STBI_REALLOC(p, newsz) realloc(p, newsz)
 #define STBI_FREE(p) free(p)
 #include "stb_image.h"
-
-
 
 /* -------------------------------------------------------------------------------
 
@@ -58,283 +52,295 @@
    loads a dxtc (1, 3, 5) dds buffer into a valid rgba image
  */
 
-static void LoadDDSBuffer( byte *buffer, int size, byte **pixels, int *width, int *height ){
-	int w, h;
-	ddsPF_t pf;
+static void LoadDDSBuffer(byte *buffer, int size, byte **pixels, int *width, int *height)
+{
+  int w, h;
+  ddsPF_t pf;
 
+  /* dummy check */
+  if (buffer == NULL || size <= 0 || pixels == NULL || width == NULL || height == NULL)
+  {
+    return;
+  }
 
-	/* dummy check */
-	if ( buffer == NULL || size <= 0 || pixels == NULL || width == NULL || height == NULL ) {
-		return;
-	}
+  /* null out */
+  *pixels = 0;
+  *width = 0;
+  *height = 0;
 
-	/* null out */
-	*pixels = 0;
-	*width = 0;
-	*height = 0;
+  /* get dds info */
+  if (DDSGetInfo((ddsBuffer_t *)buffer, &w, &h, &pf))
+  {
+    Sys_FPrintf(SYS_WRN, "WARNING: Invalid DDS texture\n");
+    return;
+  }
 
-	/* get dds info */
-	if ( DDSGetInfo( (ddsBuffer_t*) buffer, &w, &h, &pf ) ) {
-		Sys_FPrintf( SYS_WRN, "WARNING: Invalid DDS texture\n" );
-		return;
-	}
+  /* only certain types of dds textures are supported */
+  if (pf != DDS_PF_ARGB8888 && pf != DDS_PF_DXT1 && pf != DDS_PF_DXT3 && pf != DDS_PF_DXT5)
+  {
+    Sys_FPrintf(SYS_WRN, "WARNING: Only DDS texture formats ARGB8888, DXT1, DXT3, and DXT5 are supported (%d)\n", pf);
+    return;
+  }
 
-	/* only certain types of dds textures are supported */
-	if ( pf != DDS_PF_ARGB8888 && pf != DDS_PF_DXT1 && pf != DDS_PF_DXT3 && pf != DDS_PF_DXT5 ) {
-		Sys_FPrintf( SYS_WRN, "WARNING: Only DDS texture formats ARGB8888, DXT1, DXT3, and DXT5 are supported (%d)\n", pf );
-		return;
-	}
+  /* create image pixel buffer */
+  *width = w;
+  *height = h;
+  *pixels = safe_malloc(w * h * 4);
 
-	/* create image pixel buffer */
-	*width = w;
-	*height = h;
-	*pixels = safe_malloc( w * h * 4 );
-
-	/* decompress the dds texture */
-	DDSDecompress( (ddsBuffer_t*) buffer, *pixels );
+  /* decompress the dds texture */
+  DDSDecompress((ddsBuffer_t *)buffer, *pixels);
 }
-
-
 
 /*
    LoadPNGBuffer()
    loads a png file buffer into a valid rgba image
  */
 
-static void LoadPNGBuffer( byte *buffer, int size, byte **pixels, int *width, int *height ){
-	/* dummy check */
-	if ( buffer == NULL || size <= 0 || pixels == NULL || width == NULL || height == NULL ) {
-		return;
-	}
+static void LoadPNGBuffer(byte *buffer, int size, byte **pixels, int *width, int *height)
+{
+  /* dummy check */
+  if (buffer == NULL || size <= 0 || pixels == NULL || width == NULL || height == NULL)
+  {
+    return;
+  }
 
-	/* null out */
-	*pixels = 0;
-	*width = 0;
-	*height = 0;
+  /* null out */
+  *pixels = 0;
+  *width = 0;
+  *height = 0;
 
-	/* load image */
-	*pixels = stbi_load_from_memory(buffer, size, width, height, NULL, 4);
-	if (!*pixels)
-		Sys_FPrintf( SYS_WRN, "WARNING: LoadPNGBuffer: %s\n", stbi_failure_reason() );
+  /* load image */
+  *pixels = stbi_load_from_memory(buffer, size, width, height, NULL, 4);
+  if (!*pixels)
+    Sys_FPrintf(SYS_WRN, "WARNING: LoadPNGBuffer: %s\n", stbi_failure_reason());
 }
-
-
 
 /*
    LoadJPGBuff()
    loads a jpeg file buffer into a valid rgba image
  */
 
-static int LoadJPGBuff( byte *buffer, int size, byte **pixels, int *width, int *height ){
-	/* dummy check */
-	if ( buffer == NULL || size <= 0 || pixels == NULL || width == NULL || height == NULL ) {
-		return -1;
-	}
+static int LoadJPGBuff(byte *buffer, int size, byte **pixels, int *width, int *height)
+{
+  /* dummy check */
+  if (buffer == NULL || size <= 0 || pixels == NULL || width == NULL || height == NULL)
+  {
+    return -1;
+  }
 
-	/* null out */
-	*pixels = 0;
-	*width = 0;
-	*height = 0;
+  /* null out */
+  *pixels = 0;
+  *width = 0;
+  *height = 0;
 
-	/* load image */
-	*pixels = stbi_load_from_memory(buffer, size, width, height, NULL, 4);
-	if (!*pixels) {
-		Sys_FPrintf( SYS_WRN, "WARNING: LoadJPGBuff: %s\n", stbi_failure_reason() );
-		return -1;
-	}
+  /* load image */
+  *pixels = stbi_load_from_memory(buffer, size, width, height, NULL, 4);
+  if (!*pixels)
+  {
+    Sys_FPrintf(SYS_WRN, "WARNING: LoadJPGBuff: %s\n", stbi_failure_reason());
+    return -1;
+  }
 
-	return 0;
+  return 0;
 }
-
-
 
 /*
    ImageInit()
    implicitly called by every function to set up image list
  */
 
-static void ImageInit( void ){
-	int i;
+static void ImageInit(void)
+{
+  int i;
 
+  if (numImages <= 0)
+  {
+    /* clear images (fixme: this could theoretically leak) */
+    memset(images, 0, sizeof(images));
 
-	if ( numImages <= 0 ) {
-		/* clear images (fixme: this could theoretically leak) */
-		memset( images, 0, sizeof( images ) );
-
-		/* generate *bogus image */
-		images[ 0 ].name = safe_malloc( strlen( DEFAULT_IMAGE ) + 1 );
-		strcpy( images[ 0 ].name, DEFAULT_IMAGE );
-		images[ 0 ].filename = safe_malloc( strlen( DEFAULT_IMAGE ) + 1 );
-		strcpy( images[ 0 ].filename, DEFAULT_IMAGE );
-		images[ 0 ].width = 64;
-		images[ 0 ].height = 64;
-		images[ 0 ].refCount = 1;
-		images[ 0 ].pixels = safe_malloc( 64 * 64 * 4 );
-		for ( i = 0; i < ( 64 * 64 * 4 ); i++ )
-			images[ 0 ].pixels[ i ] = 255;
-	}
+    /* generate *bogus image */
+    images[0].name = safe_malloc(strlen(DEFAULT_IMAGE) + 1);
+    strcpy(images[0].name, DEFAULT_IMAGE);
+    images[0].filename = safe_malloc(strlen(DEFAULT_IMAGE) + 1);
+    strcpy(images[0].filename, DEFAULT_IMAGE);
+    images[0].width = 64;
+    images[0].height = 64;
+    images[0].refCount = 1;
+    images[0].pixels = safe_malloc(64 * 64 * 4);
+    for (i = 0; i < (64 * 64 * 4); i++)
+      images[0].pixels[i] = 255;
+  }
 }
-
-
 
 /*
    ImageFree()
    frees an rgba image
  */
 
-void ImageFree( image_t *image ){
-	/* dummy check */
-	if ( image == NULL ) {
-		return;
-	}
+void ImageFree(image_t *image)
+{
+  /* dummy check */
+  if (image == NULL)
+  {
+    return;
+  }
 
-	/* decrement refcount */
-	image->refCount--;
+  /* decrement refcount */
+  image->refCount--;
 
-	/* free? */
-	if ( image->refCount <= 0 ) {
-		if ( image->name != NULL ) {
-			free( image->name );
-		}
-		image->name = NULL;
-		if ( image->filename != NULL ) {
-			free( image->filename );
-		}
-		image->filename = NULL;
-		free( image->pixels );
-		image->width = 0;
-		image->height = 0;
-		numImages--;
-	}
+  /* free? */
+  if (image->refCount <= 0)
+  {
+    if (image->name != NULL)
+    {
+      free(image->name);
+    }
+    image->name = NULL;
+    if (image->filename != NULL)
+    {
+      free(image->filename);
+    }
+    image->filename = NULL;
+    free(image->pixels);
+    image->width = 0;
+    image->height = 0;
+    numImages--;
+  }
 }
-
-
 
 /*
    ImageFind()
    finds an existing rgba image and returns a pointer to the image_t struct or NULL if not found
  */
 
-image_t *ImageFind( const char *filename ){
-	int i;
-	char name[ 1024 ];
+image_t *ImageFind(const char *filename)
+{
+  int i;
+  char name[1024];
 
+  /* init */
+  ImageInit();
 
-	/* init */
-	ImageInit();
+  /* dummy check */
+  if (filename == NULL || filename[0] == '\0')
+  {
+    return NULL;
+  }
 
-	/* dummy check */
-	if ( filename == NULL || filename[ 0 ] == '\0' ) {
-		return NULL;
-	}
+  /* strip file extension off name */
+  strcpy(name, filename);
+  StripExtension(name);
 
-	/* strip file extension off name */
-	strcpy( name, filename );
-	StripExtension( name );
+  /* search list */
+  for (i = 0; i < MAX_IMAGES; i++)
+  {
+    if (images[i].name != NULL && !strcmp(name, images[i].name))
+    {
+      return &images[i];
+    }
+  }
 
-	/* search list */
-	for ( i = 0; i < MAX_IMAGES; i++ )
-	{
-		if ( images[ i ].name != NULL && !strcmp( name, images[ i ].name ) ) {
-			return &images[ i ];
-		}
-	}
-
-	/* no matching image found */
-	return NULL;
+  /* no matching image found */
+  return NULL;
 }
-
-
 
 /*
    ImageLoad()
    loads an rgba image and returns a pointer to the image_t struct or NULL if not found
  */
 
-image_t *ImageLoad( const char *filename ){
-	int i;
-	image_t     *image;
-	char name[ 1024 ];
-	int size;
-	byte        *buffer = NULL;
-	qboolean alphaHack = qfalse;
+image_t *ImageLoad(const char *filename)
+{
+  int i;
+  image_t *image;
+  char name[1024];
+  int size;
+  byte *buffer = NULL;
+  qboolean alphaHack = qfalse;
 
+  /* init */
+  ImageInit();
 
-	/* init */
-	ImageInit();
+  /* dummy check */
+  if (filename == NULL || filename[0] == '\0')
+  {
+    return NULL;
+  }
 
-	/* dummy check */
-	if ( filename == NULL || filename[ 0 ] == '\0' ) {
-		return NULL;
-	}
+  /* strip file extension off name */
+  strcpy(name, filename);
+  StripExtension(name);
 
-	/* strip file extension off name */
-	strcpy( name, filename );
-	StripExtension( name );
+  /* try to find existing image */
+  image = ImageFind(name);
+  if (image != NULL)
+  {
+    image->refCount++;
+    return image;
+  }
 
-	/* try to find existing image */
-	image = ImageFind( name );
-	if ( image != NULL ) {
-		image->refCount++;
-		return image;
-	}
+  /* none found, so find first non-null image */
+  image = NULL;
+  for (i = 0; i < MAX_IMAGES; i++)
+  {
+    if (images[i].name == NULL)
+    {
+      image = &images[i];
+      break;
+    }
+  }
 
-	/* none found, so find first non-null image */
-	image = NULL;
-	for ( i = 0; i < MAX_IMAGES; i++ )
-	{
-		if ( images[ i ].name == NULL ) {
-			image = &images[ i ];
-			break;
-		}
-	}
+  /* too many images? */
+  if (image == NULL)
+  {
+    Error("MAX_IMAGES (%d) exceeded, there are too many image files referenced by the map.", MAX_IMAGES);
+  }
 
-	/* too many images? */
-	if ( image == NULL ) {
-		Error( "MAX_IMAGES (%d) exceeded, there are too many image files referenced by the map.", MAX_IMAGES );
-	}
+  /* set it up */
+  image->name = safe_malloc(strlen(name) + 1);
+  strcpy(image->name, name);
 
-	/* set it up */
-	image->name = safe_malloc( strlen( name ) + 1 );
-	strcpy( image->name, name );
+  /* attempt to load tga */
+  StripExtension(name);
+  strcat(name, ".tga");
+  size = vfsLoadFile((const char *)name, (void **)&buffer, 0);
+  if (size > 0)
+  {
+    LoadTGABuffer(buffer, buffer + size, &image->pixels, &image->width, &image->height);
+  }
+  else
+  {
+    /* attempt to load png */
+    StripExtension(name);
+    strcat(name, ".png");
+    size = vfsLoadFile((const char *)name, (void **)&buffer, 0);
+    if (size > 0)
+    {
+      LoadPNGBuffer(buffer, size, &image->pixels, &image->width, &image->height);
+    }
+    else
+    {
+      /* attempt to load jpg */
+      StripExtension(name);
+      strcat(name, ".jpg");
+      size = vfsLoadFile((const char *)name, (void **)&buffer, 0);
+      if (size > 0)
+      {
+        LoadJPGBuff(buffer, size, &image->pixels, &image->width, &image->height);
+        alphaHack = qtrue;
+      }
+      else
+      {
+        /* attempt to load dds */
+        StripExtension(name);
+        strcat(name, ".dds");
+        size = vfsLoadFile((const char *)name, (void **)&buffer, 0);
+        if (size > 0)
+        {
+          LoadDDSBuffer(buffer, size, &image->pixels, &image->width, &image->height);
 
-	/* attempt to load tga */
-	StripExtension( name );
-	strcat( name, ".tga" );
-	size = vfsLoadFile( (const char*) name, (void**) &buffer, 0 );
-	if ( size > 0 ) {
-		LoadTGABuffer( buffer, buffer + size, &image->pixels, &image->width, &image->height );
-	}
-	else
-	{
-		/* attempt to load png */
-		StripExtension( name );
-		strcat( name, ".png" );
-		size = vfsLoadFile( (const char*) name, (void**) &buffer, 0 );
-		if ( size > 0 ) {
-			LoadPNGBuffer( buffer, size, &image->pixels, &image->width, &image->height );
-		}
-		else
-		{
-			/* attempt to load jpg */
-			StripExtension( name );
-			strcat( name, ".jpg" );
-			size = vfsLoadFile( (const char*) name, (void**) &buffer, 0 );
-			if ( size > 0 ) {
-				LoadJPGBuff( buffer, size, &image->pixels, &image->width, &image->height );
-				alphaHack = qtrue;
-			}
-			else
-			{
-				/* attempt to load dds */
-				StripExtension( name );
-				strcat( name, ".dds" );
-				size = vfsLoadFile( (const char*) name, (void**) &buffer, 0 );
-				if ( size > 0 ) {
-					LoadDDSBuffer( buffer, size, &image->pixels, &image->width, &image->height );
-
-					/* debug code */
-					#if 0
+/* debug code */
+#if 0
 					{
 						ddsPF_t pf;
 						DDSGetInfo( (ddsBuffer_t*) buffer, NULL, NULL, &pf );
@@ -345,61 +351,67 @@ image_t *ImageLoad( const char *filename ){
 							WriteTGA( "C:\\games\\quake3\\baseq3\\textures\\rad\\dds_converted.tga", image->pixels, image->width, image->height );
 						}
 					}
-					#endif
-				}
-				else
-				{
-					/* attempt to load ktx */
-					StripExtension( name );
-					strcat( name, ".ktx" );
-					size = vfsLoadFile( (const char*) name, (void**) &buffer, 0 );
-					if ( size > 0 ) {
-						LoadKTXBufferFirstImage( buffer, size, &image->pixels, &image->width, &image->height );
-					}
-				}
-			}
-		}
-	}
+#endif
+        }
+        else
+        {
+          /* attempt to load ktx */
+          StripExtension(name);
+          strcat(name, ".ktx");
+          size = vfsLoadFile((const char *)name, (void **)&buffer, 0);
+          if (size > 0)
+          {
+            LoadKTXBufferFirstImage(buffer, size, &image->pixels, &image->width, &image->height);
+          }
+        }
+      }
+    }
+  }
 
-	/* free file buffer */
-	free( buffer );
+  /* free file buffer */
+  free(buffer);
 
-	/* make sure everything's kosher */
-	if ( size <= 0 || image->width <= 0 || image->height <= 0 || image->pixels == NULL ) {
-		//%	Sys_Printf( "size = %d  width = %d  height = %d  pixels = 0x%08x (%s)\n",
-		//%		size, image->width, image->height, image->pixels, name );
-		free( image->name );
-		image->name = NULL;
-		return NULL;
-	}
+  /* make sure everything's kosher */
+  if (size <= 0 || image->width <= 0 || image->height <= 0 || image->pixels == NULL)
+  {
+    //%	Sys_Printf( "size = %d  width = %d  height = %d  pixels = 0x%08x (%s)\n",
+    //%		size, image->width, image->height, image->pixels, name );
+    free(image->name);
+    image->name = NULL;
+    return NULL;
+  }
 
-	/* set filename */
-	image->filename = safe_malloc( strlen( name ) + 1 );
-	strcpy( image->filename, name );
+  /* set filename */
+  image->filename = safe_malloc(strlen(name) + 1);
+  strcpy(image->filename, name);
 
-	/* set count */
-	image->refCount = 1;
-	numImages++;
+  /* set count */
+  image->refCount = 1;
+  numImages++;
 
-	if ( alphaHack ) {
-		StripExtension( name );
-		strcat( name, "_alpha.jpg" );
-		size = vfsLoadFile( (const char*) name, (void**) &buffer, 0 );
-		if ( size > 0 ) {
-			unsigned char *pixels;
-			int width, height;
-			if ( LoadJPGBuff( buffer, size, &pixels, &width, &height ) == 0 ) {
-				if ( width == image->width && height == image->height ) {
-					int i;
-					for ( i = 0; i < width * height; ++i )
-						image->pixels[4 * i + 3] = pixels[4 * i + 2];  // copy alpha from blue channel
-				}
-				free( pixels );
-			}
-			free( buffer );
-		}
-	}
+  if (alphaHack)
+  {
+    StripExtension(name);
+    strcat(name, "_alpha.jpg");
+    size = vfsLoadFile((const char *)name, (void **)&buffer, 0);
+    if (size > 0)
+    {
+      unsigned char *pixels;
+      int width, height;
+      if (LoadJPGBuff(buffer, size, &pixels, &width, &height) == 0)
+      {
+        if (width == image->width && height == image->height)
+        {
+          int i;
+          for (i = 0; i < width * height; ++i)
+            image->pixels[4 * i + 3] = pixels[4 * i + 2]; // copy alpha from blue channel
+        }
+        free(pixels);
+      }
+      free(buffer);
+    }
+  }
 
-	/* return the image */
-	return image;
+  /* return the image */
+  return image;
 }

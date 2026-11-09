@@ -1,0 +1,9 @@
+/* Client game logic (CSQC) -> demo/csprogs.dat */
+#pragma target fte
+#pragma progs_dat "../../csprogs.dat"
+#define CSQC
+
+#includelist
+../fteextensions.qc
+cl_main.qc
+#endlist

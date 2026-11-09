@@ -1,0 +1,9 @@
+// Startup script of the demo game; the engine runs it at launch.
+// It replaces the quake.rc inside demo/pak0.pak (loose files win over paks).
+//
+// No "stuffcmds" here: FTE runs the command-line +commands (e.g. +map room)
+// itself once it has finished starting up. Running them from this script is
+// too early and the +map is lost.
+
+exec default.cfg	// default binds and settings of this game
+exec autoexec.cfg	// optional, per-user tweaks (not shipped)

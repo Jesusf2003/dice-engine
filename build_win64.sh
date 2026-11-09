@@ -1,53 +1,34 @@
 #!/bin/bash
-# Windows (MSYS2 UCRT64) build wrapper for this workspace: FTEQW at the root, Nuclide in ./bin.
-# Runs the steps from bin/Documentation/Building.md with the parameters MinGW-w64 needs.
+# Windows (MSYS2 UCRT64) build wrapper for this workspace: FTEQW at the root, the games in ./bin.
 #
 # Usage, from an MSYS2 UCRT64 terminal in this directory:
-#   ./build_win64.sh [targets...]          e.g.  GAME=base ./build_win64.sh game engine
+#   ./build_win64.sh [targets...]          e.g.  GAME=demo ./build_win64.sh game maps
 # or from VS Code: Terminal > Run Build Task (.vscode/tasks.json).
-# Targets (default: fteqcc game engine plugins):
-#   fteqcc   - builds the QuakeC compiler and installs it as bin/fteqcc.exe   (make fteqcc)
-#   game     - builds progs.dat/csprogs.dat/menu.dat for $GAME               (make game GAME=...)
-#   engine   - builds the branded engine from bin/$GAME/engine.h              (make engine-win64 GAME=...)
-#   fteqw    - builds the generic, unbranded engine as bin/fteqw.exe          (make fteqw)
+# Targets (default: fteqcc game):
+#   fteqcc   - builds the QuakeC compiler and installs it as bin/fteqcc.exe
+#   game     - compiles bin/$GAME/src/progs.src (progs.dat + csprogs.dat in bin/$GAME)
+#   maps     - compiles every bin/$GAME/maps/*.map with vmap (bsp, vis, light)
+#   fteqw    - builds the generic engine as bin/fteqw.exe
 #   plugins  - builds the plugins listed in bin/$GAME/PLUGINS or $NATIVE_PLUGINS
 #   makelibs - builds the static third-party libs (zlib, png, jpeg, ogg, vorbis, opus, speex, freetype)
 #   vmap     - builds the map compiler into tools/vmap/bin/vmap.exe (plus the DLLs it needs)
 #   vmap-intellisense - only writes tools/vmap/compile_commands.json (VS Code include paths for vmap)
 #   clean    - removes engine objects (keeps the third-party libs)
-# Environment: GAME (default base), JOBS (default: nproc), NATIVE_PLUGINS.
+# Environment: GAME (default demo), JOBS (default: nproc), NATIVE_PLUGINS.
 
 set -e
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-NUCLIDE="$ROOT/bin"
+BIN="$ROOT/bin"
 ENGINE="$ROOT/engine"
 VMAP="$ROOT/tools/vmap"
-GAME="${GAME:-base}"
+GAME="${GAME:-demo}"
 JOBS="${JOBS:-$(nproc)}"
 
 if [ "$MSYSTEM" != "UCRT64" ] && [ "$MSYSTEM" != "MINGW64" ]; then
 	echo "error: run this from an MSYS2 UCRT64 shell (MSYSTEM=$MSYSTEM)" >&2
 	exit 1
 fi
-
-# Nuclide expects FTEQW in bin/ThirdParty/fteqw. Junctions point there instead of cloning a second copy.
-ensure_thirdparty() {
-	local tp="$NUCLIDE/ThirdParty/fteqw"
-	# MSYS2's own /usr/bin/cmd is a wrapper script, not Windows' cmd.exe.
-	local wincmd
-	wincmd="$(cygpath -u "${COMSPEC:-C:\\Windows\\System32\\cmd.exe}")"
-	mkdir -p "$tp"
-	# Junctions store absolute targets, so after moving the workspace they still point at the old copy.
-	for d in engine plugins; do
-		if [ "$(realpath -m "$tp/$d")" != "$(realpath "$ROOT/$d")" ]; then
-			if [ -e "$tp/$d" ] || [ -L "$tp/$d" ]; then
-				"$wincmd" //c "rmdir $(cygpath -w "$tp/$d")" > /dev/null	# removes only the junction, not its target
-			fi
-			"$wincmd" //c "mklink /J $(cygpath -w "$tp/$d") $(cygpath -w "$ROOT/$d")" > /dev/null
-		fi
-	done
-}
 
 # The engine Makefile shares one object dir between FTE_CONFIGs and does not notice config changes,
 # so stale objects (e.g. plugin.o referencing Plug_Q3_Init) break the link. Wipe them on a switch.
@@ -67,42 +48,51 @@ do_makelibs() {
 
 do_fteqcc() {
 	make -C "$ENGINE" qcc-rel FTE_TARGET=win64 -j"$JOBS"
-	install -m 0755 "$ENGINE/release/fteqcc64.exe" "$NUCLIDE/fteqcc.exe"
+	install -m 0755 "$ENGINE/release/fteqcc64.exe" "$BIN/fteqcc.exe"
 }
 
 do_game() {
-	[ -f "$NUCLIDE/fteqcc.exe" ] || do_fteqcc
-	make -C "$NUCLIDE" game GAME="$GAME"
+	[ -f "$BIN/fteqcc.exe" ] || do_fteqcc
+	if [ ! -f "$BIN/$GAME/src/progs.src" ]; then
+		echo "error: bin/$GAME/src/progs.src not found" >&2
+		exit 1
+	fi
+	# progs.src lists each program (#pragma sourcefile); every one writes its own .dat.
+	(cd "$BIN/$GAME/src" && "$BIN/fteqcc.exe")
 }
 
-do_engine() {
-	do_makelibs
-	select_config "$GAME"
-	# Nuclide's engine-win64 target is the exe itself with no prerequisites; remove it so engine edits get rebuilt.
-	rm -f "$ENGINE/release/${GAME}64.exe"
-	make -C "$NUCLIDE" engine-win64 GAME="$GAME" NATIVE_PLUGINS="${NATIVE_PLUGINS:-}" -j"$JOBS"
-	local name
-	name="$(cd "$NUCLIDE" && ./Tools/get-name.sh "$GAME")"
-	install -m 0755 "$NUCLIDE/build/$name-win/${name}_x64.exe" "$NUCLIDE/${name}_x64.exe"
-	echo "Engine: bin/${name}_x64.exe  (run: ${name}_x64.exe +game $GAME)"
+# Every map source in bin/$GAME/maps is compiled next to itself: bsp, then vis, then light.
+do_maps() {
+	[ -x "$VMAP/bin/vmap.exe" ] || do_vmap
+	local basepath map n=0
+	basepath="$(cygpath -m "$BIN")"
+	for map in "$BIN/$GAME"/maps/*.map; do
+		[ -f "$map" ] || continue
+		map="$(cygpath -m "$map")"
+		"$VMAP/bin/vmap.exe" -fs_basepath "$basepath" -fs_game "$GAME" "$map"
+		"$VMAP/bin/vmap.exe" -fs_basepath "$basepath" -fs_game "$GAME" -vis "$map"
+		"$VMAP/bin/vmap.exe" -fs_basepath "$basepath" -fs_game "$GAME" -light "$map"
+		n=$((n + 1))
+	done
+	echo "maps: $n compiled in bin/$GAME/maps"
 }
 
 do_fteqw() {
 	do_makelibs
 	select_config fteqw
 	make -C "$ENGINE" m-rel FTE_TARGET=win64 -j"$JOBS"
-	install -m 0755 "$ENGINE/release/fteqw64.exe" "$NUCLIDE/fteqw.exe"
+	install -m 0755 "$ENGINE/release/fteqw64.exe" "$BIN/fteqw.exe"
 	echo "Engine: bin/fteqw.exe  (run: fteqw.exe +game $GAME)"
 }
 
 do_plugins() {
-	local plugins="${NATIVE_PLUGINS:-$(head -n 1 "$NUCLIDE/$GAME/PLUGINS" 2>/dev/null | tr -d '\r' || true)}"
+	local plugins="${NATIVE_PLUGINS:-$(head -n 1 "$BIN/$GAME/PLUGINS" 2>/dev/null | tr -d '\r' || true)}"
 	if [ -z "$plugins" ]; then
 		echo "No plugins requested (set NATIVE_PLUGINS or fill bin/$GAME/PLUGINS)."
 		return
 	fi
-	make -C "$ENGINE" plugins-rel NATIVE_PLUGINS="$plugins" FTE_TARGET=win64 FTE_CONFIG="$GAME"
-	find "$ENGINE/release/" -maxdepth 1 -name "fteplug_*.dll" -exec install -m 0755 '{}' "$NUCLIDE/" \;
+	make -C "$ENGINE" plugins-rel NATIVE_PLUGINS="$plugins" FTE_TARGET=win64 FTE_CONFIG=fteqw
+	find "$ENGINE/release/" -maxdepth 1 -name "fteplug_*.dll" -exec install -m 0755 '{}' "$BIN/" \;
 }
 
 # vmap needs glib, libxml2 and minizip. Installing them through pacman would force a full MSYS2
@@ -148,10 +138,10 @@ vmap_compile_commands() {
 	pkgflags="$(PKG_CONFIG_PATH="$VMAP/deps/ucrt64/lib/pkgconfig:/ucrt64/lib/pkgconfig" \
 		pkg-config --cflags glib-2.0 libxml-2.0 minizip)"
 	echo "[" > "$out"
-	for f in "$VMAP"/src/*.c "$VMAP"/common/*.c "$VMAP"/libs/*/*.c; do
+	for f in "$VMAP"/src/*.c "$VMAP"/src/*/*.c "$VMAP"/common/*.c "$VMAP"/libs/*/*.c; do
 		case "$f" in
 			"$VMAP"/libs/*) dir="$(dirname "$f")"; flags="-I../../include -I../../libs" ;;
-			*) dir="$VMAP/src"; flags="$pkgflags -I../include -I../common -I../libs" ;;
+			*) dir="$VMAP/src"; flags="$pkgflags -I. -I../include -I../common -I../libs" ;;
 		esac
 		# only what the Makefiles build (src/ and common/ keep unbuilt q3map2 leftovers)
 		grep -qw "$(basename "$f" .c)\.o" "$dir/Makefile" || continue
@@ -175,6 +165,9 @@ do_vmap() {
 	mkdir -p "$VMAP/bin"
 	install -m 0755 "$VMAP/vmap.exe" "$VMAP/bin/vmap.exe"
 	copy_dlls "$VMAP/bin/vmap.exe" "$VMAP/bin"
+	# The objects are only build intermediates: drop them so they do not pile up in the source tree
+	# (next build recompiles everything).
+	find "$VMAP/src" "$VMAP/common" "$VMAP/libs" -name "*.o" -delete
 	echo "vmap: tools/vmap/bin/vmap.exe"
 }
 
@@ -183,12 +176,11 @@ do_clean() {
 	rm -f "$ENGINE/release/.fte_config"
 }
 
-ensure_thirdparty
-[ $# -eq 0 ] && set -- fteqcc game engine plugins
+[ $# -eq 0 ] && set -- fteqcc game
 for t in "$@"; do
 	echo "=== $t (GAME=$GAME) ==="
 	case "$t" in
-		fteqcc|game|engine|fteqw|plugins|makelibs|vmap|clean) "do_$t" ;;
+		fteqcc|game|maps|fteqw|plugins|makelibs|vmap|clean) "do_$t" ;;
 		vmap-intellisense) vmap_deps; vmap_compile_commands ;;
 		*) echo "unknown target: $t" >&2; exit 1 ;;
 	esac

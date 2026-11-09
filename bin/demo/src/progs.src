@@ -1,0 +1,9 @@
+/*
+ * demo: entry point of the QuakeC build.
+ * fteqcc compiles each file listed here as its own program:
+ *   server/progs.src -> demo/progs.dat    (server game logic, SSQC)
+ *   client/progs.src -> demo/csprogs.dat  (client game logic, CSQC)
+ * Build: bin\run.bat build  (or: cd bin/demo/src && ../../fteqcc.exe)
+ */
+#pragma sourcefile server/progs.src
+#pragma sourcefile client/progs.src

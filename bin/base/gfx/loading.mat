@@ -1,8 +1,0 @@
-{
-	noMipmap
-	noPicmip
-	{
-		map gfx/loading.tga
-		blendFunc blend
-	}
-}

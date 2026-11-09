@@ -1,6 +1,0 @@
-/* Developer tools, server side. A game adds this list to its server progs.src
-   (after src/server/include.src); leaving it out drops the tools. */
-#includelist
-server/debugdraw.qc
-server/commands.qc
-#endlist

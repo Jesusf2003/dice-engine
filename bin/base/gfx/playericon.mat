@@ -1,7 +1,0 @@
-{
-	{
-		map "gfx/playericon.tga"
-		rgbGen vertex
-		blendFunc blend
-	}
-}

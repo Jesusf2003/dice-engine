@@ -146,9 +146,9 @@ add_executable(vmap
 	${PROJECT_SOURCE_DIR}/common/matlib.c
 	${PROJECT_SOURCE_DIR}/common/threads.c
 	${PROJECT_SOURCE_DIR}/common/vfs.c
-	${PROJECT_SOURCE_DIR}/src/brush.c
-	${PROJECT_SOURCE_DIR}/src/brush_primit.c
-	${PROJECT_SOURCE_DIR}/src/bsp.c
+	${PROJECT_SOURCE_DIR}/src/bsp/brush.c
+	${PROJECT_SOURCE_DIR}/src/bsp/brush_primit.c
+	${PROJECT_SOURCE_DIR}/src/bsp/bsp.c
 	${PROJECT_SOURCE_DIR}/src/bsp_analyze.c
 	${PROJECT_SOURCE_DIR}/src/bsp_info.c
 	${PROJECT_SOURCE_DIR}/src/bsp_scale.c
@@ -159,41 +159,42 @@ add_executable(vmap
 	${PROJECT_SOURCE_DIR}/src/convert_bsp.c
 	${PROJECT_SOURCE_DIR}/src/convert_map.c
 	${PROJECT_SOURCE_DIR}/src/convert_obj.c
-	${PROJECT_SOURCE_DIR}/src/decals.c
+	${PROJECT_SOURCE_DIR}/src/bsp/decals.c
 	${PROJECT_SOURCE_DIR}/src/exportents.c
-	${PROJECT_SOURCE_DIR}/src/facebsp.c
+	${PROJECT_SOURCE_DIR}/src/bsp/facebsp.c
 	${PROJECT_SOURCE_DIR}/src/fixaas.c
-	${PROJECT_SOURCE_DIR}/src/fog.c
+	${PROJECT_SOURCE_DIR}/src/bsp/fog.c
 	${PROJECT_SOURCE_DIR}/src/help.c
 	${PROJECT_SOURCE_DIR}/src/image.c
-	${PROJECT_SOURCE_DIR}/src/leakfile.c
-	${PROJECT_SOURCE_DIR}/src/light.c
-	${PROJECT_SOURCE_DIR}/src/light_bounce.c
-	${PROJECT_SOURCE_DIR}/src/light_trace.c
-	${PROJECT_SOURCE_DIR}/src/light_ydnar.c
-	${PROJECT_SOURCE_DIR}/src/lightmaps_ydnar.c
+	${PROJECT_SOURCE_DIR}/src/bsp/leakfile.c
+	${PROJECT_SOURCE_DIR}/src/light/light.c
+	${PROJECT_SOURCE_DIR}/src/light/light_bounce.c
+	${PROJECT_SOURCE_DIR}/src/light/light_trace.c
+	${PROJECT_SOURCE_DIR}/src/light/light_ydnar.c
+	${PROJECT_SOURCE_DIR}/src/light/lightmaps_ydnar.c
 	${PROJECT_SOURCE_DIR}/src/main.c
-	${PROJECT_SOURCE_DIR}/src/map.c
-	${PROJECT_SOURCE_DIR}/src/mesh.c
-	${PROJECT_SOURCE_DIR}/src/model.c
-	${PROJECT_SOURCE_DIR}/src/patch.c
+	${PROJECT_SOURCE_DIR}/src/bsp/map.c
+	${PROJECT_SOURCE_DIR}/src/bsp/mesh.c
+	${PROJECT_SOURCE_DIR}/src/bsp/model.c
+	${PROJECT_SOURCE_DIR}/src/bsp/patch.c
 	${PROJECT_SOURCE_DIR}/src/path_init.c
-	${PROJECT_SOURCE_DIR}/src/portals.c
-	${PROJECT_SOURCE_DIR}/src/prtfile.c
+	${PROJECT_SOURCE_DIR}/src/bsp/portals.c
+	${PROJECT_SOURCE_DIR}/src/bsp/prtfile.c
 	${PROJECT_SOURCE_DIR}/src/shaders.c
-	${PROJECT_SOURCE_DIR}/src/surface.c
-	${PROJECT_SOURCE_DIR}/src/surface_extra.c
-	${PROJECT_SOURCE_DIR}/src/surface_foliage.c
-	${PROJECT_SOURCE_DIR}/src/surface_fur.c
-	${PROJECT_SOURCE_DIR}/src/surface_meta.c
-	${PROJECT_SOURCE_DIR}/src/tjunction.c
-	${PROJECT_SOURCE_DIR}/src/tree.c
-	${PROJECT_SOURCE_DIR}/src/vis.c
-	${PROJECT_SOURCE_DIR}/src/visflow.c
-	${PROJECT_SOURCE_DIR}/src/writebsp.c
+	${PROJECT_SOURCE_DIR}/src/bsp/surface.c
+	${PROJECT_SOURCE_DIR}/src/bsp/surface_extra.c
+	${PROJECT_SOURCE_DIR}/src/bsp/surface_foliage.c
+	${PROJECT_SOURCE_DIR}/src/bsp/surface_fur.c
+	${PROJECT_SOURCE_DIR}/src/bsp/surface_meta.c
+	${PROJECT_SOURCE_DIR}/src/bsp/tjunction.c
+	${PROJECT_SOURCE_DIR}/src/bsp/tree.c
+	${PROJECT_SOURCE_DIR}/src/vis/vis.c
+	${PROJECT_SOURCE_DIR}/src/vis/visflow.c
+	${PROJECT_SOURCE_DIR}/src/bsp/writebsp.c
 )
 target_include_directories(vmap
 	PRIVATE
+		${PROJECT_SOURCE_DIR}/src/
 		${PROJECT_SOURCE_DIR}/include/
 		${PROJECT_SOURCE_DIR}/common/
 		${PROJECT_SOURCE_DIR}/libs/

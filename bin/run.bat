@@ -6,13 +6,12 @@ rem
 rem Commands:
 rem   buildrun  compile the game's QuakeC, then start the engine (default)
 rem   build     compile the game's QuakeC only (build_win64.sh game, through MSYS2 UCRT64)
-rem   run       start the engine only: bin\<PROJECT>_x64.exe when it was built for the game,
-rem             otherwise the generic bin\fteqw.exe
-rem   fteqw     start the generic engine bin\fteqw.exe
+rem   run       start the engine only (bin\fteqw.exe)
+rem   fteqw     same as run
 rem   fteqcc    run bin\fteqcc.exe inside bin\<game>\src (no extra args: compiles progs.src there)
 rem
 rem Options:
-rem   -game DIR    game/mod directory under bin\ (default: %GAME% or base)
+rem   -game DIR    game/mod directory under bin\ (default: %GAME% or demo)
 rem   -map MAP     map to load on start (+map MAP)
 rem   -dev         developer 1, and +devmap instead of +map (cheats allowed)
 rem   -n           print the command instead of running it
@@ -26,7 +25,7 @@ rem This script lives in bin\; the repo root (build_win64.sh) is its parent.
 set "BIN=%~dp0"
 set "BIN=%BIN:~0,-1%"
 for %%I in ("%BIN%\..") do set "ROOT=%%~fI"
-if not defined GAME set "GAME=base"
+if not defined GAME set "GAME=demo"
 if not defined MSYS2_ROOT set "MSYS2_ROOT=C:\msys64"
 set "CMD=buildrun"
 set "MAP="
@@ -143,16 +142,8 @@ popd
 if not "%RC%"=="0" echo error: build failed (exit code %RC%)
 exit /b %RC%
 
-rem Same name rule as bin\Tools\get-name.sh: first line of <game>\PROJECT without spaces or dashes.
+rem Every game runs on the generic engine (build_win64.sh fteqw).
 :find_engine
-set "NAME="
-if exist "%BIN%\%GAME%\PROJECT" set /p NAME=<"%BIN%\%GAME%\PROJECT"
-if not defined NAME set "NAME=%GAME%"
-set "NAME=%NAME: =%"
-set "NAME=%NAME:-=%"
-set "ENGINE=%BIN%\%NAME%_x64.exe"
-if exist "%ENGINE%" exit /b 0
-echo note: bin\%NAME%_x64.exe not built (build_win64.sh engine), using bin\fteqw.exe
 set "ENGINE=%BIN%\fteqw.exe"
 exit /b 0
 
@@ -180,11 +171,11 @@ echo usage: run.bat [buildrun^|build^|run^|fteqw^|fteqcc] [-game DIR] [-map MAP]
 echo.
 echo   buildrun  compile the game's QuakeC, then start the engine (default)
 echo   build     compile the game's QuakeC only
-echo   run       start the game's engine (bin\PROJECT_x64.exe, else bin\fteqw.exe)
-echo   fteqw     start the generic engine bin\fteqw.exe
+echo   run       start the engine only (bin\fteqw.exe)
+echo   fteqw     same as run
 echo   fteqcc    run bin\fteqcc.exe in bin\DIR\src with the extra args
 echo.
-echo   -game DIR    game/mod directory under bin\ (default: base)
+echo   -game DIR    game/mod directory under bin\ (default: demo)
 echo   -map MAP     map to load on start, a name from bin\DIR\maps without .bsp
 echo   -dev         developer mode, +devmap instead of +map
 echo   -n           print the command instead of running it
@@ -194,9 +185,9 @@ echo   In the game console, load a map with "map MAP" or "devmap MAP";
 echo   "gamedir MAP" switches the game directory instead and creates bin\MAP.
 echo.
 echo examples:
-echo   run.bat                              build base and play
-echo   run.bat run -map demo -dev           play demo.bsp with cheats
+echo   run.bat -map room                    build demo and play its room map
+echo   run.bat run -map room -dev           play room.bsp with cheats
 echo   run.bat build -game mymod            compile bin\mymod
-echo   run.bat fteqw -game base +set r_fullbright 1
-echo   run.bat fteqcc -game base -srcfile client/progs.src
+echo   run.bat fteqw -game demo +set r_fullbright 1
+echo   run.bat fteqcc -game demo -srcfile client/progs.src
 exit /b 0

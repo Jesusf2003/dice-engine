@@ -1,7 +1,0 @@
-typeInfo takeCover
-{
-	"task_1"	"StopMovement"
-	"task_2"	"FindCoverFromEnemy"
-	"task_3"	"RunToTarget"
-	"CanRangedAttack1"	"ChangeMindset rangedCombat"
-}
